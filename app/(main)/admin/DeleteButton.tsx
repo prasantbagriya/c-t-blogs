@@ -5,10 +5,13 @@ import { handleDeletePost, handleDeleteStory } from '@/lib/actions';
 
 interface DeleteButtonProps {
   id: string;
-  type: 'post' | 'story';
+  type?: 'post' | 'story';
+  endpoint?: string;
+  onSuccess?: () => void | Promise<void>;
+  label?: string;
 }
 
-export default function DeleteButton({ id, type }: DeleteButtonProps) {
+export default function DeleteButton({ id, type, endpoint, onSuccess, label = 'Delete' }: DeleteButtonProps) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const onDelete = async () => {
@@ -18,18 +21,30 @@ export default function DeleteButton({ id, type }: DeleteButtonProps) {
 
     setIsDeleting(true);
     try {
-      let result;
-      if (type === 'post') {
-        result = await handleDeletePost(id);
-      } else {
-        result = await handleDeleteStory(id);
-      }
-      
-      if (result.success) {
-        window.location.reload();
-      } else {
-        alert(result.error || 'Error deleting item');
-        setIsDeleting(false);
+      if (endpoint) {
+        const res = await fetch(`${endpoint}?id=${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          if (onSuccess) await onSuccess();
+          else window.location.reload();
+        } else {
+          alert('Error deleting item');
+          setIsDeleting(false);
+        }
+      } else if (type) {
+        let result;
+        if (type === 'post') {
+          result = await handleDeletePost(id);
+        } else {
+          result = await handleDeleteStory(id);
+        }
+        
+        if (result?.success) {
+          if (onSuccess) await onSuccess();
+          else window.location.reload();
+        } else {
+          alert(result?.error || 'Error deleting item');
+          setIsDeleting(false);
+        }
       }
     } catch (err) {
       alert('Connection error');
@@ -55,7 +70,7 @@ export default function DeleteButton({ id, type }: DeleteButtonProps) {
         textAlign: 'left'
       }}
     >
-      {isDeleting ? 'Deleting...' : 'Delete'}
+      {isDeleting ? 'Deleting...' : label}
     </button>
   );
 }
