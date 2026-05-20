@@ -1,0 +1,54 @@
+{
+  "name": "ChatWizs — Expert SEO Insights",
+  "short_name": "ChatWizs",
+  "description": "Expert-verified articles on SEO, technology, and digital marketing. Google 2026 EEAT compliant.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "lang": "en-IN",
+  "dir": "ltr",
+  "categories": ["news", "education", "technology"],
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Latest Articles",
+      "url": "/blog",
+      "description": "Read our latest SEO and tech articles"
+    },
+    {
+      "name": "Web Stories",
+      "url": "/stories",
+      "description": "Browse visual web stories"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

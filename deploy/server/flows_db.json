@@ -1,0 +1,2349 @@
+{
+  "chat_flows_whatsapp": {
+    "1777203578871c792vqw": {
+      "analytics": {
+        "messagesRecieved": 16,
+        "repliesSent": 34,
+        "humanHandoffs": 3,
+        "lastTriggered": "2026-05-05T12:41:17.393Z"
+      },
+      "id": "1777203578871c792vqw",
+      "nodes": [
+        {
+          "id": "trigger_root",
+          "type": "trigger",
+          "position": {
+            "x": -1740.844785417432,
+            "y": -3289.46523175136
+          },
+          "data": {
+            "id": "trigger_root",
+            "userId": "user_1774694137625kfo9yph",
+            "label": "Inbound Trigger (Logic A)",
+            "triggerType": "Any Message",
+            "webhookEvent": "form_submit",
+            "platform": "all",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 217,
+            "height": 236
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777203476439",
+          "type": "message",
+          "position": {
+            "x": -1717.39168211869,
+            "y": -2897.6365647864413
+          },
+          "data": {
+            "id": "1777203476439",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "message",
+            "message": "👋 Hello! Welcome to ChatWizs  \nI'm here to help you 😊  ",
+            "buttons": [],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 290,
+            "height": 234
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777203585872",
+          "type": "list",
+          "position": {
+            "x": -1197.5007892049211,
+            "y": -2825.597097323994
+          },
+          "data": {
+            "id": "1777203585872",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "list",
+            "message": "",
+            "header": "plz select Your issue",
+            "sections": [
+              {
+                "id": 1777203588811,
+                "title": "Options",
+                "rows": [
+                  {
+                    "id": 1777203588812,
+                    "title": "Services  ",
+                    "leadCapture": true,
+                    "tag": "Services ",
+                    "priority": "high"
+                  },
+                  {
+                    "id": 1777203592761,
+                    "title": "Pricing ",
+                    "leadCapture": true,
+                    "tag": "Pricing ",
+                    "priority": "high"
+                  },
+                  {
+                    "id": 1777203613976,
+                    "title": "Demo",
+                    "leadCapture": true,
+                    "tag": "Demo",
+                    "priority": "high"
+                  },
+                  {
+                    "id": 1777203629159,
+                    "title": "General Support"
+                  },
+                  {
+                    "id": 1777205107832,
+                    "title": "New Item"
+                  }
+                ]
+              }
+            ],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 311,
+            "height": 714
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777203914231",
+          "type": "message",
+          "position": {
+            "x": -421.1937219082181,
+            "y": -2474.222099130771
+          },
+          "data": {
+            "id": "1777203914231",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "message",
+            "message": "Want to see how it works?\n\nCheck out this demo video:",
+            "buttons": [
+              {
+                "id": "btn_1777204006015",
+                "label": "Must Watch",
+                "hasLink": true,
+                "tag": "Must Watch",
+                "url": "https://youtu.be/F6CHHfyaZuM"
+              }
+            ],
+            "isMilestone": true,
+            "completionWeight": 27,
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 339,
+            "height": 421
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777204158142",
+          "type": "message",
+          "position": {
+            "x": -843.8089496223378,
+            "y": -2047.795388465624
+          },
+          "data": {
+            "id": "1777204158142",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "message",
+            "message": "💰 Our pricing plans are flexible:\nTell us your requirements, and weâ€™ll suggest the best plan for you.",
+            "buttons": [
+              {
+                "id": "btn_1777204191088",
+                "label": "Basic Plan",
+                "tag": "Basic Plan"
+              },
+              {
+                "id": "btn_1777204232952",
+                "label": "Pro Plan",
+                "tag": "Pro Plan"
+              },
+              {
+                "id": "btn_1777204253719",
+                "label": "Custom Plan",
+                "tag": "Custom Plan"
+              }
+            ],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 339,
+            "height": 570
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777204366023",
+          "type": "list",
+          "position": {
+            "x": -742.9123258294744,
+            "y": -3149.841536587992
+          },
+          "data": {
+            "id": "1777204366023",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "list",
+            "message": "",
+            "header": "ChatWizs offers the following services:",
+            "sections": [
+              {
+                "id": 1777204369439,
+                "title": "Options",
+                "rows": [
+                  {
+                    "id": 1777204369440,
+                    "title": "AI Chatbot Setup "
+                  },
+                  {
+                    "id": 1777204381279,
+                    "title": " Website Integration "
+                  },
+                  {
+                    "id": 1777204390103,
+                    "title": "Automated Reply System "
+                  },
+                  {
+                    "id": 1777204402063,
+                    "title": "Lead Generation Tools"
+                  },
+                  {
+                    "id": 1777204410663,
+                    "title": "24/7 Customer Support"
+                  }
+                ]
+              }
+            ],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 311,
+            "height": 645
+          },
+          "selected": true,
+          "dragging": false
+        },
+        {
+          "id": "1777360526235",
+          "type": "flow_form",
+          "position": {
+            "x": -271.25372825572845,
+            "y": -2887.258890129363
+          },
+          "data": {
+            "id": "1777360526235",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "flow_form",
+            "message": "",
+            "flowId": "17773760922920x55mv8",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 220,
+            "height": 113
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777360538595",
+          "type": "handoff",
+          "position": {
+            "x": 44.2459874096092,
+            "y": -2564.7714766947033
+          },
+          "data": {
+            "id": "1777360538595",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "handoff",
+            "message": "",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 509,
+            "height": 162
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777547883242",
+          "type": "flow_form",
+          "position": {
+            "x": -345.2678563914653,
+            "y": -1845.759893047259
+          },
+          "data": {
+            "id": "1777547883242",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "flow_form",
+            "message": "",
+            "flowId": "17773760922920x55mv8",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 220,
+            "height": 113
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777547925642",
+          "type": "message",
+          "position": {
+            "x": -4.2678532412125065,
+            "y": -1924.7598929543008
+          },
+          "data": {
+            "id": "1777547925642",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "message",
+            "message": "contact  as soon as possible",
+            "buttons": [],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 290,
+            "height": 234
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777547952994",
+          "type": "handoff",
+          "position": {
+            "x": 236.73214900011482,
+            "y": -2272.7598938012534
+          },
+          "data": {
+            "id": "1777547952994",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "handoff",
+            "message": "",
+            "handoffType": "team",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 509,
+            "height": 162
+          },
+          "selected": false,
+          "dragging": false
+        }
+      ],
+      "edges": [
+        {
+          "source": "trigger_root",
+          "target": "1777203476439",
+          "id": "xy-edge__trigger_root-1777203476439"
+        },
+        {
+          "source": "1777203476439",
+          "target": "1777203585872",
+          "id": "xy-edge__1777203476439-1777203585872"
+        },
+        {
+          "source": "1777203585872",
+          "sourceHandle": "1777203613976",
+          "target": "1777203914231",
+          "id": "xy-edge__17772035858721777203613976-1777203914231"
+        },
+        {
+          "source": "1777203585872",
+          "sourceHandle": "1777203592761",
+          "target": "1777204158142",
+          "id": "xy-edge__17772035858721777203592761-1777204158142"
+        },
+        {
+          "source": "1777203585872",
+          "sourceHandle": "1777203588812",
+          "target": "1777204366023",
+          "id": "xy-edge__17772035858721777203588812-1777204366023"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204369440",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204369440-1777360526235"
+        },
+        {
+          "source": "1777360526235",
+          "target": "1777360538595",
+          "id": "xy-edge__1777360526235-1777360538595"
+        },
+        {
+          "source": "1777203914231",
+          "sourceHandle": "btn_1777204006015",
+          "target": "1777360538595",
+          "id": "xy-edge__1777203914231btn_1777204006015-1777360538595"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204381279",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204381279-1777360526235"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204390103",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204390103-1777360526235"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204402063",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204402063-1777360526235"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204410663",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204410663-1777360526235"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777204158142",
+          "sourceHandle": "btn_1777204191088",
+          "target": "1777547883242",
+          "id": "xy-edge__1777204158142btn_1777204191088-1777547883242"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777547883242",
+          "target": "1777547925642",
+          "id": "xy-edge__1777547883242-1777547925642"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777547925642",
+          "target": "1777547952994",
+          "id": "xy-edge__1777547925642-1777547952994"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777203914231",
+          "sourceHandle": "btn_1777204006015",
+          "target": "1777547925642",
+          "id": "xy-edge__1777203914231btn_1777204006015-1777547925642"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777203585872",
+          "sourceHandle": "1777203588812_primary",
+          "target": "1777204366023",
+          "id": "xy-edge__17772035858721777203588812_primary-1777204366023"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777203585872",
+          "sourceHandle": "1777203592761_primary",
+          "target": "1777204158142",
+          "id": "xy-edge__17772035858721777203592761_primary-1777204158142"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777204366023",
+          "sourceHandle": "1777204369440_primary",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204369440_primary-1777360526235"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777203585872",
+          "sourceHandle": "1777203613976_primary",
+          "target": "1777203914231",
+          "id": "xy-edge__17772035858721777203613976_primary-1777203914231"
+        }
+      ],
+      "uid": "user_1774694137625kfo9yph",
+      "whatsappAccountIds": [],
+      "instagramAccountIds": [],
+      "websiteAccountIds": [],
+      "whatsappAccountId": null,
+      "instagramAccountId": null,
+      "websiteAccountId": null,
+      "name": "Flow: Main (website_livechat)",
+      "platform": "all",
+      "status": "Active",
+      "type": "website_livechat",
+      "updatedAt": "2026-05-06T07:46:44.582Z"
+    }
+  },
+  "chat_flows_instagram": {
+    "1777203578871c792vqw": {
+      "nodes": [
+        {
+          "id": "trigger_root",
+          "type": "trigger",
+          "position": {
+            "x": -1740.844785417432,
+            "y": -3289.46523175136
+          },
+          "data": {
+            "id": "trigger_root",
+            "userId": "user_1774694137625kfo9yph",
+            "label": "Inbound Trigger (Logic A)",
+            "triggerType": "Any Message",
+            "webhookEvent": "form_submit",
+            "platform": "all",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 217,
+            "height": 236
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777203476439",
+          "type": "message",
+          "position": {
+            "x": -1717.39168211869,
+            "y": -2897.6365647864413
+          },
+          "data": {
+            "id": "1777203476439",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "message",
+            "message": "👋 Hello! Welcome to ChatWizs  \nI'm here to help you 😊  ",
+            "buttons": [],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 290,
+            "height": 234
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777203585872",
+          "type": "list",
+          "position": {
+            "x": -1197.5007892049211,
+            "y": -2825.597097323994
+          },
+          "data": {
+            "id": "1777203585872",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "list",
+            "message": "",
+            "header": "plz select Your issue",
+            "sections": [
+              {
+                "id": 1777203588811,
+                "title": "Options",
+                "rows": [
+                  {
+                    "id": 1777203588812,
+                    "title": "Services  ",
+                    "leadCapture": true,
+                    "tag": "Services ",
+                    "priority": "high"
+                  },
+                  {
+                    "id": 1777203592761,
+                    "title": "Pricing ",
+                    "leadCapture": true,
+                    "tag": "Pricing ",
+                    "priority": "high"
+                  },
+                  {
+                    "id": 1777203613976,
+                    "title": "Demo",
+                    "leadCapture": true,
+                    "tag": "Demo",
+                    "priority": "high"
+                  },
+                  {
+                    "id": 1777203629159,
+                    "title": "General Support"
+                  },
+                  {
+                    "id": 1777205107832,
+                    "title": "New Item"
+                  }
+                ]
+              }
+            ],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 311,
+            "height": 714
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777203914231",
+          "type": "message",
+          "position": {
+            "x": -421.1937219082181,
+            "y": -2474.222099130771
+          },
+          "data": {
+            "id": "1777203914231",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "message",
+            "message": "Want to see how it works?\n\nCheck out this demo video:",
+            "buttons": [
+              {
+                "id": "btn_1777204006015",
+                "label": "Must Watch",
+                "hasLink": true,
+                "tag": "Must Watch",
+                "url": "https://youtu.be/F6CHHfyaZuM"
+              }
+            ],
+            "isMilestone": true,
+            "completionWeight": 27,
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 339,
+            "height": 421
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777204158142",
+          "type": "message",
+          "position": {
+            "x": -843.8089496223378,
+            "y": -2047.795388465624
+          },
+          "data": {
+            "id": "1777204158142",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "message",
+            "message": "💰 Our pricing plans are flexible:\nTell us your requirements, and weâ€™ll suggest the best plan for you.",
+            "buttons": [
+              {
+                "id": "btn_1777204191088",
+                "label": "Basic Plan",
+                "tag": "Basic Plan"
+              },
+              {
+                "id": "btn_1777204232952",
+                "label": "Pro Plan",
+                "tag": "Pro Plan"
+              },
+              {
+                "id": "btn_1777204253719",
+                "label": "Custom Plan",
+                "tag": "Custom Plan"
+              }
+            ],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 339,
+            "height": 570
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777204366023",
+          "type": "list",
+          "position": {
+            "x": -742.9123258294744,
+            "y": -3149.841536587992
+          },
+          "data": {
+            "id": "1777204366023",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "list",
+            "message": "",
+            "header": "ChatWizs offers the following services:",
+            "sections": [
+              {
+                "id": 1777204369439,
+                "title": "Options",
+                "rows": [
+                  {
+                    "id": 1777204369440,
+                    "title": "AI Chatbot Setup "
+                  },
+                  {
+                    "id": 1777204381279,
+                    "title": " Website Integration "
+                  },
+                  {
+                    "id": 1777204390103,
+                    "title": "Automated Reply System "
+                  },
+                  {
+                    "id": 1777204402063,
+                    "title": "Lead Generation Tools"
+                  },
+                  {
+                    "id": 1777204410663,
+                    "title": "24/7 Customer Support"
+                  }
+                ]
+              }
+            ],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 311,
+            "height": 645
+          },
+          "selected": true,
+          "dragging": false
+        },
+        {
+          "id": "1777360526235",
+          "type": "flow_form",
+          "position": {
+            "x": -271.25372825572845,
+            "y": -2887.258890129363
+          },
+          "data": {
+            "id": "1777360526235",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "flow_form",
+            "message": "",
+            "flowId": "17773760922920x55mv8",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 220,
+            "height": 113
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777360538595",
+          "type": "handoff",
+          "position": {
+            "x": 44.2459874096092,
+            "y": -2564.7714766947033
+          },
+          "data": {
+            "id": "1777360538595",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "handoff",
+            "message": "",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 509,
+            "height": 162
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777547883242",
+          "type": "flow_form",
+          "position": {
+            "x": -345.2678563914653,
+            "y": -1845.759893047259
+          },
+          "data": {
+            "id": "1777547883242",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "flow_form",
+            "message": "",
+            "flowId": "17773760922920x55mv8",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 220,
+            "height": 113
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777547925642",
+          "type": "message",
+          "position": {
+            "x": -4.2678532412125065,
+            "y": -1924.7598929543008
+          },
+          "data": {
+            "id": "1777547925642",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "message",
+            "message": "contact  as soon as possible",
+            "buttons": [],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 290,
+            "height": 234
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777547952994",
+          "type": "handoff",
+          "position": {
+            "x": 236.73214900011482,
+            "y": -2272.7598938012534
+          },
+          "data": {
+            "id": "1777547952994",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "handoff",
+            "message": "",
+            "handoffType": "team",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 509,
+            "height": 162
+          },
+          "selected": false,
+          "dragging": false
+        }
+      ],
+      "edges": [
+        {
+          "source": "trigger_root",
+          "target": "1777203476439",
+          "id": "xy-edge__trigger_root-1777203476439"
+        },
+        {
+          "source": "1777203476439",
+          "target": "1777203585872",
+          "id": "xy-edge__1777203476439-1777203585872"
+        },
+        {
+          "source": "1777203585872",
+          "sourceHandle": "1777203613976",
+          "target": "1777203914231",
+          "id": "xy-edge__17772035858721777203613976-1777203914231"
+        },
+        {
+          "source": "1777203585872",
+          "sourceHandle": "1777203592761",
+          "target": "1777204158142",
+          "id": "xy-edge__17772035858721777203592761-1777204158142"
+        },
+        {
+          "source": "1777203585872",
+          "sourceHandle": "1777203588812",
+          "target": "1777204366023",
+          "id": "xy-edge__17772035858721777203588812-1777204366023"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204369440",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204369440-1777360526235"
+        },
+        {
+          "source": "1777360526235",
+          "target": "1777360538595",
+          "id": "xy-edge__1777360526235-1777360538595"
+        },
+        {
+          "source": "1777203914231",
+          "sourceHandle": "btn_1777204006015",
+          "target": "1777360538595",
+          "id": "xy-edge__1777203914231btn_1777204006015-1777360538595"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204381279",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204381279-1777360526235"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204390103",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204390103-1777360526235"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204402063",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204402063-1777360526235"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204410663",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204410663-1777360526235"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777204158142",
+          "sourceHandle": "btn_1777204191088",
+          "target": "1777547883242",
+          "id": "xy-edge__1777204158142btn_1777204191088-1777547883242"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777547883242",
+          "target": "1777547925642",
+          "id": "xy-edge__1777547883242-1777547925642"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777547925642",
+          "target": "1777547952994",
+          "id": "xy-edge__1777547925642-1777547952994"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777203914231",
+          "sourceHandle": "btn_1777204006015",
+          "target": "1777547925642",
+          "id": "xy-edge__1777203914231btn_1777204006015-1777547925642"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777203585872",
+          "sourceHandle": "1777203588812_primary",
+          "target": "1777204366023",
+          "id": "xy-edge__17772035858721777203588812_primary-1777204366023"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777203585872",
+          "sourceHandle": "1777203592761_primary",
+          "target": "1777204158142",
+          "id": "xy-edge__17772035858721777203592761_primary-1777204158142"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777204366023",
+          "sourceHandle": "1777204369440_primary",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204369440_primary-1777360526235"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777203585872",
+          "sourceHandle": "1777203613976_primary",
+          "target": "1777203914231",
+          "id": "xy-edge__17772035858721777203613976_primary-1777203914231"
+        }
+      ],
+      "uid": "user_1774694137625kfo9yph",
+      "whatsappAccountIds": [],
+      "instagramAccountIds": [],
+      "websiteAccountIds": [],
+      "whatsappAccountId": null,
+      "instagramAccountId": null,
+      "websiteAccountId": null,
+      "name": "Flow: Main (website_livechat)",
+      "platform": "all",
+      "status": "Active",
+      "type": "website_livechat",
+      "updatedAt": "2026-05-06T07:46:44.615Z",
+      "id": "1777203578871c792vqw"
+    }
+  },
+  "chat_flows_widget": {
+    "1777203578871c792vqw": {
+      "nodes": [
+        {
+          "id": "trigger_root",
+          "type": "trigger",
+          "position": {
+            "x": -1740.844785417432,
+            "y": -3289.46523175136
+          },
+          "data": {
+            "id": "trigger_root",
+            "userId": "user_1774694137625kfo9yph",
+            "label": "Inbound Trigger (Logic A)",
+            "triggerType": "Any Message",
+            "webhookEvent": "form_submit",
+            "platform": "all",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 217,
+            "height": 236
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777203476439",
+          "type": "message",
+          "position": {
+            "x": -1717.39168211869,
+            "y": -2897.6365647864413
+          },
+          "data": {
+            "id": "1777203476439",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "message",
+            "message": "👋 Hello! Welcome to ChatWizs  \nI'm here to help you 😊  ",
+            "buttons": [],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 290,
+            "height": 234
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777203585872",
+          "type": "list",
+          "position": {
+            "x": -1197.5007892049211,
+            "y": -2825.597097323994
+          },
+          "data": {
+            "id": "1777203585872",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "list",
+            "message": "",
+            "header": "plz select Your issue",
+            "sections": [
+              {
+                "id": 1777203588811,
+                "title": "Options",
+                "rows": [
+                  {
+                    "id": 1777203588812,
+                    "title": "Services  ",
+                    "leadCapture": true,
+                    "tag": "Services ",
+                    "priority": "high"
+                  },
+                  {
+                    "id": 1777203592761,
+                    "title": "Pricing ",
+                    "leadCapture": true,
+                    "tag": "Pricing ",
+                    "priority": "high"
+                  },
+                  {
+                    "id": 1777203613976,
+                    "title": "Demo",
+                    "leadCapture": true,
+                    "tag": "Demo",
+                    "priority": "high"
+                  },
+                  {
+                    "id": 1777203629159,
+                    "title": "General Support"
+                  },
+                  {
+                    "id": 1777205107832,
+                    "title": "New Item"
+                  }
+                ]
+              }
+            ],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 311,
+            "height": 714
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777203914231",
+          "type": "message",
+          "position": {
+            "x": -421.1937219082181,
+            "y": -2474.222099130771
+          },
+          "data": {
+            "id": "1777203914231",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "message",
+            "message": "Want to see how it works?\n\nCheck out this demo video:",
+            "buttons": [
+              {
+                "id": "btn_1777204006015",
+                "label": "Must Watch",
+                "hasLink": true,
+                "tag": "Must Watch",
+                "url": "https://youtu.be/F6CHHfyaZuM"
+              }
+            ],
+            "isMilestone": true,
+            "completionWeight": 27,
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 339,
+            "height": 421
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777204158142",
+          "type": "message",
+          "position": {
+            "x": -843.8089496223378,
+            "y": -2047.795388465624
+          },
+          "data": {
+            "id": "1777204158142",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "message",
+            "message": "💰 Our pricing plans are flexible:\nTell us your requirements, and weâ€™ll suggest the best plan for you.",
+            "buttons": [
+              {
+                "id": "btn_1777204191088",
+                "label": "Basic Plan",
+                "tag": "Basic Plan"
+              },
+              {
+                "id": "btn_1777204232952",
+                "label": "Pro Plan",
+                "tag": "Pro Plan"
+              },
+              {
+                "id": "btn_1777204253719",
+                "label": "Custom Plan",
+                "tag": "Custom Plan"
+              }
+            ],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 339,
+            "height": 570
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777204366023",
+          "type": "list",
+          "position": {
+            "x": -742.9123258294744,
+            "y": -3149.841536587992
+          },
+          "data": {
+            "id": "1777204366023",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "list",
+            "message": "",
+            "header": "ChatWizs offers the following services:",
+            "sections": [
+              {
+                "id": 1777204369439,
+                "title": "Options",
+                "rows": [
+                  {
+                    "id": 1777204369440,
+                    "title": "AI Chatbot Setup "
+                  },
+                  {
+                    "id": 1777204381279,
+                    "title": " Website Integration "
+                  },
+                  {
+                    "id": 1777204390103,
+                    "title": "Automated Reply System "
+                  },
+                  {
+                    "id": 1777204402063,
+                    "title": "Lead Generation Tools"
+                  },
+                  {
+                    "id": 1777204410663,
+                    "title": "24/7 Customer Support"
+                  }
+                ]
+              }
+            ],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 311,
+            "height": 645
+          },
+          "selected": true,
+          "dragging": false
+        },
+        {
+          "id": "1777360526235",
+          "type": "flow_form",
+          "position": {
+            "x": -271.25372825572845,
+            "y": -2887.258890129363
+          },
+          "data": {
+            "id": "1777360526235",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "flow_form",
+            "message": "",
+            "flowId": "17773760922920x55mv8",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 220,
+            "height": 113
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777360538595",
+          "type": "handoff",
+          "position": {
+            "x": 44.2459874096092,
+            "y": -2564.7714766947033
+          },
+          "data": {
+            "id": "1777360538595",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "handoff",
+            "message": "",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 509,
+            "height": 162
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777547883242",
+          "type": "flow_form",
+          "position": {
+            "x": -345.2678563914653,
+            "y": -1845.759893047259
+          },
+          "data": {
+            "id": "1777547883242",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "flow_form",
+            "message": "",
+            "flowId": "17773760922920x55mv8",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 220,
+            "height": 113
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777547925642",
+          "type": "message",
+          "position": {
+            "x": -4.2678532412125065,
+            "y": -1924.7598929543008
+          },
+          "data": {
+            "id": "1777547925642",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "message",
+            "message": "contact  as soon as possible",
+            "buttons": [],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 290,
+            "height": 234
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777547952994",
+          "type": "handoff",
+          "position": {
+            "x": 236.73214900011482,
+            "y": -2272.7598938012534
+          },
+          "data": {
+            "id": "1777547952994",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "handoff",
+            "message": "",
+            "handoffType": "team",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 509,
+            "height": 162
+          },
+          "selected": false,
+          "dragging": false
+        }
+      ],
+      "edges": [
+        {
+          "source": "trigger_root",
+          "target": "1777203476439",
+          "id": "xy-edge__trigger_root-1777203476439"
+        },
+        {
+          "source": "1777203476439",
+          "target": "1777203585872",
+          "id": "xy-edge__1777203476439-1777203585872"
+        },
+        {
+          "source": "1777203585872",
+          "sourceHandle": "1777203613976",
+          "target": "1777203914231",
+          "id": "xy-edge__17772035858721777203613976-1777203914231"
+        },
+        {
+          "source": "1777203585872",
+          "sourceHandle": "1777203592761",
+          "target": "1777204158142",
+          "id": "xy-edge__17772035858721777203592761-1777204158142"
+        },
+        {
+          "source": "1777203585872",
+          "sourceHandle": "1777203588812",
+          "target": "1777204366023",
+          "id": "xy-edge__17772035858721777203588812-1777204366023"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204369440",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204369440-1777360526235"
+        },
+        {
+          "source": "1777360526235",
+          "target": "1777360538595",
+          "id": "xy-edge__1777360526235-1777360538595"
+        },
+        {
+          "source": "1777203914231",
+          "sourceHandle": "btn_1777204006015",
+          "target": "1777360538595",
+          "id": "xy-edge__1777203914231btn_1777204006015-1777360538595"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204381279",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204381279-1777360526235"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204390103",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204390103-1777360526235"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204402063",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204402063-1777360526235"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204410663",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204410663-1777360526235"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777204158142",
+          "sourceHandle": "btn_1777204191088",
+          "target": "1777547883242",
+          "id": "xy-edge__1777204158142btn_1777204191088-1777547883242"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777547883242",
+          "target": "1777547925642",
+          "id": "xy-edge__1777547883242-1777547925642"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777547925642",
+          "target": "1777547952994",
+          "id": "xy-edge__1777547925642-1777547952994"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777203914231",
+          "sourceHandle": "btn_1777204006015",
+          "target": "1777547925642",
+          "id": "xy-edge__1777203914231btn_1777204006015-1777547925642"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777203585872",
+          "sourceHandle": "1777203588812_primary",
+          "target": "1777204366023",
+          "id": "xy-edge__17772035858721777203588812_primary-1777204366023"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777203585872",
+          "sourceHandle": "1777203592761_primary",
+          "target": "1777204158142",
+          "id": "xy-edge__17772035858721777203592761_primary-1777204158142"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777204366023",
+          "sourceHandle": "1777204369440_primary",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204369440_primary-1777360526235"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777203585872",
+          "sourceHandle": "1777203613976_primary",
+          "target": "1777203914231",
+          "id": "xy-edge__17772035858721777203613976_primary-1777203914231"
+        }
+      ],
+      "uid": "user_1774694137625kfo9yph",
+      "whatsappAccountId": null,
+      "name": "Flow: Main (website_livechat)",
+      "platform": "all",
+      "status": "Active",
+      "type": "website_livechat",
+      "updatedAt": "2026-05-06T07:46:44.661Z",
+      "createdBy": "user_1774694137625kfo9yph",
+      "createdAt": "2026-04-26T11:39:38.871Z",
+      "id": "1777203578871c792vqw",
+      "analytics": {
+        "messagesRecieved": 29,
+        "repliesSent": 60,
+        "lastTriggered": "2026-05-09T04:43:28.454Z"
+      },
+      "whatsappAccountIds": [],
+      "instagramAccountIds": [],
+      "whatsappName": null,
+      "instagramAccountId": null,
+      "instagramUsername": null,
+      "websiteAccountIds": [],
+      "websiteAccountId": null
+    }
+  },
+  "chat_flows_threads": {
+    "1777203578871c792vqw": {
+      "nodes": [
+        {
+          "id": "trigger_root",
+          "type": "trigger",
+          "position": {
+            "x": -1740.844785417432,
+            "y": -3289.46523175136
+          },
+          "data": {
+            "id": "trigger_root",
+            "userId": "user_1774694137625kfo9yph",
+            "label": "Inbound Trigger (Logic A)",
+            "triggerType": "Any Message",
+            "webhookEvent": "form_submit",
+            "platform": "all",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 217,
+            "height": 236
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777203476439",
+          "type": "message",
+          "position": {
+            "x": -1717.39168211869,
+            "y": -2897.6365647864413
+          },
+          "data": {
+            "id": "1777203476439",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "message",
+            "message": "👋 Hello! Welcome to ChatWizs  \nI'm here to help you 😊  ",
+            "buttons": [],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 290,
+            "height": 234
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777203585872",
+          "type": "list",
+          "position": {
+            "x": -1197.5007892049211,
+            "y": -2825.597097323994
+          },
+          "data": {
+            "id": "1777203585872",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "list",
+            "message": "",
+            "header": "plz select Your issue",
+            "sections": [
+              {
+                "id": 1777203588811,
+                "title": "Options",
+                "rows": [
+                  {
+                    "id": 1777203588812,
+                    "title": "Services  ",
+                    "leadCapture": true,
+                    "tag": "Services ",
+                    "priority": "high"
+                  },
+                  {
+                    "id": 1777203592761,
+                    "title": "Pricing ",
+                    "leadCapture": true,
+                    "tag": "Pricing ",
+                    "priority": "high"
+                  },
+                  {
+                    "id": 1777203613976,
+                    "title": "Demo",
+                    "leadCapture": true,
+                    "tag": "Demo",
+                    "priority": "high"
+                  },
+                  {
+                    "id": 1777203629159,
+                    "title": "General Support"
+                  },
+                  {
+                    "id": 1777205107832,
+                    "title": "New Item"
+                  }
+                ]
+              }
+            ],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 311,
+            "height": 714
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777203914231",
+          "type": "message",
+          "position": {
+            "x": -421.1937219082181,
+            "y": -2474.222099130771
+          },
+          "data": {
+            "id": "1777203914231",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "message",
+            "message": "Want to see how it works?\n\nCheck out this demo video:",
+            "buttons": [
+              {
+                "id": "btn_1777204006015",
+                "label": "Must Watch",
+                "hasLink": true,
+                "tag": "Must Watch",
+                "url": "https://youtu.be/F6CHHfyaZuM"
+              }
+            ],
+            "isMilestone": true,
+            "completionWeight": 27,
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 339,
+            "height": 421
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777204158142",
+          "type": "message",
+          "position": {
+            "x": -843.8089496223378,
+            "y": -2047.795388465624
+          },
+          "data": {
+            "id": "1777204158142",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "message",
+            "message": "💰 Our pricing plans are flexible:\nTell us your requirements, and weâ€™ll suggest the best plan for you.",
+            "buttons": [
+              {
+                "id": "btn_1777204191088",
+                "label": "Basic Plan",
+                "tag": "Basic Plan"
+              },
+              {
+                "id": "btn_1777204232952",
+                "label": "Pro Plan",
+                "tag": "Pro Plan"
+              },
+              {
+                "id": "btn_1777204253719",
+                "label": "Custom Plan",
+                "tag": "Custom Plan"
+              }
+            ],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 339,
+            "height": 570
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777204366023",
+          "type": "list",
+          "position": {
+            "x": -742.9123258294744,
+            "y": -3149.841536587992
+          },
+          "data": {
+            "id": "1777204366023",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "list",
+            "message": "",
+            "header": "ChatWizs offers the following services:",
+            "sections": [
+              {
+                "id": 1777204369439,
+                "title": "Options",
+                "rows": [
+                  {
+                    "id": 1777204369440,
+                    "title": "AI Chatbot Setup "
+                  },
+                  {
+                    "id": 1777204381279,
+                    "title": " Website Integration "
+                  },
+                  {
+                    "id": 1777204390103,
+                    "title": "Automated Reply System "
+                  },
+                  {
+                    "id": 1777204402063,
+                    "title": "Lead Generation Tools"
+                  },
+                  {
+                    "id": 1777204410663,
+                    "title": "24/7 Customer Support"
+                  }
+                ]
+              }
+            ],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 311,
+            "height": 645
+          },
+          "selected": true,
+          "dragging": false
+        },
+        {
+          "id": "1777360526235",
+          "type": "flow_form",
+          "position": {
+            "x": -271.25372825572845,
+            "y": -2887.258890129363
+          },
+          "data": {
+            "id": "1777360526235",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "flow_form",
+            "message": "",
+            "flowId": "17773760922920x55mv8",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 220,
+            "height": 113
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777360538595",
+          "type": "handoff",
+          "position": {
+            "x": 44.2459874096092,
+            "y": -2564.7714766947033
+          },
+          "data": {
+            "id": "1777360538595",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "handoff",
+            "message": "",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 509,
+            "height": 162
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777547883242",
+          "type": "flow_form",
+          "position": {
+            "x": -345.2678563914653,
+            "y": -1845.759893047259
+          },
+          "data": {
+            "id": "1777547883242",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "flow_form",
+            "message": "",
+            "flowId": "17773760922920x55mv8",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 220,
+            "height": 113
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777547925642",
+          "type": "message",
+          "position": {
+            "x": -4.2678532412125065,
+            "y": -1924.7598929543008
+          },
+          "data": {
+            "id": "1777547925642",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "message",
+            "message": "contact  as soon as possible",
+            "buttons": [],
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 290,
+            "height": 234
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "1777547952994",
+          "type": "handoff",
+          "position": {
+            "x": 236.73214900011482,
+            "y": -2272.7598938012534
+          },
+          "data": {
+            "id": "1777547952994",
+            "userId": "user_1774694137625kfo9yph",
+            "whatsappAccountId": "waba_888800750640883",
+            "label": "handoff",
+            "message": "",
+            "handoffType": "team",
+            "userRole": "admin"
+          },
+          "measured": {
+            "width": 509,
+            "height": 162
+          },
+          "selected": false,
+          "dragging": false
+        }
+      ],
+      "edges": [
+        {
+          "source": "trigger_root",
+          "target": "1777203476439",
+          "id": "xy-edge__trigger_root-1777203476439"
+        },
+        {
+          "source": "1777203476439",
+          "target": "1777203585872",
+          "id": "xy-edge__1777203476439-1777203585872"
+        },
+        {
+          "source": "1777203585872",
+          "sourceHandle": "1777203613976",
+          "target": "1777203914231",
+          "id": "xy-edge__17772035858721777203613976-1777203914231"
+        },
+        {
+          "source": "1777203585872",
+          "sourceHandle": "1777203592761",
+          "target": "1777204158142",
+          "id": "xy-edge__17772035858721777203592761-1777204158142"
+        },
+        {
+          "source": "1777203585872",
+          "sourceHandle": "1777203588812",
+          "target": "1777204366023",
+          "id": "xy-edge__17772035858721777203588812-1777204366023"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204369440",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204369440-1777360526235"
+        },
+        {
+          "source": "1777360526235",
+          "target": "1777360538595",
+          "id": "xy-edge__1777360526235-1777360538595"
+        },
+        {
+          "source": "1777203914231",
+          "sourceHandle": "btn_1777204006015",
+          "target": "1777360538595",
+          "id": "xy-edge__1777203914231btn_1777204006015-1777360538595"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204381279",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204381279-1777360526235"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204390103",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204390103-1777360526235"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204402063",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204402063-1777360526235"
+        },
+        {
+          "source": "1777204366023",
+          "sourceHandle": "1777204410663",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204410663-1777360526235"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777204158142",
+          "sourceHandle": "btn_1777204191088",
+          "target": "1777547883242",
+          "id": "xy-edge__1777204158142btn_1777204191088-1777547883242"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777547883242",
+          "target": "1777547925642",
+          "id": "xy-edge__1777547883242-1777547925642"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777547925642",
+          "target": "1777547952994",
+          "id": "xy-edge__1777547925642-1777547952994"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777203914231",
+          "sourceHandle": "btn_1777204006015",
+          "target": "1777547925642",
+          "id": "xy-edge__1777203914231btn_1777204006015-1777547925642"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777203585872",
+          "sourceHandle": "1777203588812_primary",
+          "target": "1777204366023",
+          "id": "xy-edge__17772035858721777203588812_primary-1777204366023"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777203585872",
+          "sourceHandle": "1777203592761_primary",
+          "target": "1777204158142",
+          "id": "xy-edge__17772035858721777203592761_primary-1777204158142"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777204366023",
+          "sourceHandle": "1777204369440_primary",
+          "target": "1777360526235",
+          "id": "xy-edge__17772043660231777204369440_primary-1777360526235"
+        },
+        {
+          "type": "default",
+          "animated": true,
+          "style": {
+            "stroke": "rgba(99, 102, 241, 0.4)",
+            "strokeWidth": 2,
+            "filter": "drop-shadow(0 0 5px rgba(99, 102, 241, 0.1))"
+          },
+          "markerEnd": {
+            "type": "arrowclosed",
+            "width": 15,
+            "height": 15,
+            "color": "rgba(99, 102, 241, 0.6)"
+          },
+          "source": "1777203585872",
+          "sourceHandle": "1777203613976_primary",
+          "target": "1777203914231",
+          "id": "xy-edge__17772035858721777203613976_primary-1777203914231"
+        }
+      ],
+      "uid": "user_1774694137625kfo9yph",
+      "whatsappAccountIds": [],
+      "instagramAccountIds": [],
+      "websiteAccountIds": [],
+      "whatsappAccountId": null,
+      "instagramAccountId": null,
+      "websiteAccountId": null,
+      "name": "Flow: Main (website_livechat)",
+      "platform": "all",
+      "status": "Active",
+      "type": "website_livechat",
+      "updatedAt": "2026-05-06T07:46:44.693Z",
+      "id": "1777203578871c792vqw"
+    }
+  }
+}

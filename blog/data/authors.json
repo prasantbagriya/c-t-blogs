@@ -1,0 +1,28 @@
+[
+  {
+    "id": "a90b4d45-6f10-4f9e-8c77-4c7b6f6d6f51",
+    "name": "Prasant Bagriya",
+    "jobTitle": "Subject Matter Expert",
+    "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80",
+    "bio": "",
+    "experienceYears": 0,
+    "socials": {
+      "twitter": "",
+      "linkedin": "https://www.linkedin.com/in/prasantbagriya/",
+      "website": "https://prashantbagriya.graphy.com/"
+    }
+  },
+  {
+    "id": "e45a7c29-3b56-4b6e-9e77-5d2a8b9c1d2e",
+    "name": "Kapil Kumar",
+    "jobTitle": "Car Review / Automobile Review / Vehicle Analysis",
+    "image": "/uploads/media-1779256004256-409405479.jpeg",
+    "bio": "",
+    "experienceYears": 0,
+    "socials": {
+      "twitter": "",
+      "linkedin": "https://www.linkedin.com/in/prasantbagriya/",
+      "website": "https://prashantbagriya.graphy.com/"
+    }
+  }
+]

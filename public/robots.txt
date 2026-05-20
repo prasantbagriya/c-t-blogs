@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /uploads/
+Disallow: /sdk/
+
+# Sitemap location
+Sitemap: https://chatwizs.com/sitemap.xml
+
+# Crawl delay for responsible indexing
+Crawl-delay: 1
