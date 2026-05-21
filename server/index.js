@@ -76,6 +76,7 @@ const BLOG_PATHS = [
   '/blog', '/admin', '/auth', '/category', '/author',
   '/stories', '/search', '/sitemap.xml', '/feed.xml',
   '/news-sitemap.xml', '/api/og', '/_next',
+  '/about', '/contact', '/privacy', '/terms', '/editorial-policy', '/fact-checking-policy',
 ];
 
 // Lazy proxy instance — created once, reuses the current port from blogState
@@ -100,14 +101,25 @@ const getBlogProxy = () => {
           }
         },
         proxyRes: (proxyRes, req, res) => {
-          // Extra safety: manually rewrite any leaked 127.0.0.1 Location headers
-          if (proxyRes.headers.location && proxyRes.headers.location.includes(`127.0.0.1:${blogState.port}`)) {
+          // Extra safety: manually rewrite any leaked localhost/127.0.0.1 or port Location headers
+          if (proxyRes.headers.location) {
+            let loc = proxyRes.headers.location;
             const externalProto = req.headers['x-forwarded-proto'] || 'https';
             const externalHost = req.headers['x-forwarded-host'] || req.headers.host || 'chatwizs.com';
-            proxyRes.headers.location = proxyRes.headers.location.replace(
-              `http://127.0.0.1:${blogState.port}`,
-              `${externalProto}://${externalHost}`
-            );
+            
+            // If the redirect is absolute and contains localhost or 127.0.0.1, replace it with external host
+            loc = loc.replace(/^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?/i, `${externalProto}://${externalHost}`);
+            
+            // If the redirect contains the external host BUT leaked the internal port (e.g. chatwizs.com:4000), strip the port
+            if (loc.includes(`${externalHost}:${blogState.port}`)) {
+              loc = loc.replace(`${externalHost}:${blogState.port}`, externalHost);
+            }
+            
+            // Also explicitly strip :4000 and :4001 just in case
+            if (loc.includes(':4000')) loc = loc.replace(':4000', '');
+            if (loc.includes(':4001')) loc = loc.replace(':4001', '');
+            
+            proxyRes.headers.location = loc;
           }
         },
       },
@@ -296,3 +308,4 @@ server.on('error', (err) => {
       process.exit(1);
     }
 });
+
