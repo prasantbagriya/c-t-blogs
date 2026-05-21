@@ -70,7 +70,6 @@ app.use(cors({
 // BUG FIX: Was hardcoded to port 3000 (same as Hostinger's main PORT → ECONNREFUSED)
 // Now dynamically reads BLOG_INTERNAL_PORT (4000) from app.js
 const proxyToNext = (targetPathPrefix) => (req, res) => {
-  // BUG FIX: Check blogReady before proxying — avoids ECONNREFUSED on cold start
   if (!blogState.ready) {
     return res.status(503).send(
       '<html><head><meta http-equiv="refresh" content="4"></head><body>' +
@@ -80,19 +79,44 @@ const proxyToNext = (targetPathPrefix) => (req, res) => {
     );
   }
   const blogPort = blogState.port;
-  const targetUrl = `http://127.0.0.1:${blogPort}${targetPathPrefix}${req.url}`;
+
+  // FIX: Don't add trailing slash when req.url is '/'
+  // Without this: GET /blog → proxy sends /blog/ → Next.js redirects /blog/ → /blog → LOOP
+  const reqPath = req.url === '/' ? '' : req.url;
+  const targetUrl = `http://127.0.0.1:${blogPort}${targetPathPrefix}${reqPath}`;
+
   const parsedUrl = new URL(targetUrl);
+  const externalProto = req.headers['x-forwarded-proto'] || 'https';
+  const externalHost = req.headers['x-forwarded-host'] || req.headers.host || 'chatwizs.com';
+
   const options = {
     hostname: parsedUrl.hostname,
     port: parsedUrl.port,
     path: parsedUrl.pathname + parsedUrl.search,
     method: req.method,
-    headers: { ...req.headers, host: `127.0.0.1:${blogPort}` }
+    headers: {
+      ...req.headers,
+      host: `127.0.0.1:${blogPort}`,
+      // Tell Next.js the real external host/proto so its redirects use the right URL
+      'x-forwarded-host': externalHost,
+      'x-forwarded-proto': externalProto,
+    }
   };
+
   const proxyReq = http.request(options, (proxyRes) => {
-    res.writeHead(proxyRes.statusCode, proxyRes.headers);
+    // FIX: Rewrite Location headers containing internal 127.0.0.1 address
+    // Next.js may redirect to http://127.0.0.1:4000/... which clients can't reach
+    const headers = { ...proxyRes.headers };
+    if (headers.location && headers.location.includes(`127.0.0.1:${blogPort}`)) {
+      headers.location = headers.location.replace(
+        `http://127.0.0.1:${blogPort}`,
+        `${externalProto}://${externalHost}`
+      );
+    }
+    res.writeHead(proxyRes.statusCode, headers);
     proxyRes.pipe(res, { end: true });
   });
+
   req.pipe(proxyReq, { end: true });
   proxyReq.on('error', (err) => {
     console.error('[Proxy Error]', err.message);
@@ -105,6 +129,7 @@ const proxyToNext = (targetPathPrefix) => (req, res) => {
     );
   });
 };
+
 
 app.use('/blog', proxyToNext('/blog'));
 app.use('/_next', proxyToNext('/_next'));
