@@ -68,11 +68,53 @@ app.use(cors({
   credentials: true
 }));
 
-// ✅ Blog Proxy using http-proxy-middleware (battle-tested, handles chunked encoding, streaming)
-// This replaces the manual http.request approach which had ERR_INCOMPLETE_RESPONSE issues.
+// ✅ Blog Proxy — ROOT LEVEL MOUNT (critical fix)
+// PROBLEM: app.use('/auth', proxy) → Express strips '/auth' → proxy sends GET /login → 404
+//          app.use('/admin', proxy) → Express strips '/admin' → proxy sends GET / → Homepage!
+// SOLUTION: Mount at root, filter paths manually → full path preserved → correct routing
+const BLOG_PATHS = [
+  '/blog', '/admin', '/auth', '/category', '/author',
+  '/stories', '/search', '/sitemap.xml', '/feed.xml',
+  '/news-sitemap.xml', '/api/og', '/_next',
+];
 
-// Middleware that shows "starting up" if blog not ready
-const blogReadyCheck = (req, res, next) => {
+// Lazy proxy instance — created once, reuses the current port from blogState
+let _blogProxy = null;
+const getBlogProxy = () => {
+  if (!_blogProxy) {
+    _blogProxy = createProxyMiddleware({
+      target: `http://127.0.0.1:${blogState.port}`,
+      changeOrigin: true,
+      // Use router to always pick up latest port (handles restart)
+      router: () => `http://127.0.0.1:${blogState.port}`,
+      on: {
+        error: (err, req, res) => {
+          console.error('[Proxy Error]', err.message);
+          blogState.ready = false;
+          if (!res.headersSent) {
+            res.status(503).send(
+              '<html><head><meta http-equiv="refresh" content="5"></head><body>' +
+              '<h2 style="font-family:sans-serif;text-align:center;margin-top:20vh">⏳ Blog restarting...</h2>' +
+              '<p style="text-align:center;font-family:sans-serif">Auto-refreshing in 5 seconds...</p>' +
+              '</body></html>'
+            );
+          }
+        },
+      },
+    });
+  }
+  return _blogProxy;
+};
+
+// Single root-level middleware — intercepts blog paths BEFORE Express can strip prefix
+app.use((req, res, next) => {
+  const path = req.path;
+  const isBlogPath = BLOG_PATHS.some(p =>
+    path === p || path.startsWith(p + '/') || path === p + '/'
+  );
+  if (!isBlogPath) return next();
+
+  // Blog not ready yet — show loading page
   if (!blogState.ready) {
     return res.status(503).send(
       '<html><head><meta http-equiv="refresh" content="4"></head><body>' +
@@ -81,45 +123,11 @@ const blogReadyCheck = (req, res, next) => {
       '</body></html>'
     );
   }
-  next();
-};
 
-// Create proxy middleware lazily so it always uses the current port from blogState
-const makeBlogProxy = () => createProxyMiddleware({
-  target: `http://127.0.0.1:${blogState.port}`,
-  changeOrigin: true,
-  on: {
-    error: (err, req, res) => {
-      console.error('[Proxy Error]', err.message);
-      blogState.ready = false;
-      if (!res.headersSent) {
-        res.status(503).send(
-          '<html><head><meta http-equiv="refresh" content="5"></head><body>' +
-          '<h2 style="font-family:sans-serif;text-align:center;margin-top:20vh">⏳ Blog restarting...</h2>' +
-          '<p style="text-align:center;font-family:sans-serif">Auto-refreshing in 5 seconds...</p>' +
-          '</body></html>'
-        );
-      }
-    },
-  },
+  // Forward full path to blog — e.g. /auth/login → blog:/auth/login ✅
+  getBlogProxy()(req, res, next);
 });
 
-let _blogProxy = null;
-const getBlogProxy = () => {
-  // Recreate if port changed
-  if (!_blogProxy) _blogProxy = makeBlogProxy();
-  return _blogProxy;
-};
-
-// ✅ Blog route proxies — All blog paths forwarded to Next.js on port 4000
-const blogRoutes = [
-  '/blog', '/admin', '/auth', '/category', '/author',
-  '/stories', '/search', '/sitemap.xml', '/feed.xml',
-  '/news-sitemap.xml', '/api/og', '/_next',
-];
-blogRoutes.forEach(route => {
-  app.use(route, blogReadyCheck, (req, res, next) => getBlogProxy()(req, res, next));
-});
 
 
 app.use(express.json({
