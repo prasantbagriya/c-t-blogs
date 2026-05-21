@@ -8,6 +8,13 @@ import SectionHeader from "./section-header"
 import { SERVICES } from "../lib/constants"
 
 export default function ServiceGridHome({ onNavigate }: { onNavigate?: (page: string) => void }) {
+  const openService = (serviceId: string) => {
+    window.dispatchEvent(new CustomEvent('app-navigate', {
+      detail: `/services/${serviceId}`,
+    }));
+    onNavigate?.('service-detail');
+  };
+
   return (
     <section className="py-10 bg-black relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 relative z-10">
@@ -25,7 +32,7 @@ export default function ServiceGridHome({ onNavigate }: { onNavigate?: (page: st
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              onClick={() => onNavigate?.('services')}
+              onClick={() => openService(service.id)}
               className="group relative bg-slate-900/20 backdrop-blur-sm border border-white/5 rounded-3xl p-8 hover:border-indigo-500/30 transition-all cursor-pointer overflow-hidden"
             >
               <GlowingEffect blur={0} borderWidth={1.5} spread={60} glow={true} disabled={false} proximity={64} inactiveZone={0.01} />

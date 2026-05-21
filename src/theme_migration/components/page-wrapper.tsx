@@ -10,6 +10,7 @@ interface PageWrapperProps {
 
 export default function PageWrapper({ children, showSpline = true }: PageWrapperProps) {
   const [scrollProgress, setScrollProgress] = useState(0)
+  const [showSplineScene, setShowSplineScene] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,6 +24,23 @@ export default function PageWrapper({ children, showSpline = true }: PageWrapper
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  useEffect(() => {
+    if (!showSpline) return;
+
+    const reveal = () => setShowSplineScene(true);
+    const idleId = window.setTimeout(reveal, 6000);
+    window.addEventListener("pointermove", reveal, { once: true, passive: true });
+    window.addEventListener("scroll", reveal, { once: true, passive: true });
+    window.addEventListener("keydown", reveal, { once: true });
+
+    return () => {
+      window.clearTimeout(idleId);
+      window.removeEventListener("pointermove", reveal);
+      window.removeEventListener("scroll", reveal);
+      window.removeEventListener("keydown", reveal);
+    };
+  }, [showSpline]);
+
   const splineOpacity = 1 - scrollProgress
 
   return (
@@ -30,7 +48,7 @@ export default function PageWrapper({ children, showSpline = true }: PageWrapper
       <BackgroundPaths />
       
       {/* Global Background Elements */}
-      {showSpline && (
+      {showSpline && showSplineScene && (
         <div 
           className="fixed right-[-10%] top-0 w-[60%] h-screen pointer-events-none z-0 hidden lg:block"
           style={{ opacity: splineOpacity, visibility: 'visible' }}

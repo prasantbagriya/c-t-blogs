@@ -18,20 +18,6 @@ import {
   Sparkles
 } from 'lucide-react';
 import { Instagram, Threads, Facebook } from './components/common/BrandIcons';
-import { motion, AnimatePresence } from 'motion/react';
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  BarChart,
-  Bar
-} from 'recharts';
 import {
   auth,
   db,
@@ -68,7 +54,6 @@ import {
 } from './api';
 
 import ErrorBoundary from './components/ErrorBoundary';
-import { CampaignAnalytics } from './components/analytics/CampaignAnalytics';
 
 // ── Heavy components loaded lazily to minimize initial JS bundle ─────────
 const FlowBuilderView = lazy(() => import('./components/FlowBuilderView').then(m => ({ default: m.FlowBuilderView })));
@@ -102,10 +87,15 @@ const PrivacyPolicy = lazy(() => import('./theme_migration/app/privacy-policy/pa
 const TermsOfService = lazy(() => import('./theme_migration/app/terms/page'));
 
 import ThemeHome from './theme_migration/app/page';
-import ThemeArtistsPage from './theme_migration/app/artists/page';
-import ThemeSuccessStoriesPage from './theme_migration/app/success-stories/page';
-import ThemeCareersPage from './theme_migration/app/careers/page';
-import ThemedAuthWrapper from './theme_migration/components/auth/themed-auth-wrapper';
+
+const ThemeArtistsPage = lazy(() => import('./theme_migration/app/artists/page'));
+const ThemeSuccessStoriesPage = lazy(() => import('./theme_migration/app/success-stories/page'));
+const ThemeCareersPage = lazy(() => import('./theme_migration/app/careers/page'));
+const ThemedAuthWrapper = lazy(() => import('./theme_migration/components/auth/themed-auth-wrapper'));
+const AboutPage = lazy(() => import('./theme_migration/components/about-page'));
+const ContactPage = lazy(() => import('./theme_migration/components/contact-page'));
+const ServicesPage = lazy(() => import('./theme_migration/components/services-page'));
+const PricingPage = lazy(() => import('./theme_migration/components/pricing-page'));
 
 
 const ThemeDirectMessagePage = lazy(() => import('./theme_migration/components/direct-message'));
@@ -113,16 +103,19 @@ const ThemeFormPage = lazy(() => import('./theme_migration/components/form-to-li
 const ThemeToolsPage = lazy(() => import('./theme_migration/app/tools/page'));
 
 import Navbar from './theme_migration/components/navbar';
-import PublicFooter from './theme_migration/components/animated-footer';
-import AnimatedFooter from './theme_migration/components/animated-footer';
-import ServiceDetailView from './theme_migration/components/service-detail-view';
-import BackgroundPaths from './theme_migration/components/background-paths';
-import AnimatedBackground from './theme_migration/components/animated-background';
-import BackgroundStripes from './theme_migration/components/background-stripes';
 
-import DashboardLayout, { DashboardTab } from './components/dashboard/DashboardLayout';
-import DashboardOverview from './components/dashboard/DashboardOverview';
-import Toast, { ToastType } from './theme_migration/components/ui/toast';
+const ServiceDetailView = lazy(() => import('./theme_migration/components/service-detail-view'));
+const AnimatedFooter = lazy(() => import('./theme_migration/components/animated-footer'));
+const BackgroundPaths = lazy(() => import('./theme_migration/components/background-paths'));
+const AnimatedBackground = lazy(() => import('./theme_migration/components/animated-background'));
+const BackgroundStripes = lazy(() => import('./theme_migration/components/background-stripes'));
+
+import type { DashboardTab } from './components/dashboard/DashboardLayout';
+import type { ToastType } from './theme_migration/components/ui/toast';
+
+const DashboardLayout = lazy(() => import('./components/dashboard/DashboardLayout'));
+const DashboardOverview = lazy(() => import('./components/dashboard/DashboardOverview'));
+const Toast = lazy(() => import('./theme_migration/components/ui/toast'));
 
 
 
@@ -152,6 +145,8 @@ export default function App() {
     const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '') || 'landing';
     const publicRoutes = ['services', 'service-detail', 'contact', 'about', 'success-stories', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'auth', 'dashboard', 'reset-password', 'threads-callback', 'instagram-callback', 'artists'];
     
+    if (path.startsWith('services/')) return 'service-detail';
+    if (path === 'get-started') return 'auth';
     if (path === 'about-us') return 'about';
     if (path === 'contact-us') return 'contact';
     if (path === 'privacy-policy') return 'privacy';
@@ -206,6 +201,13 @@ export default function App() {
 
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
 
+  useEffect(() => {
+    const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
+    if (path.startsWith('services/')) {
+      setSelectedServiceId(path.split('/').pop() || null);
+    }
+  }, []);
+
   const [userRole, setUserRole] = useState<UserRole>('user');
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -247,6 +249,7 @@ export default function App() {
   useEffect(() => {
     let path = `/${currentPage}`;
     if (currentPage === 'landing') path = '/';
+    else if (currentPage === 'service-detail') path = `/services/${selectedServiceId || 'bulk-whatsapp-campaigns'}`;
     else if (currentPage === 'about') path = '/about-us';
     else if (currentPage === 'contact') path = '/contact-us';
     else if (currentPage === 'privacy') path = '/privacy-policy';
@@ -260,7 +263,7 @@ export default function App() {
     if (window.location.pathname + window.location.search + window.location.hash !== newPath) {
       window.history.pushState({}, '', newPath);
     }
-  }, [currentPage, activeTab]);
+  }, [currentPage, activeTab, selectedServiceId]);
 
   // Handle browser back/forward buttons
   useEffect(() => {
@@ -269,7 +272,12 @@ export default function App() {
       const hash = window.location.hash.replace(/^#/, '');
 
       const validPages = ['landing', 'dashboard', 'auth', 'reset-password', 'services', 'service-detail', 'about', 'success-stories', 'contact', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'artists'];
-      if (path === 'about-us') {
+      if (path.startsWith('services/')) {
+        setSelectedServiceId(path.split('/').pop() || null);
+        setCurrentPage('service-detail');
+      } else if (path === 'get-started') {
+        setCurrentPage('auth');
+      } else if (path === 'about-us') {
         setCurrentPage('about');
       } else if (path === 'contact-us') {
         setCurrentPage('contact');
@@ -760,11 +768,7 @@ export default function App() {
         {/* Background Glow */}
         <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-transparent to-purple-500/10" />
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="relative z-10 flex flex-col items-center"
-        >
+        <div className="relative z-10 flex flex-col items-center animate-fade-in">
           <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center shadow-[0_0_50px_rgba(255,255,255,0.1)] relative">
             {/* Pulse rings */}
             <div className="absolute inset-0 rounded-2xl border border-white/20 animate-ping opacity-20" />
@@ -773,38 +777,19 @@ export default function App() {
             <Zap className="text-black w-10 h-10 fill-black" />
           </div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="mt-8 flex flex-col items-center"
-          >
+          <div className="mt-8 flex flex-col items-center">
             <span className="text-white font-black tracking-[0.3em] uppercase text-xs">ChatWizs</span>
 
             {/* Premium Loading Bar */}
             <div className="w-24 h-[3px] bg-white/5 rounded-full mt-6 overflow-hidden relative">
-              <motion.div
-                initial={{ x: "-100%" }}
-                animate={{ x: "100%" }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500 to-transparent"
-              />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500 to-transparent animate-loading-bar" />
             </div>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="mt-4 text-[8px] font-bold text-gray-500 uppercase tracking-widest"
-            >
+            <div className="mt-4 text-[8px] font-bold text-gray-500 uppercase tracking-widest">
               Establishing Secure Connection
-            </motion.div>
-          </motion.div>
-        </motion.div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -839,29 +824,33 @@ export default function App() {
 
   if (currentPage === 'auth') {
     return (
-      <ThemedAuthWrapper
-        onSuccess={(user) => {
-          console.log('[App] Auth success triggered for:', user?.uid);
-          if (user) setCurrentUser(user);
-          setCurrentPage('dashboard');
-        }}
-      />
+      <Suspense fallback={<LoadingFallback />}>
+        <ThemedAuthWrapper
+          onSuccess={(user: any) => {
+            console.log('[App] Auth success triggered for:', user?.uid);
+            if (user) setCurrentUser(user);
+            setCurrentPage('dashboard');
+          }}
+        />
+      </Suspense>
     );
   }
 
   if (currentPage === 'service-detail') {
     return (
       <div className="relative min-h-screen bg-black">
-        <BackgroundPaths />
-        <AnimatedBackground />
-        <BackgroundStripes />
+        <Suspense fallback={null}><BackgroundPaths /></Suspense>
+        <Suspense fallback={null}><AnimatedBackground /></Suspense>
+        <Suspense fallback={null}><BackgroundStripes /></Suspense>
         <div className="relative z-10">
           <Navbar onNavigate={setCurrentPage} />
-          <ServiceDetailView
-            id={selectedServiceId || 'bulk-whatsapp-campaigns'}
-            onBack={() => setCurrentPage('services')}
-            onNavigate={setCurrentPage}
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <ServiceDetailView
+              id={selectedServiceId || 'bulk-whatsapp-campaigns'}
+              onBack={() => setCurrentPage('services')}
+              onNavigate={setCurrentPage}
+            />
+          </Suspense>
           <AnimatedFooter />
         </div>
       </div>
@@ -870,13 +859,28 @@ export default function App() {
 
 
   // Premium Loading Fallback
-  const LoadingFallback = () => (
-    <div className="fixed inset-0 bg-black flex items-center justify-center z-[100]">
-      <div className="relative">
-        <div className="w-16 h-16 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-8 h-8 bg-blue-500/10 rounded-full blur-xl animate-pulse" />
+  function LoadingFallback() {
+    return (
+      <div className="fixed inset-0 bg-black flex items-center justify-center z-[100]">
+        <div className="relative">
+          <div className="w-16 h-16 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-8 h-8 bg-blue-500/10 rounded-full blur-xl animate-pulse" />
+          </div>
         </div>
+      </div>
+    );
+  }
+
+  const MarketingShell = ({ children }: { children: React.ReactNode }) => (
+    <div className="relative min-h-screen bg-black">
+      <Suspense fallback={null}><BackgroundPaths /></Suspense>
+      <Suspense fallback={null}><AnimatedBackground /></Suspense>
+      <Suspense fallback={null}><BackgroundStripes /></Suspense>
+      <div className="relative z-10">
+        <Navbar onNavigate={setCurrentPage} />
+        {children}
+        <AnimatedFooter onNavigate={setCurrentPage} />
       </div>
     </div>
   );
@@ -893,6 +897,22 @@ export default function App() {
     if (currentPage === 'careers') {
       return <ThemeCareersPage onNavigate={setCurrentPage} />;
     }
+    if (currentPage === 'about') {
+      return <MarketingShell><AboutPage onNavigate={setCurrentPage} /></MarketingShell>;
+    }
+
+    if (currentPage === 'contact') {
+      return <MarketingShell><ContactPage /></MarketingShell>;
+    }
+
+    if (currentPage === 'services') {
+      return <MarketingShell><ServicesPage /></MarketingShell>;
+    }
+
+    if (currentPage === 'pricing') {
+      return <MarketingShell><PricingPage onNavigate={setCurrentPage} /></MarketingShell>;
+    }
+
     if (currentPage === 'whatsapp-link-generator') return <Suspense fallback={null}><ThemeToolsPage onNavigate={setCurrentPage} /></Suspense>;
 
     if (currentPage === 'whatsapp-direct-message') return <Suspense fallback={null}><ThemeDirectMessagePage onNavigate={setCurrentPage} /></Suspense>;
@@ -957,43 +977,38 @@ export default function App() {
 
   if (!currentUser && currentPage === 'dashboard') {
     return (
-      <ThemedAuthWrapper
-        onSuccess={(user) => {
-          console.log('[App] onAuthSuccess (bypass) triggered for:', user?.uid);
-          if (user) setCurrentUser(user);
-          setCurrentPage('dashboard');
-        }}
-      />
+      <Suspense fallback={<LoadingFallback />}>
+        <ThemedAuthWrapper
+          onSuccess={(user: any) => {
+            console.log('[App] onAuthSuccess (bypass) triggered for:', user?.uid);
+            if (user) setCurrentUser(user);
+            setCurrentPage('dashboard');
+          }}
+        />
+      </Suspense>
     );
   }
 
   return (
-    <DashboardLayout 
-      activeTab={activeTab} 
-      setActiveTab={handleSetActiveTab} 
-      user={currentUser} 
-      userRole={userRole}
-      isDarkMode={isDarkMode}
-      setIsDarkMode={saveAccountTheme}
-      handleLogout={handleLogout}
-      notifications={notifications}
-      selectedAccount={selectedAccount}
-      setSelectedAccount={setSelectedAccount}
-      allAccounts={globalAccounts}
-      activeSubTab={activeSubTab}
-      setActiveSubTab={setActiveSubTab}
-      hideMobileNav={isChatActive}
-    >
+    <Suspense fallback={<LoadingFallback />}>
+      <DashboardLayout 
+        activeTab={activeTab} 
+        setActiveTab={handleSetActiveTab} 
+        user={currentUser} 
+        userRole={userRole}
+        isDarkMode={isDarkMode}
+        setIsDarkMode={saveAccountTheme}
+        handleLogout={handleLogout}
+        notifications={notifications}
+        selectedAccount={selectedAccount}
+        setSelectedAccount={setSelectedAccount}
+        allAccounts={globalAccounts}
+        activeSubTab={activeSubTab}
+        setActiveSubTab={setActiveSubTab}
+        hideMobileNav={isChatActive}
+      >
       <ErrorBoundary>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2, ease: 'linear' }}
-            className="flex-1 min-h-0 flex flex-col"
-          >
+        <div key={activeTab} className="flex-1 min-h-0 flex flex-col animate-fade-in">
             <Suspense fallback={
               <div className="flex-1 flex items-center justify-center">
                 <div className="w-12 h-12 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin" />
@@ -1123,24 +1138,24 @@ export default function App() {
                 />
               )}
             </Suspense>
-          </motion.div>
-        </AnimatePresence>
+        </div>
       </ErrorBoundary>
 
       <div className="fixed bottom-0 left-0 right-0 z-[100] pointer-events-none p-8 flex flex-col items-center gap-4">
-        <AnimatePresence>
-          {toasts.map(toast => (
-            <div key={toast.id} className="pointer-events-auto">
+        {toasts.map(toast => (
+          <div key={toast.id} className="pointer-events-auto">
+            <Suspense fallback={null}>
               <Toast
                 message={toast.message}
                 type={toast.type}
                 onClose={() => removeToast(toast.id)}
               />
-            </div>
-          ))}
-        </AnimatePresence>
+            </Suspense>
+          </div>
+        ))}
       </div>
-    </DashboardLayout>
+      </DashboardLayout>
+    </Suspense>
   );
 
 }

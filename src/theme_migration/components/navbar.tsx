@@ -12,15 +12,21 @@ export default function Navbar({ onNavigate }: { onNavigate?: (page: string) => 
   const [isToolsOpen, setIsToolsOpen] = useState(false)
 
   const handleNavClick = (page: string) => {
+    if (page === 'blog') {
+      window.location.href = '/blog';
+      return;
+    }
     onNavigate?.(page)
     setIsMenuOpen(false)
     setIsToolsOpen(false)
   }
 
   const navLinks = [
-    { label: 'Artists', page: 'artists' },
+    { label: 'Services', page: 'services' },
+    { label: 'Pricing', page: 'pricing' },
+    { label: 'Blog', page: 'blog' },
     { label: 'Success Stories', page: 'success-stories' },
-    { label: 'Careers', page: 'careers' }
+    { label: 'Contact', page: 'contact' }
   ]
 
   return (

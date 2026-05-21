@@ -97,7 +97,50 @@ export async function signOut(authObj: any = null) {
   currentUser = null;
   notifyAuthListeners();
 }
+
+let facebookSdkPromise: Promise<void> | null = null;
+
+function loadFacebookSdk() {
+  if ((window as any).FB) return Promise.resolve();
+  if (facebookSdkPromise) return facebookSdkPromise;
+
+  facebookSdkPromise = new Promise((resolve, reject) => {
+    const existing = document.getElementById('facebook-jssdk') as HTMLScriptElement | null;
+    const timeout = window.setTimeout(() => reject(new Error('Facebook SDK load timed out. Please try again.')), 10000);
+
+    (window as any).fbAsyncInit = function() {
+      (window as any).FB.init({
+        appId: '1464713225364837',
+        cookie: true,
+        xfbml: true,
+        version: 'v22.0'
+      });
+      window.clearTimeout(timeout);
+      window.dispatchEvent(new Event('FBReady'));
+      resolve();
+    };
+
+    if (existing) return;
+
+    const script = document.createElement('script');
+    script.id = 'facebook-jssdk';
+    script.async = true;
+    script.defer = true;
+    script.src = 'https://connect.facebook.net/en_US/sdk.js';
+    script.onerror = () => {
+      window.clearTimeout(timeout);
+      facebookSdkPromise = null;
+      reject(new Error('Facebook SDK failed to load. Please check your connection and try again.'));
+    };
+    document.head.appendChild(script);
+  });
+
+  return facebookSdkPromise;
+}
+
 export async function signInWithFacebook() {
+  await loadFacebookSdk();
+
   return new Promise((resolve, reject) => {
     if (!(window as any).FB) {
       return reject(new Error('Facebook SDK not loaded yet. Please refresh and try again.'));

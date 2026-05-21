@@ -4,18 +4,33 @@ import { useEffect, useState } from "react"
 
 export default function MouseMoveEffect() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [isMobile, setIsMobile] = useState(true)
 
   useEffect(() => {
+    const checkMobile = () => window.innerWidth < 768;
+    setIsMobile(checkMobile());
+
+    if (checkMobile()) return;
+
+    let ticking = false;
     const handleMouseMove = (event: MouseEvent) => {
-      setMousePosition({ x: event.clientX, y: event.clientY })
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setMousePosition({ x: event.clientX, y: event.clientY });
+          ticking = false;
+        });
+        ticking = true;
+      }
     }
 
-    window.addEventListener("mousemove", handleMouseMove)
+    window.addEventListener("mousemove", handleMouseMove, { passive: true })
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove)
     }
   }, [])
+
+  if (isMobile) return null; // No mouse effect on touch devices
 
   return (
     <div

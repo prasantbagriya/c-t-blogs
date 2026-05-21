@@ -2,12 +2,56 @@
 
 import React from "react"
 import { motion } from "framer-motion"
-import { CheckCircle, Zap, BarChart3, Globe, Code, Target } from "lucide-react"
+import { CheckCircle, Zap, BarChart3, Globe, Code, Target, MessageSquare } from "lucide-react"
 import { GlowingEffect } from "./ui/glowing-effect"
 import AnimatedFooter from "./animated-footer"
 import Navbar from "./navbar"
 
 const serviceDetails: Record<string, any> = {
+  "whatsapp-business-api": {
+    title: "Official WhatsApp Business API",
+    description: "Scale customer engagement with the official Meta Cloud API, verified business setup, compliant templates, and high-volume messaging infrastructure.",
+    icon: <MessageSquare className="w-12 h-12" />,
+    features: ["Verified Business Setup", "Template Campaigns", "Cloud API Infrastructure", "Delivery Analytics"],
+    stats: [
+      { label: "Delivery Rate", value: "99.9%" },
+      { label: "Open Rate", value: "90%+" },
+      { label: "Compliance", value: "Meta API" }
+    ]
+  },
+  "ai-chatbot-automation": {
+    title: "AI Chatbot Automation",
+    description: "Build intelligent automation flows for WhatsApp, Instagram, and web leads so support, qualification, and follow-ups run around the clock.",
+    icon: <Zap className="w-12 h-12" />,
+    features: ["No-code AI Builder", "Lead Qualification", "Human Handoff", "CRM Sync"],
+    stats: [
+      { label: "Response Time", value: "< 1s" },
+      { label: "Support Load Cut", value: "65%" },
+      { label: "Lead Lift", value: "40%" }
+    ]
+  },
+  "omnichannel-marketing": {
+    title: "Omnichannel Marketing Hub",
+    description: "Unify WhatsApp, Instagram, Facebook, and website conversations in one team dashboard with routing, notes, and follow-up workflows.",
+    icon: <Globe className="w-12 h-12" />,
+    features: ["Unified Inbox", "Team Assignment", "Conversation Notes", "Multi-platform Sync"],
+    stats: [
+      { label: "Channels", value: "4+" },
+      { label: "Team Speed", value: "2x" },
+      { label: "Lead Capture", value: "24/7" }
+    ]
+  },
+  "meta-verified-campaigns": {
+    title: "Meta-Verified Campaigns",
+    description: "Launch approved WhatsApp and Meta campaigns with ROI tracking, template governance, and conversion-focused follow-up automation.",
+    icon: <Target className="w-12 h-12" />,
+    features: ["Approved Templates", "Ad-to-Chat Tracking", "Conversion Insights", "Retargeting Flows"],
+    stats: [
+      { label: "CPA Reduction", value: "20%" },
+      { label: "Conversion Lift", value: "35%" },
+      { label: "Attribution", value: "Direct" }
+    ]
+  },
   "bulk-whatsapp-campaigns": {
     title: "Bulk WhatsApp Campaigns",
     description: "Reach thousands of customers instantly with personalized, targeted broadcast campaigns using the Meta Cloud API.",
@@ -136,11 +180,11 @@ export default function ServiceDetailView({ id, onBack, onNavigate }: { id: stri
                 {service.description}
               </p>
               <div className="flex flex-wrap gap-4">
-                <button className="bg-white text-black px-10 py-5 rounded-2xl font-bold text-xl hover:shadow-[0_0_40px_rgba(129,140,248,0.6)] transition-all">
+                <button onClick={() => onNavigate('auth')} className="bg-white text-black px-10 py-5 rounded-2xl font-bold text-xl hover:shadow-[0_0_40px_rgba(129,140,248,0.6)] transition-all">
                   Get Started Now
                 </button>
-                <button className="bg-white/5 border border-white/10 px-10 py-5 rounded-2xl font-bold text-xl hover:bg-white/10 transition-all text-white">
-                  Watch Demo
+                <button onClick={() => onNavigate('contact')} className="bg-white/5 border border-white/10 px-10 py-5 rounded-2xl font-bold text-xl hover:bg-white/10 transition-all text-white">
+                  Talk to Expert
                 </button>
               </div>
             </motion.div>

@@ -5,6 +5,12 @@ import { defineConfig, loadEnv } from 'vite';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
+  const blogPort = env.BLOG_PORT || '4000';
+  const blogProxy = {
+    target: `http://127.0.0.1:${blogPort}`,
+    changeOrigin: true,
+    secure: false,
+  };
   return {
     plugins: [react(), tailwindcss()],
     define: {
@@ -28,6 +34,10 @@ export default defineConfig(({ mode }) => {
             // Vendor: Animation
             if (id.includes('node_modules/motion/') || id.includes('node_modules/framer-motion/')) {
               return 'vendor-motion';
+            }
+            // Vendor: Firebase
+            if (id.includes('node_modules/firebase/')) {
+              return 'vendor-firebase';
             }
             // Vendor: Charts
             if (id.includes('node_modules/recharts/') || id.includes('node_modules/d3-') || id.includes('node_modules/victory-')) {
@@ -91,6 +101,9 @@ export default defineConfig(({ mode }) => {
         protocol: 'ws',
       },
       proxy: {
+        '/api/admin': blogProxy,
+        '/api/auth/login': blogProxy,
+        '/api/og': blogProxy,
         '/api': {
           target: 'http://127.0.0.1:3001',
           changeOrigin: true,
@@ -111,16 +124,17 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           secure: false,
         },
-        '/blog': {
-          target: 'http://127.0.0.1:3000',
-          changeOrigin: true,
-          secure: false,
-        },
-        '/_next': {
-          target: 'http://127.0.0.1:3000',
-          changeOrigin: true,
-          secure: false,
-        },
+        '/blog': blogProxy,
+        '/admin': blogProxy,
+        '/auth': blogProxy,
+        '/category': blogProxy,
+        '/author': blogProxy,
+        '/stories': blogProxy,
+        '/search': blogProxy,
+        '/sitemap.xml': blogProxy,
+        '/feed.xml': blogProxy,
+        '/news-sitemap.xml': blogProxy,
+        '/_next': blogProxy,
       },
     },
   };

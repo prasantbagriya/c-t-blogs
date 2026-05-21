@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inquiry Admin Login | ChatWizs</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="brand">
+                <h1>Leads Manager</h1>
+                <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.5rem;">Access your inquiry dashboard</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Admin Email</label>
+                    <input type="email" id="email" placeholder="admin@chatwizs.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <div id="errorMsg" style="color: var(--danger); font-size: 0.875rem; margin-bottom: 1rem; display: none;"></div>
+                <button type="submit" id="loginBtn">Login to Dashboard</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Check if already logged in
+        if (localStorage.getItem('inquiry_token')) {
+            window.location.href = 'dashboard.html';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('loginBtn');
+            const errorMsg = document.getElementById('errorMsg');
+
+            btn.disabled = true;
+            btn.innerText = 'Authenticating...';
+            errorMsg.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/inquiries/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                if (response.ok && data.token) {
+                    localStorage.setItem('inquiry_token', data.token);
+                    window.location.href = 'dashboard.html';
+                } else {
+                    errorMsg.innerText = data.error || 'Login failed';
+                    errorMsg.style.display = 'block';
+                    btn.disabled = false;
+                    btn.innerText = 'Login to Dashboard';
+                }
+            } catch (err) {
+                errorMsg.innerText = 'Connection error. Is the server running?';
+                errorMsg.style.display = 'block';
+                btn.disabled = false;
+                btn.innerText = 'Login to Dashboard';
+            }
+        });
+    </script>
+</body>
+</html>

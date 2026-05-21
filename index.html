@@ -57,7 +57,7 @@
     <!-- ═══════════════════════════════════════════
          GOOGLE FONTS (Display=swap for non-blocking)
     ═══════════════════════════════════════════ -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
     <!-- ═══════════════════════════════════════════
          STRUCTURED DATA / SCHEMA
@@ -125,57 +125,8 @@
       })();
     </script>
 
-    <!-- ═══════════════════════════════════════════
-         GOOGLE ANALYTICS — defer to not block render
-    ═══════════════════════════════════════════ -->
-    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-P9267BP0W6"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-P9267BP0W6', { 'send_page_view': true });
-    </script>
-    <script>
-      window.onerror = function(message, source, lineno, colno, error) {
-        alert("JS ERROR: " + message);
-        return false;
-      };
-      window.addEventListener("unhandledrejection", function(event) {
-        alert("PROMISE REJECTION: " + event.reason);
-      });
-    </script>
-
-    <!-- ═══════════════════════════════════════════
-         GOOGLE ADSENSE
-    ═══════════════════════════════════════════ -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1798439945710344"
-     crossorigin="anonymous"></script>
-
   </head>
   <body>
-    <!-- Facebook JS SDK — deferred so it never blocks render -->
-    <script>
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId   : '1464713225364837',
-          cookie  : true,
-          xfbml   : true,
-          version : 'v22.0'
-        });
-        window.dispatchEvent(new Event('FBReady'));
-      };
-      // Load FB SDK after page is interactive
-      window.addEventListener('load', function() {
-        (function(d, s, id){
-          var js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return;
-          js = d.createElement(s); js.id = id;
-          js.src = 'https://connect.facebook.net/en_US/sdk.js';
-          fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-      });
-    </script>
-
     <div id="root"></div>
 
     <!-- React App -->
@@ -195,10 +146,45 @@
       }
       window.addEventListener('scroll', loadSpline, { once: true, passive: true });
       window.addEventListener('mousemove', loadSpline, { once: true, passive: true });
-      setTimeout(loadSpline, 5000); // Fallback: load after 5s anyway
     </script>
-    <!-- ChatWizs Widget -->
-    <script type="module" src="/sdk/widget.js" data-id="1b4b3546-32f3-456d-9f97-ed657d5db994" async></script>
-    <!-- End ChatWizs Widget -->
+    <script>
+      (function() {
+        var loaded = false;
+        function loadNonCriticalScripts() {
+          if (loaded) return;
+          loaded = true;
+
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = window.gtag || function(){ dataLayer.push(arguments); };
+
+          var ga = document.createElement('script');
+          ga.async = true;
+          ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-P9267BP0W6';
+          ga.onload = function() {
+            gtag('js', new Date());
+            gtag('config', 'G-P9267BP0W6', { send_page_view: true });
+          };
+          document.head.appendChild(ga);
+
+          var ads = document.createElement('script');
+          ads.async = true;
+          ads.crossOrigin = 'anonymous';
+          ads.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1798439945710344';
+          document.head.appendChild(ads);
+
+          var widget = document.createElement('script');
+          widget.type = 'module';
+          widget.async = true;
+          widget.src = '/sdk/widget.js';
+          widget.dataset.id = '1b4b3546-32f3-456d-9f97-ed657d5db994';
+          document.body.appendChild(widget);
+        }
+
+        var schedule = function(cb) { return setTimeout(cb, 12000); };
+        window.addEventListener('load', function() { schedule(loadNonCriticalScripts); });
+        window.addEventListener('scroll', loadNonCriticalScripts, { once: true, passive: true });
+        window.addEventListener('pointerdown', loadNonCriticalScripts, { once: true, passive: true });
+      })();
+    </script>
   </body>
 </html>

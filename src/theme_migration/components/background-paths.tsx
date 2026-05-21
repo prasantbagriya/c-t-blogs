@@ -4,18 +4,43 @@ import React, { useEffect, useState } from "react"
 
 export default function BackgroundPaths() {
   const [scrollProgress, setScrollProgress] = useState(0)
+  const [isMobile, setIsMobile] = useState(true)
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY
-      const viewportHeight = window.innerHeight
-      const progress = Math.min(scrollY / viewportHeight, 1)
-      setScrollProgress(progress)
+    // Disable heavy background on mobile devices initially
+    const checkMobile = () => window.innerWidth < 768;
+    setIsMobile(checkMobile());
+
+    const handleResize = () => setIsMobile(checkMobile());
+    window.addEventListener("resize", handleResize);
+
+    if (checkMobile()) {
+      return () => window.removeEventListener("resize", handleResize);
     }
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
+    // Use requestAnimationFrame for smooth scrolling on desktop without blocking main thread
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          const viewportHeight = window.innerHeight;
+          const progress = Math.min(scrollY / viewportHeight, 1);
+          setScrollProgress(progress);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
+    }
   }, [])
+
+  if (isMobile) return null; // Save CPU on mobile completely
 
   const linesOpacity = 0.6 - scrollProgress * 0.4
   const linesScale = 1 + scrollProgress * 0.1
