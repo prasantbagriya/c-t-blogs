@@ -1,6 +1,6 @@
 'use server';
 
-import { deletePost, deleteStory, savePost, saveStory, Post, getPosts, getStories } from './db';
+import { deletePost, deleteStory, savePost, saveStory, Post, WebStory, getPosts, getStories } from './db';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { writeFile, access, mkdir, unlink } from 'fs/promises';
@@ -80,8 +80,8 @@ export async function handleAdminLogin(password: string) {
     const cookieStore = await cookies();
     cookieStore.set('admin_session', sessionToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: false, // Fixed for Hostinger testing
+      sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: '/',
     });
@@ -124,7 +124,7 @@ export async function handleSavePost(post: Post) {
   }
 }
 
-export async function handleSaveStory(story: any) {
+export async function handleSaveStory(story: WebStory) {
   try {
     await checkAdminAuth(); // 🔒 Secure action with unified verification
     

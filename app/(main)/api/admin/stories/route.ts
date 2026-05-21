@@ -1,8 +1,9 @@
+export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { getStories, saveStory, deleteStory } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
-import { isValidSession } from '@/app/(main)/api/auth/login/route';
+import { isValidSession } from '@/lib/auth';
 
 // ✅ Secure checkAuth: validates cryptographic session token
 async function checkAuth() {

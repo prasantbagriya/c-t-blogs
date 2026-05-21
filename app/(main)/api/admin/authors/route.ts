@@ -1,7 +1,8 @@
+export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { getAuthors, saveAuthor, deleteAuthor } from '@/lib/db';
-import { isValidSession } from '@/app/(main)/api/auth/login/route';
+import { isValidSession } from '@/lib/auth';
 
 async function checkAuth() {
   const cookieStore = await cookies();

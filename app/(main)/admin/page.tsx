@@ -13,13 +13,23 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard');
 
   useEffect(() => {
-    fetch('/api/admin/posts')
-      .then(res => res.json())
+    fetch('/api/admin/posts', { cache: 'no-store' })
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
+      })
       .then(data => {
-        if (Array.isArray(data)) setPosts(data);
+        if (Array.isArray(data)) {
+          setPosts(data);
+        } else {
+          console.error('[Admin] Invalid data received from /api/admin/posts:', data);
+        }
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch((err) => {
+        console.error('[Admin] Fetch error for /api/admin/posts:', err);
+        setLoading(false);
+      });
   }, []);
 
   // ==========================================

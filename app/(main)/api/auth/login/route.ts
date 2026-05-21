@@ -54,8 +54,8 @@ export async function POST(request: Request) {
       const cookieStore = await cookies();
       cookieStore.set('admin_session', sessionToken, {
         httpOnly: true,          // ✅ Not accessible via JS (XSS protection)
-        secure: process.env.NODE_ENV === 'production', // ✅ HTTPS only in prod
-        sameSite: 'strict',      // ✅ CSRF protection (strict = no cross-site)
+        secure: false,           // ✅ Fixed for Hostinger HTTP/IP testing
+        sameSite: 'lax',         // ✅ CSRF protection but allows redirects
         maxAge: 60 * 60 * 24 * 7, // 7 days
         path: '/',
       });

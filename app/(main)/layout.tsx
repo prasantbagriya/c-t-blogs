@@ -294,20 +294,20 @@ export default function RootLayout({
         <a href="#main-content" className="sr-only" style={{ top: '1rem', left: '1rem', zIndex: 9999, background: 'var(--primary)', color: 'white', padding: '0.5rem 1rem', borderRadius: 'var(--radius)', textDecoration: 'none' }}>
           Skip to content
         </a>
-        <header className="glass-panel" style={{ position: 'sticky', top: 0, zIndex: 100, margin: 0 }}>
-          <nav className="container" aria-label="Main Navigation" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 'var(--header-height)' }}>
-            <a href="/" style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.025em', color: 'var(--foreground)', textDecoration: 'none' }} aria-label="ChatWizs Home">
-              Chat<span style={{ color: 'var(--primary)' }}>Wizs</span>
+        <header className="glass-panel sticky top-0 z-[100] m-0">
+          <nav className="container flex justify-between items-center h-[var(--header-height)]" aria-label="Main Navigation">
+            <a href="/" className="text-2xl font-extrabold tracking-tight text-[var(--foreground)] no-underline" aria-label="ChatWizs Home">
+              Chat<span className="text-[var(--primary)]">Wizs</span>
             </a>
             {/* ✅ Admin link REMOVED from public header — security + no user value */}
             {/* Desktop Nav */}
             <ul className="desktop-nav" role="list">
-              <li><a href="/" style={{ fontWeight: 600, color: 'var(--foreground)', textDecoration: 'none' }}>Home</a></li>
-              <li><Link href="/blog" style={{ fontWeight: 600, color: 'var(--foreground)', textDecoration: 'none' }}>Blog</Link></li>
-              <li><Link href="/stories" style={{ fontWeight: 600, color: 'var(--foreground)', textDecoration: 'none' }}>Stories</Link></li>
-              <li><a href="/about" style={{ fontWeight: 600, color: 'var(--foreground)', textDecoration: 'none' }}>About</a></li>
-              <li><Link href="/search" style={{ fontWeight: 600, color: 'var(--foreground)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.25rem' }} aria-label="Search articles">🔍 Search</Link></li>
-              <li><a href="/contact" style={{ fontSize: '0.875rem', color: 'white', background: 'var(--primary)', padding: '0.5rem 1.25rem', borderRadius: '6px', fontWeight: 700, textDecoration: 'none' }}>Contact</a></li>
+              <li><a href="/" className="font-semibold text-[var(--foreground)] no-underline">Home</a></li>
+              <li><Link href="/blog" className="font-semibold text-[var(--foreground)] no-underline">Blog</Link></li>
+              <li><Link href="/stories" className="font-semibold text-[var(--foreground)] no-underline">Stories</Link></li>
+              <li><a href="/about" className="font-semibold text-[var(--foreground)] no-underline">About</a></li>
+              <li><Link href="/search" className="font-semibold text-[var(--foreground)] no-underline flex items-center gap-1" aria-label="Search articles">🔍 Search</Link></li>
+              <li><a href="/contact" className="text-sm text-white bg-[var(--primary)] py-2 px-5 rounded-md font-bold no-underline">Contact</a></li>
             </ul>
             {/* Mobile Nav — hamburger */}
             <div className="mobile-nav-btn">
@@ -318,20 +318,20 @@ export default function RootLayout({
         <main id="main-content" className="container">
           {children}
         </main>
-        <footer style={{ borderTop: '1px solid var(--border)', marginTop: '3rem', background: 'var(--muted)' }}>
-          <div className="container" style={{ padding: '2.5rem 1.5rem', textAlign: 'center' }}>
-            <a href="/" style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--foreground)', textDecoration: 'none', display: 'inline-block', marginBottom: '1.25rem' }}>
-              Chat<span style={{ color: 'var(--primary)' }}>Wizs</span>
+        <footer className="border-t border-[var(--border)] mt-12 bg-[var(--muted)]">
+          <div className="container py-10 px-6 text-center">
+            <a href="/" className="text-xl font-extrabold text-[var(--foreground)] no-underline inline-block mb-5">
+              Chat<span className="text-[var(--primary)]">Wizs</span>
             </a>
-            <nav aria-label="Footer Navigation" style={{ display: 'flex', justifyContent: 'center', gap: '1.25rem', flexWrap: 'wrap', marginBottom: '1.25rem', fontSize: '0.875rem', fontWeight: 600 }}>
-              <a href="/about" style={{ color: 'var(--muted-foreground)', textDecoration: 'none' }}>About Us</a>
-              <Link href="/blog" style={{ color: 'var(--muted-foreground)', textDecoration: 'none' }}>Blog</Link>
-              <Link href="/stories" style={{ color: 'var(--muted-foreground)', textDecoration: 'none' }}>Web Stories</Link>
-              <a href="/editorial-policy" style={{ color: 'var(--primary)', fontWeight: 700, textDecoration: 'none' }}>Editorial Guidelines</a>
-              <a href="/fact-checking-policy" style={{ color: 'var(--primary)', fontWeight: 700, textDecoration: 'none' }}>Fact-Checking</a>
-              <a href="/privacy" style={{ color: 'var(--muted-foreground)', textDecoration: 'none' }}>Privacy</a>
-              <a href="/contact" style={{ color: 'var(--muted-foreground)', textDecoration: 'none' }}>Contact</a>
-              <a href="/terms" style={{ color: 'var(--muted-foreground)', textDecoration: 'none' }}>Terms</a>
+            <nav aria-label="Footer Navigation" className="flex justify-center gap-5 flex-wrap mb-5 text-sm font-semibold">
+              <a href="/about" className="text-[var(--muted-foreground)] no-underline">About Us</a>
+              <Link href="/blog" className="text-[var(--muted-foreground)] no-underline">Blog</Link>
+              <Link href="/stories" className="text-[var(--muted-foreground)] no-underline">Web Stories</Link>
+              <a href="/editorial-policy" className="text-[var(--primary)] font-bold no-underline">Editorial Guidelines</a>
+              <a href="/fact-checking-policy" className="text-[var(--primary)] font-bold no-underline">Fact-Checking</a>
+              <a href="/privacy" className="text-[var(--muted-foreground)] no-underline">Privacy</a>
+              <a href="/contact" className="text-[var(--muted-foreground)] no-underline">Contact</a>
+              <a href="/terms" className="text-[var(--muted-foreground)] no-underline">Terms</a>
             </nav>
             <p style={{ color: 'var(--muted-foreground)', fontSize: '0.8125rem' }}>
               <Copyright /> Expert-verified content built for Google&apos;s EEAT standards.

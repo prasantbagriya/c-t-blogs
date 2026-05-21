@@ -2,7 +2,9 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { getPosts, savePost, deletePost } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
-import { isValidSession } from '@/app/(main)/api/auth/login/route';
+import { isValidSession } from '@/lib/auth';
+
+export const dynamic = 'force-dynamic'; // ✅ Prevent Next.js static caching
 
 // ✅ Secure checkAuth: validates cryptographic session token (not === 'true')
 async function checkAuth() {
@@ -12,9 +14,18 @@ async function checkAuth() {
 }
 
 export async function GET() {
-  if (!await checkAuth()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  const posts = await getPosts();
-  return NextResponse.json(posts);
+  if (!await checkAuth()) {
+    console.error('[API] /api/admin/posts - 401 Unauthorized. Token invalid or missing.');
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  
+  try {
+    const posts = await getPosts();
+    return NextResponse.json(posts);
+  } catch (error) {
+    console.error('[API] /api/admin/posts - Error fetching posts:', error);
+    return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 });
+  }
 }
 
 export async function POST(request: Request) {
