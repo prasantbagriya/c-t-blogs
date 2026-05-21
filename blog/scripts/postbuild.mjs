@@ -12,9 +12,14 @@ async function postbuild() {
     await cp(join(process.cwd(), 'data'), join(standaloneDir, 'data'), { recursive: true });
     console.log('✅ Copied data to standalone');
 
-    // Copy public folder to standalone (Next.js does this but sometimes uploads are missed)
+    // Copy public folder to standalone
     await cp(join(process.cwd(), 'public'), join(standaloneDir, 'public'), { recursive: true });
     console.log('✅ Copied public to standalone');
+
+    // CRITICAL: Copy .next/static to standalone/.next/static
+    // Without this, Next.js standalone server won't serve CSS (broken design) or JS (broken interactivity)
+    await cp(join(process.cwd(), '.next', 'static'), join(standaloneDir, '.next', 'static'), { recursive: true });
+    console.log('✅ Copied .next/static to standalone');
 
   } catch (error) {
     console.error('⚠️ Post-build step skipped or failed:', error.message);
