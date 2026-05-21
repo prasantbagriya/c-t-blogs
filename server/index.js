@@ -102,25 +102,30 @@ const getBlogProxy = () => {
         },
         proxyRes: (proxyRes, req, res) => {
           // Extra safety: manually rewrite any leaked localhost/127.0.0.1 or port Location headers
-          if (proxyRes.headers.location) {
-            let loc = proxyRes.headers.location;
-            const externalProto = req.headers['x-forwarded-proto'] || 'https';
-            const externalHost = req.headers['x-forwarded-host'] || req.headers.host || 'chatwizs.com';
-            
-            // If the redirect is absolute and contains localhost or 127.0.0.1, replace it with external host
-            loc = loc.replace(/^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?/i, `${externalProto}://${externalHost}`);
-            
-            // If the redirect contains the external host BUT leaked the internal port (e.g. chatwizs.com:4000), strip the port
-            if (loc.includes(`${externalHost}:${blogState.port}`)) {
-              loc = loc.replace(`${externalHost}:${blogState.port}`, externalHost);
+          // Next.js uses BOTH 'location' and 'x-nextjs-redirect' depending on client-side or server-side routing
+          const headersToRewrite = ['location', 'x-nextjs-redirect'];
+          
+          headersToRewrite.forEach(headerName => {
+            if (proxyRes.headers[headerName]) {
+              let loc = proxyRes.headers[headerName];
+              const externalProto = req.headers['x-forwarded-proto'] || 'https';
+              const externalHost = req.headers['x-forwarded-host'] || req.headers.host || 'chatwizs.com';
+              
+              // If the redirect is absolute and contains localhost or 127.0.0.1, replace it with external host
+              loc = loc.replace(/^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?/i, `${externalProto}://${externalHost}`);
+              
+              // If the redirect contains the external host BUT leaked the internal port (e.g. chatwizs.com:4000), strip the port
+              if (loc.includes(`${externalHost}:${blogState.port}`)) {
+                loc = loc.replace(`${externalHost}:${blogState.port}`, externalHost);
+              }
+              
+              // Also explicitly strip :4000 and :4001 just in case
+              if (loc.includes(':4000')) loc = loc.replace(':4000', '');
+              if (loc.includes(':4001')) loc = loc.replace(':4001', '');
+              
+              proxyRes.headers[headerName] = loc;
             }
-            
-            // Also explicitly strip :4000 and :4001 just in case
-            if (loc.includes(':4000')) loc = loc.replace(':4000', '');
-            if (loc.includes(':4001')) loc = loc.replace(':4001', '');
-            
-            proxyRes.headers.location = loc;
-          }
+          });
         },
       },
     });
