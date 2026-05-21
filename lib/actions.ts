@@ -69,12 +69,13 @@ async function deleteUploadFile(fileUrl: string) {
   }
 }
 
+import { signToken } from './auth';
+
 export async function handleAdminLogin(password: string) {
   const masterPassword = process.env.ADMIN_PASSWORD || 'admin123';
 
   if (password === masterPassword) {
-    const sessionToken = randomBytes(32).toString('hex');
-    activeSessions.set(sessionToken, Date.now() + SESSION_TTL);
+    const sessionToken = signToken(Date.now() + SESSION_TTL);
 
     const cookieStore = await cookies();
     cookieStore.set('admin_session', sessionToken, {
