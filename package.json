@@ -36,6 +36,7 @@
     "express": "^4.22.1",
     "googleapis": "^171.4.0",
     "html2canvas": "^1.4.1",
+    "http-proxy-middleware": "^4.0.0",
     "jsonwebtoken": "^9.0.3",
     "jspdf": "^4.2.1",
     "lucide-react": "^1.14.0",

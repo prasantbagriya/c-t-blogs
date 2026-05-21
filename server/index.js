@@ -10,6 +10,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import http from 'http';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
 // Import shared blog state (avoids circular dependency with app.js)
 import { blogState } from '../blog-state.js';
@@ -67,9 +68,11 @@ app.use(cors({
   credentials: true
 }));
 
-// BUG FIX: Was hardcoded to port 3000 (same as Hostinger's main PORT → ECONNREFUSED)
-// Now dynamically reads BLOG_INTERNAL_PORT (4000) from app.js
-const proxyToNext = (targetPathPrefix) => (req, res) => {
+// ✅ Blog Proxy using http-proxy-middleware (battle-tested, handles chunked encoding, streaming)
+// This replaces the manual http.request approach which had ERR_INCOMPLETE_RESPONSE issues.
+
+// Middleware that shows "starting up" if blog not ready
+const blogReadyCheck = (req, res, next) => {
   if (!blogState.ready) {
     return res.status(503).send(
       '<html><head><meta http-equiv="refresh" content="4"></head><body>' +
@@ -78,72 +81,45 @@ const proxyToNext = (targetPathPrefix) => (req, res) => {
       '</body></html>'
     );
   }
-  const blogPort = blogState.port;
-
-  // FIX: Don't add trailing slash when req.url is '/'
-  // Without this: GET /blog → proxy sends /blog/ → Next.js redirects /blog/ → /blog → LOOP
-  const reqPath = req.url === '/' ? '' : req.url;
-  const targetUrl = `http://127.0.0.1:${blogPort}${targetPathPrefix}${reqPath}`;
-
-  const parsedUrl = new URL(targetUrl);
-  const externalProto = req.headers['x-forwarded-proto'] || 'https';
-  const externalHost = req.headers['x-forwarded-host'] || req.headers.host || 'chatwizs.com';
-
-  const options = {
-    hostname: parsedUrl.hostname,
-    port: parsedUrl.port,
-    path: parsedUrl.pathname + parsedUrl.search,
-    method: req.method,
-    headers: {
-      ...req.headers,
-      host: `127.0.0.1:${blogPort}`,
-      // Tell Next.js the real external host/proto so its redirects use the right URL
-      'x-forwarded-host': externalHost,
-      'x-forwarded-proto': externalProto,
-    }
-  };
-
-  const proxyReq = http.request(options, (proxyRes) => {
-    // FIX: Rewrite Location headers containing internal 127.0.0.1 address
-    // Next.js may redirect to http://127.0.0.1:4000/... which clients can't reach
-    const headers = { ...proxyRes.headers };
-    if (headers.location && headers.location.includes(`127.0.0.1:${blogPort}`)) {
-      headers.location = headers.location.replace(
-        `http://127.0.0.1:${blogPort}`,
-        `${externalProto}://${externalHost}`
-      );
-    }
-    res.writeHead(proxyRes.statusCode, headers);
-    proxyRes.pipe(res, { end: true });
-  });
-
-  req.pipe(proxyReq, { end: true });
-  proxyReq.on('error', (err) => {
-    console.error('[Proxy Error]', err.message);
-    blogState.ready = false;
-    res.status(503).send(
-      '<html><head><meta http-equiv="refresh" content="5"></head><body>' +
-      '<h2 style="font-family:sans-serif;text-align:center;margin-top:20vh">⏳ Blog restarting...</h2>' +
-      '<p style="text-align:center;font-family:sans-serif">Auto-refreshing in 5 seconds...</p>' +
-      '</body></html>'
-    );
-  });
+  next();
 };
 
+// Create proxy middleware lazily so it always uses the current port from blogState
+const makeBlogProxy = () => createProxyMiddleware({
+  target: `http://127.0.0.1:${blogState.port}`,
+  changeOrigin: true,
+  on: {
+    error: (err, req, res) => {
+      console.error('[Proxy Error]', err.message);
+      blogState.ready = false;
+      if (!res.headersSent) {
+        res.status(503).send(
+          '<html><head><meta http-equiv="refresh" content="5"></head><body>' +
+          '<h2 style="font-family:sans-serif;text-align:center;margin-top:20vh">⏳ Blog restarting...</h2>' +
+          '<p style="text-align:center;font-family:sans-serif">Auto-refreshing in 5 seconds...</p>' +
+          '</body></html>'
+        );
+      }
+    },
+  },
+});
+
+let _blogProxy = null;
+const getBlogProxy = () => {
+  // Recreate if port changed
+  if (!_blogProxy) _blogProxy = makeBlogProxy();
+  return _blogProxy;
+};
 
 // ✅ Blog route proxies — All blog paths forwarded to Next.js on port 4000
-app.use('/blog', proxyToNext('/blog'));
-app.use('/admin', proxyToNext('/admin'));         // Blog Admin Panel
-app.use('/auth', proxyToNext('/auth'));           // Blog Login
-app.use('/category', proxyToNext('/category'));   // Category pages
-app.use('/author', proxyToNext('/author'));       // Author pages
-app.use('/stories', proxyToNext('/stories'));     // Web Stories
-app.use('/search', proxyToNext('/search'));       // Search page
-app.use('/sitemap.xml', proxyToNext('/sitemap.xml'));
-app.use('/feed.xml', proxyToNext('/feed.xml'));
-app.use('/news-sitemap.xml', proxyToNext('/news-sitemap.xml'));
-app.use('/api/og', proxyToNext('/api/og'));       // OG image API (blog)
-app.use('/_next', proxyToNext('/_next'));
+const blogRoutes = [
+  '/blog', '/admin', '/auth', '/category', '/author',
+  '/stories', '/search', '/sitemap.xml', '/feed.xml',
+  '/news-sitemap.xml', '/api/og', '/_next',
+];
+blogRoutes.forEach(route => {
+  app.use(route, blogReadyCheck, (req, res, next) => getBlogProxy()(req, res, next));
+});
 
 
 app.use(express.json({
