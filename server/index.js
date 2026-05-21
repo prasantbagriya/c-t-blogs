@@ -91,15 +91,12 @@ const getBlogProxy = () => {
       router: () => `http://127.0.0.1:${blogState.port}`,
       on: {
         error: (err, req, res) => {
-          console.error('[Proxy Error]', err.message);
-          blogState.ready = false;
+          // Do NOT set blogState.ready = false here! 
+          // Client disconnects (ECONNRESET) trigger this, which would permanently brick the blog.
+          // app.js handles actual blog process crashes and port monitoring.
+          console.error(`[Proxy Error] ${err.code}: ${err.message} on ${req.url}`);
           if (!res.headersSent) {
-            res.status(503).send(
-              '<html><head><meta http-equiv="refresh" content="5"></head><body>' +
-              '<h2 style="font-family:sans-serif;text-align:center;margin-top:20vh">⏳ Blog restarting...</h2>' +
-              '<p style="text-align:center;font-family:sans-serif">Auto-refreshing in 5 seconds...</p>' +
-              '</body></html>'
-            );
+            res.status(502).send('Bad Gateway: Unable to reach the blog service.');
           }
         },
         proxyRes: (proxyRes, req, res) => {
