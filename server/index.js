@@ -84,7 +84,9 @@ const getBlogProxy = () => {
   if (!_blogProxy) {
     _blogProxy = createProxyMiddleware({
       target: `http://127.0.0.1:${blogState.port}`,
-      changeOrigin: true,
+      xfwd: true, // add x-forwarded-* headers
+      autoRewrite: true, // rewrite location host/port on redirects
+      protocolRewrite: 'https', // rewrite location protocol to https
       // Use router to always pick up latest port (handles restart)
       router: () => `http://127.0.0.1:${blogState.port}`,
       on: {
@@ -97,6 +99,17 @@ const getBlogProxy = () => {
               '<h2 style="font-family:sans-serif;text-align:center;margin-top:20vh">⏳ Blog restarting...</h2>' +
               '<p style="text-align:center;font-family:sans-serif">Auto-refreshing in 5 seconds...</p>' +
               '</body></html>'
+            );
+          }
+        },
+        proxyRes: (proxyRes, req, res) => {
+          // Extra safety: manually rewrite any leaked 127.0.0.1 Location headers
+          if (proxyRes.headers.location && proxyRes.headers.location.includes(`127.0.0.1:${blogState.port}`)) {
+            const externalProto = req.headers['x-forwarded-proto'] || 'https';
+            const externalHost = req.headers['x-forwarded-host'] || req.headers.host || 'chatwizs.com';
+            proxyRes.headers.location = proxyRes.headers.location.replace(
+              `http://127.0.0.1:${blogState.port}`,
+              `${externalProto}://${externalHost}`
             );
           }
         },
