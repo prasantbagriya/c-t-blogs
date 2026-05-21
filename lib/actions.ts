@@ -235,7 +235,7 @@ export async function handleUpload(formData: FormData) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     const filename = 'media-' + uniqueSuffix + extension;
 
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+    const uploadDir = process.env.BLOG_UPLOADS_DIR || path.join(process.cwd(), 'public', 'uploads');
     
     try {
       await access(uploadDir);

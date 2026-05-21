@@ -101,7 +101,11 @@ export interface WebStory {
 }
 
 // ✅ ULTRA-STABLE PATHS
-const DATA_DIR = path.resolve(process.cwd(), 'data');
+// BLOG_DATA_DIR is set by app.js when running in standalone mode,
+// pointing to the blog/data/ directory in the deployment root.
+// This ensures data is shared between all Hostinger instances and
+// persists correctly — NOT tied to the standalone's cwd.
+const DATA_DIR = process.env.BLOG_DATA_DIR || path.resolve(process.cwd(), 'data');
 const DB_PATH = path.join(DATA_DIR, 'posts.json');
 const STORIES_PATH = path.join(DATA_DIR, 'stories.json');
 const AUTHORS_PATH = path.join(DATA_DIR, 'authors.json');
