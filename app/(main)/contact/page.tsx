@@ -36,7 +36,7 @@ export default function ContactPage() {
 
       <nav aria-label="Breadcrumb" style={{ marginBottom: '2rem', fontSize: '0.875rem', color: 'var(--muted-foreground)' }}>
         <ol style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '0.5rem' }}>
-          <li><Link href="/" style={{ color: 'var(--primary)' }}>Home</Link></li>
+          <li><a href="/" style={{ color: 'var(--primary)' }}>Home</a></li>
           <li>/</li>
           <li aria-current="page">Contact</li>
         </ol>

@@ -372,7 +372,7 @@ export default async function BlogPostPage({ params }: Props) {
       
       <nav aria-label="Breadcrumb" className="breadcrumb-nav" style={{ marginBottom: '1.5rem', width: '100%' }}>
         <ol className="breadcrumb-list" style={{ display: 'flex', listStyle: 'none', padding: 0, margin: 0, gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center', color: 'var(--muted-foreground)', fontSize: '0.875rem' }}>
-          <li><Link href="/" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500 }}>Home</Link></li>
+          <li><a href="/" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500 }}>Home</a></li>
           <li style={{ opacity: 0.5 }}>/</li>
           <li><Link href={`/category/${post.category.toLowerCase()}`} style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500 }}>{post.category}</Link></li>
           <li style={{ opacity: 0.5 }}>/</li>

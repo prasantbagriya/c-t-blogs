@@ -115,7 +115,7 @@ export default async function CategoryPage({ params }: Props) {
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" style={{ marginBottom: '2rem', fontSize: '0.875rem' }}>
         <ol style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '0.5rem', color: 'var(--muted-foreground)', fontWeight: 600 }}>
-          <li><Link href="/" style={{ color: 'var(--primary)', textDecoration: 'none' }}>Home</Link></li>
+          <li><a href="/" style={{ color: 'var(--primary)', textDecoration: 'none' }}>Home</a></li>
           <li style={{ color: '#94a3b8' }}>/</li>
           <li><Link href="/blog" style={{ color: 'var(--primary)', textDecoration: 'none' }}>Blog</Link></li>
           <li style={{ color: '#94a3b8' }}>/</li>

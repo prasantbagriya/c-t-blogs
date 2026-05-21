@@ -81,7 +81,7 @@ export default function AboutPage() {
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" style={{ marginBottom: '2rem', fontSize: '0.875rem' }}>
         <ol style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '0.5rem', color: 'var(--muted-foreground)' }}>
-          <li><Link href="/" style={{ color: 'var(--primary)' }}>Home</Link></li>
+          <li><a href="/" style={{ color: 'var(--primary)' }}>Home</a></li>
           <li>/</li>
           <li aria-current="page">About</li>
         </ol>
@@ -138,10 +138,10 @@ export default function AboutPage() {
         <h2 style={{ marginBottom: '0.75rem', fontSize: '1.25rem' }}>Corrections & Feedback Policy</h2>
         <p style={{ color: 'var(--muted-foreground)', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0 }}>
           We promptly correct factual errors upon verification. If you spot an inaccuracy,{' '}
-          <Link href="/contact" style={{ color: 'var(--primary)', fontWeight: 700 }}>contact our editorial team</Link>.
+          <a href="/contact" style={{ color: 'var(--primary)', fontWeight: 700 }}>contact our editorial team</a>.
           Corrections are noted inline on the affected article with a timestamp. See our full{' '}
-          <Link href="/editorial-policy" style={{ color: 'var(--primary)', fontWeight: 700 }}>Editorial Guidelines</Link> and{' '}
-          <Link href="/fact-checking-policy" style={{ color: 'var(--primary)', fontWeight: 700 }}>Fact-Checking Policy</Link>.
+          <a href="/editorial-policy" style={{ color: 'var(--primary)', fontWeight: 700 }}>Editorial Guidelines</a> and{' '}
+          <a href="/fact-checking-policy" style={{ color: 'var(--primary)', fontWeight: 700 }}>Fact-Checking Policy</a>.
         </p>
       </section>
 

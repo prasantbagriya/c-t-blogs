@@ -296,18 +296,18 @@ export default function RootLayout({
         </a>
         <header className="glass-panel" style={{ position: 'sticky', top: 0, zIndex: 100, margin: 0 }}>
           <nav className="container" aria-label="Main Navigation" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 'var(--header-height)' }}>
-            <Link href="/" style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.025em', color: 'var(--foreground)', textDecoration: 'none' }} aria-label="ChatWizs Home">
+            <a href="/" style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.025em', color: 'var(--foreground)', textDecoration: 'none' }} aria-label="ChatWizs Home">
               Chat<span style={{ color: 'var(--primary)' }}>Wizs</span>
-            </Link>
+            </a>
             {/* ✅ Admin link REMOVED from public header — security + no user value */}
             {/* Desktop Nav */}
             <ul className="desktop-nav" role="list">
-              <li><Link href="/" style={{ fontWeight: 600, color: 'var(--foreground)', textDecoration: 'none' }}>Home</Link></li>
+              <li><a href="/" style={{ fontWeight: 600, color: 'var(--foreground)', textDecoration: 'none' }}>Home</a></li>
               <li><Link href="/blog" style={{ fontWeight: 600, color: 'var(--foreground)', textDecoration: 'none' }}>Blog</Link></li>
               <li><Link href="/stories" style={{ fontWeight: 600, color: 'var(--foreground)', textDecoration: 'none' }}>Stories</Link></li>
-              <li><Link href="/about" style={{ fontWeight: 600, color: 'var(--foreground)', textDecoration: 'none' }}>About</Link></li>
+              <li><a href="/about" style={{ fontWeight: 600, color: 'var(--foreground)', textDecoration: 'none' }}>About</a></li>
               <li><Link href="/search" style={{ fontWeight: 600, color: 'var(--foreground)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.25rem' }} aria-label="Search articles">🔍 Search</Link></li>
-              <li><Link href="/contact" style={{ fontSize: '0.875rem', color: 'white', background: 'var(--primary)', padding: '0.5rem 1.25rem', borderRadius: '6px', fontWeight: 700, textDecoration: 'none' }}>Contact</Link></li>
+              <li><a href="/contact" style={{ fontSize: '0.875rem', color: 'white', background: 'var(--primary)', padding: '0.5rem 1.25rem', borderRadius: '6px', fontWeight: 700, textDecoration: 'none' }}>Contact</a></li>
             </ul>
             {/* Mobile Nav — hamburger */}
             <div className="mobile-nav-btn">
@@ -320,18 +320,18 @@ export default function RootLayout({
         </main>
         <footer style={{ borderTop: '1px solid var(--border)', marginTop: '3rem', background: 'var(--muted)' }}>
           <div className="container" style={{ padding: '2.5rem 1.5rem', textAlign: 'center' }}>
-            <Link href="/" style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--foreground)', textDecoration: 'none', display: 'inline-block', marginBottom: '1.25rem' }}>
+            <a href="/" style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--foreground)', textDecoration: 'none', display: 'inline-block', marginBottom: '1.25rem' }}>
               Chat<span style={{ color: 'var(--primary)' }}>Wizs</span>
-            </Link>
+            </a>
             <nav aria-label="Footer Navigation" style={{ display: 'flex', justifyContent: 'center', gap: '1.25rem', flexWrap: 'wrap', marginBottom: '1.25rem', fontSize: '0.875rem', fontWeight: 600 }}>
-              <Link href="/about" style={{ color: 'var(--muted-foreground)', textDecoration: 'none' }}>About Us</Link>
+              <a href="/about" style={{ color: 'var(--muted-foreground)', textDecoration: 'none' }}>About Us</a>
               <Link href="/blog" style={{ color: 'var(--muted-foreground)', textDecoration: 'none' }}>Blog</Link>
               <Link href="/stories" style={{ color: 'var(--muted-foreground)', textDecoration: 'none' }}>Web Stories</Link>
-              <Link href="/editorial-policy" style={{ color: 'var(--primary)', fontWeight: 700, textDecoration: 'none' }}>Editorial Guidelines</Link>
-              <Link href="/fact-checking-policy" style={{ color: 'var(--primary)', fontWeight: 700, textDecoration: 'none' }}>Fact-Checking</Link>
-              <Link href="/privacy" style={{ color: 'var(--muted-foreground)', textDecoration: 'none' }}>Privacy</Link>
-              <Link href="/contact" style={{ color: 'var(--muted-foreground)', textDecoration: 'none' }}>Contact</Link>
-              <Link href="/terms" style={{ color: 'var(--muted-foreground)', textDecoration: 'none' }}>Terms</Link>
+              <a href="/editorial-policy" style={{ color: 'var(--primary)', fontWeight: 700, textDecoration: 'none' }}>Editorial Guidelines</a>
+              <a href="/fact-checking-policy" style={{ color: 'var(--primary)', fontWeight: 700, textDecoration: 'none' }}>Fact-Checking</a>
+              <a href="/privacy" style={{ color: 'var(--muted-foreground)', textDecoration: 'none' }}>Privacy</a>
+              <a href="/contact" style={{ color: 'var(--muted-foreground)', textDecoration: 'none' }}>Contact</a>
+              <a href="/terms" style={{ color: 'var(--muted-foreground)', textDecoration: 'none' }}>Terms</a>
             </nav>
             <p style={{ color: 'var(--muted-foreground)', fontSize: '0.8125rem' }}>
               <Copyright /> Expert-verified content built for Google&apos;s EEAT standards.

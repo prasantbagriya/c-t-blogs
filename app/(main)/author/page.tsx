@@ -93,7 +93,7 @@ export default async function AuthorsIndexPage() {
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" style={{ marginBottom: '2rem', fontSize: '0.875rem' }}>
         <ol style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '0.5rem', color: 'var(--muted-foreground)' }}>
-          <li><Link href="/" style={{ color: 'var(--primary)', textDecoration: 'none' }}>Home</Link></li>
+          <li><a href="/" style={{ color: 'var(--primary)', textDecoration: 'none' }}>Home</a></li>
           <li>/</li>
           <li aria-current="page" style={{ color: 'var(--foreground)' }}>Authors</li>
         </ol>

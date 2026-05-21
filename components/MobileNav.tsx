@@ -110,7 +110,7 @@ export default function MobileNav() {
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
               {NAV_LINKS.map(link => (
                 <li key={link.href}>
-                  <Link
+                  <a
                     href={link.href}
                     onClick={() => setOpen(false)}
                     style={{
@@ -125,7 +125,7 @@ export default function MobileNav() {
                     }}
                   >
                     {link.label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>

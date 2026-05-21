@@ -146,7 +146,7 @@ export default async function AuthorPage({ params }: Props) {
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" style={{ marginBottom: '2rem', fontSize: '0.875rem' }}>
         <ol style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '0.5rem', color: 'var(--muted-foreground)' }}>
-          <li><Link href="/" style={{ color: 'var(--primary)' }}>Home</Link></li>
+          <li><a href="/" style={{ color: 'var(--primary)' }}>Home</a></li>
           <li>/</li>
           <li><Link href="/blog" style={{ color: 'var(--primary)' }}>Blog</Link></li>
           <li>/</li>

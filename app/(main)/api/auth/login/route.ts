@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { randomBytes, createHash } from 'crypto';
-import { activeSessions, SESSION_TTL, pruneExpiredSessions, isValidSession } from '@/lib/auth';
+import { createHash } from 'crypto';
+import { SESSION_TTL, isValidSession, signToken } from '@/lib/auth';
 
 // ✅ In-memory rate limiting (resets on server restart — acceptable for small blog)
 const loginAttempts = new Map<string, { count: number; lastAttempt: number }>();
@@ -46,11 +46,10 @@ export async function POST(request: Request) {
     if (isValid) {
       // Reset rate limiting on success
       loginAttempts.delete(ip);
-      pruneExpiredSessions();
 
-      // ✅ Generate cryptographically secure random session token (64 hex chars = 256-bit entropy)
-      const sessionToken = randomBytes(32).toString('hex');
-      activeSessions.set(sessionToken, now + SESSION_TTL);
+      // ✅ Generate stateless signed session token
+      const expiry = now + SESSION_TTL;
+      const sessionToken = signToken(expiry);
 
       const cookieStore = await cookies();
       cookieStore.set('admin_session', sessionToken, {
@@ -84,8 +83,6 @@ export async function POST(request: Request) {
 // ✅ Logout endpoint
 export async function DELETE() {
   const cookieStore = await cookies();
-  const token = cookieStore.get('admin_session')?.value;
-  if (token) activeSessions.delete(token);
   cookieStore.delete('admin_session');
   return NextResponse.json({ success: true });
 }

@@ -1,35 +1,32 @@
 import { cookies } from 'next/headers';
-
-// ✅ Ensure activeSessions is shared globally across Next.js split bundles
-const globalForAuth = global as unknown as {
-  activeSessions: Map<string, number>;
-};
-
-export const activeSessions = globalForAuth.activeSessions || new Map<string, number>();
-globalForAuth.activeSessions = activeSessions;
+import { createHmac } from 'crypto';
 
 export const SESSION_TTL = 60 * 60 * 24 * 7 * 1000; // 7 days in ms
 
-
-// ✅ Prune expired sessions
+// ✅ No-op for backwards compatibility
 export function pruneExpiredSessions() {
-  const now = Date.now();
-  for (const [token, expiry] of activeSessions.entries()) {
-    if (now > expiry) activeSessions.delete(token);
-  }
 }
 
-// ✅ Validate session token
+// ✅ Generate a stateless signed token based on expiry
+export function signToken(expiry: number): string {
+  const secret = process.env.ADMIN_PASSWORD || 'fallback_secret_key_123';
+  const signature = createHmac('sha256', secret).update(expiry.toString()).digest('hex');
+  return `${expiry}.${signature}`;
+}
+
+// ✅ Validate session token statelessly
 export function isValidSession(token: string | undefined): boolean {
   if (!token) return false;
-  if (token.length < 32) return false; // Block guessable / short values
-  const expiry = activeSessions.get(token);
-  if (!expiry) return false;
-  if (Date.now() > expiry) {
-    activeSessions.delete(token);
-    return false;
-  }
-  return true;
+  const parts = token.split('.');
+  if (parts.length !== 2) return false;
+  
+  const expiry = parseInt(parts[0], 10);
+  const signature = parts[1];
+  
+  if (isNaN(expiry) || Date.now() > expiry) return false;
+  
+  const expectedSignature = signToken(expiry).split('.')[1];
+  return signature === expectedSignature;
 }
 
 // ✅ Centralized Admin Auth verification for both Server Actions & APIs

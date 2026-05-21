@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 import { writeFile, access, mkdir, unlink } from 'fs/promises';
 import path from 'path';
 import { randomBytes } from 'crypto';
-import { activeSessions, SESSION_TTL, checkAdminAuth } from './auth';
+import { SESSION_TTL, checkAdminAuth } from './auth';
 
 // Helper to extract upload URLs starting with /uploads/ from any object
 function getUploadUrls(obj: any): string[] {

@@ -33,12 +33,12 @@ export default function NotFound() {
         Try heading back to our homepage for more expert insights.
       </p>
       <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-        <Link href="/" className="btn btn-primary">
+        <a href="/" className="btn btn-primary">
           Back to Home
-        </Link>
-        <Link href="/blog" className="btn" style={{ border: '1px solid var(--border)', background: 'transparent' }}>
+        </a>
+        <a href="/blog" className="btn" style={{ border: '1px solid var(--border)', background: 'transparent' }}>
           Browse Articles
-        </Link>
+        </a>
       </div>
     </div>
   );
