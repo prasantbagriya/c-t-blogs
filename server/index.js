@@ -131,8 +131,20 @@ const proxyToNext = (targetPathPrefix) => (req, res) => {
 };
 
 
+// ✅ Blog route proxies — All blog paths forwarded to Next.js on port 4000
 app.use('/blog', proxyToNext('/blog'));
+app.use('/admin', proxyToNext('/admin'));         // Blog Admin Panel
+app.use('/auth', proxyToNext('/auth'));           // Blog Login
+app.use('/category', proxyToNext('/category'));   // Category pages
+app.use('/author', proxyToNext('/author'));       // Author pages
+app.use('/stories', proxyToNext('/stories'));     // Web Stories
+app.use('/search', proxyToNext('/search'));       // Search page
+app.use('/sitemap.xml', proxyToNext('/sitemap.xml'));
+app.use('/feed.xml', proxyToNext('/feed.xml'));
+app.use('/news-sitemap.xml', proxyToNext('/news-sitemap.xml'));
+app.use('/api/og', proxyToNext('/api/og'));       // OG image API (blog)
 app.use('/_next', proxyToNext('/_next'));
+
 
 app.use(express.json({
   limit: '50mb',
