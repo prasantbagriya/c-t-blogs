@@ -72,7 +72,7 @@ async function deleteUploadFile(fileUrl: string) {
 import { signToken } from './auth';
 
 export async function handleAdminLogin(password: string) {
-  const masterPassword = 'admin123';
+  const masterPassword = process.env.ADMIN_PASSWORD || 'admin123';
 
   if (password === masterPassword) {
     const sessionToken = signToken(Date.now() + SESSION_TTL);
