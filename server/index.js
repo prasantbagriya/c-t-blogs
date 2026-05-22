@@ -86,7 +86,7 @@ app.use(cors({
 const BLOG_PATHS = [
   '/blog', '/blog/admin', '/blog/auth', '/category', '/author',
   '/stories', '/search', '/sitemap.xml', '/feed.xml',
-  '/news-sitemap.xml', '/api/admin', '/api/auth/login', '/api/og', '/_next',
+  '/news-sitemap.xml', '/api/admin', '/api/og', '/_next',
   '/about', '/contact', '/privacy', '/terms', '/editorial-policy', '/fact-checking-policy',
 ];
 
