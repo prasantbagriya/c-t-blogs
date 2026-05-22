@@ -63,13 +63,54 @@ process.on('unhandledRejection', (reason, promise) => {
     console.error('[CRITICAL] Unhandled Rejection in Wrapper:', reason);
 });
 
+const http = require('http');
+const server = http.createServer();
+
+// Hostinger/LiteSpeed requires listen to be called synchronously
+const PORT = process.env.PORT || 3001;
+server.listen(PORT);
+
+server.on('error', (err) => {
+    console.error('[CRITICAL] Server Listen Error:', err);
+});
+
+// Set a flag so the dynamically loaded app knows it's running under the wrapper
+process.env.IS_WRAPPER = 'true';
+
+let expressApp = null;
+let appLoadError = null;
+
+server.on('request', (req, res) => {
+    if (expressApp) {
+        expressApp(req, res);
+    } else if (appLoadError) {
+        // Expose the error directly to the browser to debug Hostinger issues!
+        res.writeHead(500, { 'Content-Type': 'text/html' });
+        res.end(`
+            <html>
+                <body style="font-family: monospace; background: #1e1e1e; color: #ff5555; padding: 20px;">
+                    <h2>ChatWiz Server Startup Failed</h2>
+                    <p>The Node.js server started, but the main application code failed to load.</p>
+                    <hr/>
+                    <pre>${appLoadError.stack || appLoadError.message || String(appLoadError)}</pre>
+                </body>
+            </html>
+        `);
+    } else {
+        res.writeHead(503, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Service is starting. Please retry shortly.' }));
+    }
+});
+
 async function startApp() {
     try {
         console.log('[Info] Wrapper starting app.js...');
-        await import('./app.js');
+        const appModule = await import('./app.js');
+        expressApp = appModule.app;
         console.log('[Info] app.js imported successfully.');
     } catch (err) {
         console.error("Failed to load app.js:", err);
+        appLoadError = err;
     }
 }
 

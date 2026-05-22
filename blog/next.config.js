@@ -40,8 +40,13 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/blog/admin/login',
+        destination: '/blog/auth/login',
+        permanent: true,
+      },
+      {
         source: '/admin/login',
-        destination: '/auth/login',
+        destination: '/blog/auth/login',
         permanent: true,
       },
       {
@@ -93,13 +98,13 @@ const nextConfig = {
       },
       // ✅ Admin pages: noindex via X-Robots-Tag header
       {
-        source: '/admin/(.*)',
+        source: '/blog/admin/(.*)',
         headers: [
           { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
         ],
       },
       {
-        source: '/auth/(.*)',
+        source: '/blog/auth/(.*)',
         headers: [
           { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
         ],

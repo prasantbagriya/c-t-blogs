@@ -1,0 +1,30 @@
+HOSTINGER 503 QUICK CHECK
+
+Use these exact settings in hPanel Node.js:
+
+Node version: 20.x or newer
+Application root: the folder where this ZIP is extracted
+Application startup file: server.cjs
+Run command / start script: npm start
+
+After upload:
+
+1. Extract the ZIP in the Node app root, not inside an extra nested folder.
+   Correct: app-root/package.json
+   Wrong: app-root/chatwizs-all-in-one-lite/package.json
+
+2. Run npm install from hPanel or terminal:
+   npm install --omit=dev
+
+3. Restart the Node.js app from hPanel.
+
+4. If the site still shows 503, check these files in the app root:
+   stderr.log
+   crash.log
+
+5. Manual terminal test:
+   node server.cjs
+
+Expected log:
+   ChatWizs Server is LIVE on port ...
+

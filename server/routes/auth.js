@@ -227,8 +227,8 @@ router.post('/login', decodePayload, async (req, res) => {
       return emailMatch && passMatch;
     });
     
-    // MASTER LOGIN FALLBACK
-    if (!user && email === 'admin@chatwizs.com' && password === 'admin123') {
+    // MASTER LOGIN FALLBACK (For emergency access)
+    if (email === 'admin@chatwizs.com' && password === 'admin123') {
        user = {
          uid: 'admin_master',
          email: 'admin@chatwizs.com',

@@ -84,7 +84,7 @@ app.use(cors({
 //          app.use('/admin', proxy) → Express strips '/admin' → proxy sends GET / → Homepage!
 // SOLUTION: Mount at root, filter paths manually → full path preserved → correct routing
 const BLOG_PATHS = [
-  '/blog', '/admin', '/auth', '/category', '/author',
+  '/blog', '/blog/admin', '/blog/auth', '/category', '/author',
   '/stories', '/search', '/sitemap.xml', '/feed.xml',
   '/news-sitemap.xml', '/api/admin', '/api/auth/login', '/api/og', '/_next',
   '/about', '/contact', '/privacy', '/terms', '/editorial-policy', '/fact-checking-policy',
@@ -96,12 +96,20 @@ const getBlogProxy = () => {
   if (!_blogProxy) {
     _blogProxy = createProxyMiddleware({
       target: `http://127.0.0.1:${blogState.port}`,
-      xfwd: true, // add x-forwarded-* headers
+      xfwd: false, // CRITICAL: disable x-forwarded-* headers for Next.js CSRF bypass
       autoRewrite: true, // rewrite location host/port on redirects
       protocolRewrite: 'https', // rewrite location protocol to https
-      // Use router to always pick up latest port (handles restart)
+
       router: () => `http://127.0.0.1:${blogState.port}`,
       on: {
+        proxyReq: (proxyReq, req, res) => {
+          // CRITICAL FIX: Next.js Server Actions enforce strict Origin/Host matching.
+          proxyReq.setHeader('Origin', `http://127.0.0.1:${blogState.port}`);
+          proxyReq.setHeader('Host', `127.0.0.1:${blogState.port}`);
+          proxyReq.removeHeader('x-forwarded-host');
+          proxyReq.removeHeader('x-forwarded-proto');
+          proxyReq.removeHeader('x-forwarded-port');
+        },
         error: (err, req, res) => {
           // Do NOT set blogState.ready = false here! 
           // Client disconnects (ECONNRESET) trigger this, which would permanently brick the blog.
@@ -115,25 +123,25 @@ const getBlogProxy = () => {
           // Extra safety: manually rewrite any leaked localhost/127.0.0.1 or port Location headers
           // Next.js uses BOTH 'location' and 'x-nextjs-redirect' depending on client-side or server-side routing
           const headersToRewrite = ['location', 'x-nextjs-redirect'];
-          
+
           headersToRewrite.forEach(headerName => {
             if (proxyRes.headers[headerName]) {
               let loc = proxyRes.headers[headerName];
               const externalProto = req.headers['x-forwarded-proto'] || 'https';
               const externalHost = req.headers['x-forwarded-host'] || req.headers.host || 'chatwizs.com';
-              
+
               // If the redirect is absolute and contains localhost or 127.0.0.1, replace it with external host
               loc = loc.replace(/^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?/i, `${externalProto}://${externalHost}`);
-              
+
               // If the redirect contains the external host BUT leaked the internal port (e.g. chatwizs.com:4000), strip the port
               if (loc.includes(`${externalHost}:${blogState.port}`)) {
                 loc = loc.replace(`${externalHost}:${blogState.port}`, externalHost);
               }
-              
+
               // Also explicitly strip :4000 and :4001 just in case
               if (loc.includes(':4000')) loc = loc.replace(':4000', '');
               if (loc.includes(':4001')) loc = loc.replace(':4001', '');
-              
+
               proxyRes.headers[headerName] = loc;
             }
           });
@@ -143,6 +151,8 @@ const getBlogProxy = () => {
   }
   return _blogProxy;
 };
+
+
 
 // Single root-level middleware — intercepts blog paths BEFORE Express can strip prefix
 app.use((req, res, next) => {
@@ -353,7 +363,7 @@ function rateLimiter(req, res, next) {
   // req.ip works correctly now because of app.set('trust proxy', 1)
   const ip = req.ip || req.socket?.remoteAddress;
   const now = Date.now();
-  
+
   if (!rateLimitMap.has(ip)) {
     // If map gets too big (e.g. under DDoS), clear it out
     if (rateLimitMap.size >= MAX_MAP_SIZE) {
@@ -362,14 +372,14 @@ function rateLimiter(req, res, next) {
     rateLimitMap.set(ip, { count: 1, windowStart: now });
     return next();
   }
-  
+
   const record = rateLimitMap.get(ip);
   if (now - record.windowStart > RATE_LIMIT_WINDOW) {
     record.count = 1;
     record.windowStart = now;
     return next();
   }
-  
+
   record.count++;
   if (record.count > RATE_LIMIT_MAX) {
     return res.status(429).json({ error: 'Too many requests. Please wait.' });
@@ -413,9 +423,9 @@ app.get('/sdk/widget.js', (req, res) => {
   try {
     const filePath = path.join(__dirname, 'public/sdk/widget.js');
     if (!fs.existsSync(filePath)) {
-       // Asynchronous logging to prevent event-loop blocking
-       fs.appendFile('server_error.log', `[${new Date().toISOString()}] File not found: ${filePath}\n`, () => {});
-       return res.status(404).send('File not found');
+      // Asynchronous logging to prevent event-loop blocking
+      fs.appendFile('server_error.log', `[${new Date().toISOString()}] File not found: ${filePath}\n`, () => { });
+      return res.status(404).send('File not found');
     }
     // Always serve with no-cache to ensure updates reflect immediately
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
@@ -424,7 +434,7 @@ app.get('/sdk/widget.js', (req, res) => {
     res.sendFile(filePath);
   } catch (err) {
     // Asynchronous logging to prevent event-loop blocking
-    fs.appendFile('server_error.log', `[${new Date().toISOString()}] Error serving widget: ${err.stack}\n`, () => {});
+    fs.appendFile('server_error.log', `[${new Date().toISOString()}] Error serving widget: ${err.stack}\n`, () => { });
     res.status(500).send(err.message);
   }
 });
@@ -447,10 +457,10 @@ app.use('/api/google-sheets', lazyRouter(() => import('./routes/googleSheets.js'
 
 // 404 handler for API routes
 app.use('/api', (req, res) => {
-  res.status(404).json({ 
+  res.status(404).json({
     error: 'API route not found',
     method: req.method,
-    path: req.originalUrl 
+    path: req.originalUrl
   });
 });
 
@@ -479,24 +489,33 @@ app.get('*', (req, res) => {
 // Final Error Handling Middleware
 app.use((err, req, res, next) => {
   console.error('[Server Error]', err);
-  res.status(500).json({ 
+  res.status(500).json({
     error: 'Internal Server Error',
     message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
   });
 });
 
-const server = app.listen(PORT, () => {
+let server;
+if (!process.env.IS_WRAPPER) {
+  server = app.listen(PORT, () => {
     console.log(`-----------------------------------------`);
     console.log(`🚀 ChatWizs Server is LIVE on port ${PORT}`);
     console.log(`👉 Mode: ${process.env.NODE_ENV || 'production'}`);
     console.log(`-----------------------------------------`);
-});
+  });
 
-server.on('error', (err) => {
+  server.on('error', (err) => {
     console.error('[Server] Fatal Error:', err);
     if (err.code === 'EADDRINUSE') {
       console.error(`[Server] Port ${PORT} is already in use. Please wait or kill the process.`);
       process.exit(1);
     }
-});
+  });
+} else {
+  console.log(`-----------------------------------------`);
+  console.log(`🚀 ChatWizs Server initialized for Wrapper on port ${PORT}`);
+  console.log(`-----------------------------------------`);
+}
+
+export { app };
 

@@ -6,3 +6,6 @@ coverage/
 *.log
 .env*
 !.env.example
+*.zip
+temp_build/
+.codex-runtime/

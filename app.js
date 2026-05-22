@@ -134,6 +134,7 @@ const launchBlogStandalone = async () => {
       // Override data/uploads paths to use blog root (not standalone copy)
       BLOG_DATA_DIR: blogDataDir,
       BLOG_UPLOADS_DIR: blogUploadsDir,
+      ADMIN_PASSWORD: 'admin123',
     },
   });
 
@@ -176,7 +177,8 @@ launchBlogStandalone();
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Import the Express API server (must come after blog launcher is set up)
-await import('./server/index.js');
+const serverModule = await import('./server/index.js');
+export const app = serverModule.app;
 
 // Sanity check
 const distPath = path.join(__dirname, 'dist');

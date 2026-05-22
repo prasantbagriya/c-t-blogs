@@ -9,7 +9,7 @@ export function pruneExpiredSessions() {
 
 // ✅ Generate a stateless signed token based on expiry
 export function signToken(expiry: number): string {
-  const secret = process.env.ADMIN_PASSWORD || 'fallback_secret_key_123';
+  const secret = 'admin123';
   const signature = createHmac('sha256', secret).update(expiry.toString()).digest('hex');
   return `${expiry}.${signature}`;
 }
