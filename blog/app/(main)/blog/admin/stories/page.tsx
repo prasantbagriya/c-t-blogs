@@ -27,7 +27,7 @@ export default function StoriesDashboard() {
     <div style={{ margin: 0, padding: 0 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
         <h1 style={{ fontSize: '28px', fontWeight: 700, margin: 0, color: '#0f172a' }}>Web Stories</h1>
-        <Link href="/admin/stories/new" style={{ background: '#2563eb', color: '#fff', padding: '10px 20px', borderRadius: '8px', fontWeight: 600 }}>+ Create Story</Link>
+        <Link href="/blog/admin/stories/new" style={{ background: '#2563eb', color: '#fff', padding: '10px 20px', borderRadius: '8px', fontWeight: 600 }}>+ Create Story</Link>
       </div>
 
       <div style={{ display: 'flex', gap: '24px', fontSize: '14px', marginBottom: '24px', color: '#64748b', fontWeight: 600 }}>
@@ -47,7 +47,7 @@ export default function StoriesDashboard() {
             </div>
             <div style={{ padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', gap: '12px', fontSize: '13px' }}>
-                <Link href={`/admin/stories/edit/${story.id}`} style={{ color: '#2563eb', fontWeight: 600 }}>Edit</Link>
+                <Link href={`/blog/admin/stories/edit/${story.id}`} style={{ color: '#2563eb', fontWeight: 600 }}>Edit</Link>
                 <DeleteButton id={story.id} type="story" />
               </div>
               <Link href={`/stories/${story.slug}`} target="_blank" style={{ fontSize: '12px', color: '#64748b' }}>View ↗</Link>

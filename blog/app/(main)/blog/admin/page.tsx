@@ -427,7 +427,7 @@ export default function AdminPage() {
         <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
             <h3 style={{ fontSize: '1.125rem', fontWeight: 800, margin: 0 }}>Content Catalog ({posts.length} items)</h3>
-            <Link href="/admin/new" style={{ background: 'var(--primary)', color: '#fff', padding: '0.5rem 1rem', borderRadius: '6px', fontSize: '0.875rem', fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)' }}>
+            <Link href="/blog/admin/new" style={{ background: 'var(--primary)', color: '#fff', padding: '0.5rem 1rem', borderRadius: '6px', fontSize: '0.875rem', fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)' }}>
               + Create New Post
             </Link>
           </div>
@@ -452,7 +452,7 @@ export default function AdminPage() {
                     return (
                       <tr key={post.id} className="admin-table-row" style={{ borderBottom: '1px solid #f1f5f9' }}>
                         <td style={tdStyle}>
-                          <Link href={`/admin/edit/${post.id}`} style={{ fontWeight: 800, color: '#0f172a', textDecoration: 'none' }}>
+                          <Link href={`/blog/admin/edit/${post.id}`} style={{ fontWeight: 800, color: '#0f172a', textDecoration: 'none' }}>
                             {post.title || 'Untitled Article'}
                           </Link>
                           <div style={{ fontSize: '11px', color: '#64748b', marginTop: '0.25rem', display: 'flex', gap: '8px' }}>
@@ -518,7 +518,7 @@ export default function AdminPage() {
                         </td>
                         <td style={tdStyle}>
                           <div style={{ display: 'flex', gap: '1rem', fontSize: '13px' }}>
-                            <Link href={`/admin/edit/${post.id}`} style={{ color: 'var(--primary)', fontWeight: 700, textDecoration: 'none' }}>Edit</Link>
+                            <Link href={`/blog/admin/edit/${post.id}`} style={{ color: 'var(--primary)', fontWeight: 700, textDecoration: 'none' }}>Edit</Link>
                             <DeleteButton id={post.id} type="post" />
                           </div>
                         </td>
@@ -586,7 +586,7 @@ export default function AdminPage() {
                     </div>
                     
                     <Link 
-                      href={`/admin/edit/${alert.postId}`}
+                      href={`/blog/admin/edit/${alert.postId}`}
                       style={{
                         fontSize: '0.8125rem',
                         fontWeight: 800,

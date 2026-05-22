@@ -43,7 +43,7 @@ export default function AuthorsPage() {
           <h1 style={{ fontSize: '2rem', fontWeight: 900, color: '#0f172a', margin: 0 }}>Author Profiles</h1>
           <p style={{ color: 'var(--muted-foreground)', margin: 0 }}>Manage writers and their E-E-A-T credentials</p>
         </div>
-        <Link href="/admin/authors/new" style={{ background: '#2563eb', color: '#fff', padding: '10px 20px', borderRadius: '8px', fontWeight: 700, textDecoration: 'none' }}>
+        <Link href="/blog/admin/authors/new" style={{ background: '#2563eb', color: '#fff', padding: '10px 20px', borderRadius: '8px', fontWeight: 700, textDecoration: 'none' }}>
           + Add New Author
         </Link>
       </div>
@@ -64,7 +64,7 @@ export default function AuthorsPage() {
             </p>
 
             <div style={{ display: 'flex', gap: '0.5rem', marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid #f1f5f9' }}>
-              <Link href={`/admin/authors/edit/${author.id}`} style={{ flex: 1, textAlign: 'center', background: '#eff6ff', color: '#2563eb', padding: '8px', borderRadius: '8px', fontWeight: 700, textDecoration: 'none', fontSize: '14px' }}>Edit Profile</Link>
+              <Link href={`/blog/admin/authors/edit/${author.id}`} style={{ flex: 1, textAlign: 'center', background: '#eff6ff', color: '#2563eb', padding: '8px', borderRadius: '8px', fontWeight: 700, textDecoration: 'none', fontSize: '14px' }}>Edit Profile</Link>
               <button onClick={() => handleDelete(author.id)} style={{ flex: 1, background: '#fef2f2', color: '#ef4444', padding: '8px', borderRadius: '8px', fontWeight: 700, border: 'none', cursor: 'pointer', fontSize: '14px' }}>Delete</button>
             </div>
           </div>

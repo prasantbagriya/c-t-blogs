@@ -24,14 +24,14 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
   }, []);
 
   const menuItems = [
-    { label: 'Dashboard', href: '/admin', icon: '🏠' },
-    { label: 'All Posts', href: '/admin', icon: '📌' },
-    { label: 'Authors', href: '/admin/authors', icon: '👥' },
-    { label: 'Categories', href: '/admin/categories', icon: '📁' },
-    { label: 'Add New', href: '/admin/new', icon: '➕' },
-    { label: 'Web Stories', href: '/admin/stories', icon: '⚡' },
-    { label: 'Media Library', href: '/admin/media', icon: '🖼️' },
-    { label: 'SEO Audit', href: '/admin/seo-audit', icon: '📈' },
+    { label: 'Dashboard', href: '/blog/admin', icon: '🏠' },
+    { label: 'All Posts', href: '/blog/admin', icon: '📌' },
+    { label: 'Authors', href: '/blog/admin/authors', icon: '👥' },
+    { label: 'Categories', href: '/blog/admin/categories', icon: '📁' },
+    { label: 'Add New', href: '/blog/admin/new', icon: '➕' },
+    { label: 'Web Stories', href: '/blog/admin/stories', icon: '⚡' },
+    { label: 'Media Library', href: '/blog/admin/media', icon: '🖼️' },
+    { label: 'SEO Audit', href: '/blog/admin/seo-audit', icon: '📈' },
     { label: 'Settings', href: '#', icon: '⚙️' },
   ];
 
@@ -199,7 +199,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
                 <div style={{ width: '1px', height: '24px', background: '#e2e8f0' }}></div>
               </>
             )}
-            <Link href="/admin/new" style={{ background: '#2563eb', color: '#fff', padding: isMobile ? '6px 12px' : '8px 16px', borderRadius: '6px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 2px 4px rgba(37, 99, 235, 0.2)' }}>
+            <Link href="/blog/admin/new" style={{ background: '#2563eb', color: '#fff', padding: isMobile ? '6px 12px' : '8px 16px', borderRadius: '6px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 2px 4px rgba(37, 99, 235, 0.2)' }}>
               + New Post
             </Link>
           </div>
