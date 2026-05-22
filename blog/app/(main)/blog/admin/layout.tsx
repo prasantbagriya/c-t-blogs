@@ -9,7 +9,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const session = cookieStore.get('admin_session')?.value;
 
   if (!isValidSession(session)) {
-    redirect('/auth/login');
+    redirect('/blog/auth/login');
   }
 
   return (
