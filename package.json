@@ -3,12 +3,12 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "main": "app.js",
+  "main": "server.cjs",
   "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
-    "start": "node app.js",
+    "start": "node server.cjs",
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "dev:client": "vite --port=5173",
     "dev:server": "cross-env PORT=3001 NODE_ENV=development nodemon --config server/nodemon.json server/index.js",
@@ -36,7 +36,7 @@
     "express": "^4.22.1",
     "googleapis": "^171.4.0",
     "html2canvas": "^1.4.1",
-    "http-proxy-middleware": "^4.0.0",
+    "http-proxy-middleware": "^3.0.0",
     "jsonwebtoken": "^9.0.3",
     "jspdf": "^4.2.1",
     "lucide-react": "^1.14.0",

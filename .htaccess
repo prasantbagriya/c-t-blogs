@@ -13,6 +13,19 @@
   # We only keep basic env fixes here.
 </IfModule>
 
+# Hostinger/Passenger Node.js entrypoint.
+# Keep this file at the ZIP root so hPanel/Passenger starts the CommonJS
+# wrapper instead of trying to require the ESM app.js directly.
+<IfModule mod_passenger.c>
+  PassengerAppType node
+  PassengerStartupFile server.cjs
+</IfModule>
+
+<IfModule passenger_module>
+  PassengerAppType node
+  PassengerStartupFile server.cjs
+</IfModule>
+
 # Basic CORS headers if Apache is intercepting
 <IfModule mod_headers.c>
     Header set Access-Control-Allow-Origin "*"

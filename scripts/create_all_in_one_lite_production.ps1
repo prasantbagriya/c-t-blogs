@@ -98,6 +98,7 @@ $files = @(
     "package.json",
     "package-lock.json",
     "app.js",
+    "server.cjs",
     "blog-state.js",
     ".htaccess",
     ".env"
@@ -108,6 +109,17 @@ foreach ($file in $files) {
     if (Test-Path $source) {
         Copy-Item -LiteralPath $source -Destination (Join-Path $stagePath $file) -Force
     }
+}
+
+# KEY BUILD BYPASS: Modify production package.json scripts.build to bypass Hostinger auto-build phase
+$stagePkgPath = Join-Path $stagePath "package.json"
+if (Test-Path $stagePkgPath) {
+    Write-Host "Modifying package.json scripts.build to bypass Hostinger build phase..."
+    $pkg = Get-Content $stagePkgPath -Raw | ConvertFrom-Json
+    if ($pkg.scripts) {
+        $pkg.scripts.build = "echo 'Build bypassed'"
+    }
+    $pkg | ConvertTo-Json -Depth 100 | Out-File $stagePkgPath -Encoding utf8
 }
 
 if (Test-Path $zipPath) {

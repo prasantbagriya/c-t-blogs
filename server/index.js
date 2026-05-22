@@ -28,14 +28,8 @@ import { JWT_SECRET, PORT, UPLOAD_DIR } from './config.js';
 
 // Import Routes
 import authRoutes from './routes/auth.js';
-import apiRouter from './routes/api.js';
-import webhookRouter from './routes/webhooks.js';
 import shopifyRouter from './routes/shopify.js';
-import instagramRoutes from './instagram/index.js';
-import threadsRoutes from './threads/routes.js';
 import inquiryRoutes from './routes/inquiries.js';
-import paymentRoutes from './routes/payments.js';
-import googleSheetsRouter from './routes/googleSheets.js';
 import { startInstagramScheduler } from './instagram/scheduler.js';
 
 // Start Background Workers
@@ -45,6 +39,23 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+function lazyRouter(importRouter) {
+  let routerPromise = null;
+
+  return async (req, res, next) => {
+    try {
+      routerPromise ||= importRouter().then((mod) => mod.default || mod);
+      const router = await routerPromise;
+      return router(req, res, next);
+    } catch (err) {
+      console.error('[Server] Lazy route import failed:', err);
+      if (!res.headersSent) {
+        res.status(503).json({ error: 'Service is starting. Please retry shortly.' });
+      }
+    }
+  };
+}
 
 // Middleware
 // C-5 FIX: Restrict CORS to known origins instead of wildcard '*'
@@ -141,14 +152,182 @@ app.use((req, res, next) => {
   );
   if (!isBlogPath) return next();
 
-  // Blog not ready yet — show loading page
+  // Blog not ready yet or not running (fallback support)
   if (!blogState.ready) {
-    return res.status(503).send(
-      '<html><head><meta http-equiv="refresh" content="4"></head><body>' +
-      '<h2 style="font-family:sans-serif;text-align:center;margin-top:20vh">⏳ Blog is starting up...</h2>' +
-      '<p style="text-align:center;font-family:sans-serif">Auto-refreshing in 4 seconds...</p>' +
-      '</body></html>'
-    );
+    // If it's a main application path or auth API, fall through to the React SPA natively!
+    const isMainAppPath = [
+      '/auth', '/about', '/contact', '/privacy', '/terms', '/api/auth'
+    ].some(p => path === p || path.startsWith(p + '/'));
+
+    if (isMainAppPath) {
+      console.log(`[Blog Offline] Falling back natively to React SPA for path: ${path}`);
+      return next();
+    }
+
+    // Otherwise, show a beautifully designed, premium offline fallback page
+    return res.status(200).send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog Temporarily Offline | ChatWizs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #09090b;
+      --card-bg: #121214;
+      --text: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --primary: #3b82f6;
+      --primary-glow: rgba(59, 130, 246, 0.15);
+      --border: #27272a;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow: hidden;
+      position: relative;
+    }
+    .glow-1 {
+      position: absolute;
+      top: -10%;
+      left: -10%;
+      width: 40%;
+      height: 40%;
+      background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%);
+      filter: blur(80px);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .glow-2 {
+      position: absolute;
+      bottom: -10%;
+      right: -10%;
+      width: 45%;
+      height: 45%;
+      background: radial-gradient(circle, rgba(168,85,247,0.08) 0%, transparent 70%);
+      filter: blur(80px);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .container {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px 32px;
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+    }
+    .icon-wrapper {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #1e1b4b, #0f172a);
+      border: 1px solid var(--primary);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      box-shadow: 0 0 30px var(--primary-glow);
+      position: relative;
+    }
+    .icon-wrapper::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, var(--primary), #a855f7);
+      z-index: -1;
+      opacity: 0.3;
+    }
+    .icon {
+      color: var(--primary);
+      width: 36px;
+      height: 36px;
+      animation: pulse 2s infinite ease-in-out;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+      background: linear-gradient(to right, #ffffff, #d4d4d8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--text);
+      color: var(--bg);
+      font-weight: 600;
+      font-size: 14px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    .btn:hover {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--border);
+      transform: translateY(-2px);
+    }
+    .footer-text {
+      margin-top: 40px;
+      font-size: 11px;
+      color: #52525b;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-1"></div>
+  <div class="glow-2"></div>
+  <div class="container">
+    <div class="icon-wrapper">
+      <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h.008v.008H12V7.5zM12 11.5h.008v.008H12V11.5zM12 15.5h.008v.008H12V15.5zM20.25 14.25v2.25A2.25 2.25 0 0118 18.75H6a2.25 2.25 0 01-2.25-2.25V5.25A2.25 2.25 0 016 3h12a2.25 2.25 0 012.25 2.25v4.25H21a.75.75 0 01.75.75v3a.75.75 0 01-.75.75h-.75z" />
+      </svg>
+    </div>
+    <h1>Blog is Temporarily Offline</h1>
+    <p>Our blog is currently undergoing scheduled updates. The main ChatWizs AI Automation Platform is fully functional and ready to use.</p>
+    <a href="/" class="btn">Go to Dashboard</a>
+    <div class="footer-text">ChatWizs AI Platform</div>
+  </div>
+</body>
+</html>`);
   }
 
   // Forward full path to blog — e.g. /auth/login → blog:/auth/login ✅
@@ -250,21 +429,21 @@ app.get('/sdk/widget.js', (req, res) => {
   }
 });
 app.use('/api/auth', authRoutes);
-app.use('/api', apiRouter);
-app.use('/api/webhooks', webhookRouter);
+app.use('/api', lazyRouter(() => import('./routes/api.js')));
+app.use('/api/webhooks', lazyRouter(() => import('./routes/webhooks.js')));
 app.use('/shopify-login', shopifyRouter);
 
 try {
-  app.use('/api/instagram', instagramRoutes);
-  app.use('/api/threads', threadsRoutes);
+  app.use('/api/instagram', lazyRouter(() => import('./instagram/index.js')));
+  app.use('/api/threads', lazyRouter(() => import('./threads/routes.js')));
   console.log('[Server] Instagram & Threads Modules Loaded');
 } catch (e) {
   console.error('[Server] Failed to load Social Modules:', e.message);
 }
 
 app.use('/api/inquiries', inquiryRoutes);
-app.use('/api/payments', paymentRoutes);
-app.use('/api/google-sheets', googleSheetsRouter);
+app.use('/api/payments', lazyRouter(() => import('./routes/payments.js')));
+app.use('/api/google-sheets', lazyRouter(() => import('./routes/googleSheets.js')));
 
 // 404 handler for API routes
 app.use('/api', (req, res) => {

@@ -26,10 +26,25 @@ dotenv.config({ path: path.join(__dirname, 'blog', '.env.local'), override: fals
 
 console.log('[Entry] Initializing ChatWizs Single-Unit Deployment...');
 
+process.on('uncaughtException', (err) => {
+  console.error('[CRITICAL] Uncaught Exception in app.js:', err);
+  // Keep alive to prevent 503
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[CRITICAL] Unhandled Rejection in app.js at:', promise, 'reason:', reason);
+  // Keep alive to prevent 503
+});
+
 // ─── BLOG STANDALONE LAUNCHER ────────────────────────────────────────────────
 const BLOG_PORT = blogState.port;
 const blogStandaloneDir    = path.join(__dirname, 'blog', '.next', 'standalone');
 const blogStandaloneServer = path.join(blogStandaloneDir, 'server.js');
+
+let blogRestartCount = 0;
+let lastBlogRestartTime = 0;
+const MAX_RESTARTS = 3;
+const RESTART_COOLDOWN = 60000; // 1 minute
 
 /** Returns true if something is already listening on this port. */
 const isPortInUse = (port, host = '127.0.0.1') =>
@@ -64,8 +79,8 @@ const waitForPort = (port, host = '127.0.0.1', timeout = 30000) =>
 
 const launchBlogStandalone = async () => {
   if (!fs.existsSync(blogStandaloneServer)) {
-    console.warn('[Blog] ⚠️  Standalone server.js not found at:', blogStandaloneServer);
-    console.warn('[Blog] Blog routes (/blog) will return 503.');
+    console.warn('[Blog] ⚠️ Standalone server.js not found at:', blogStandaloneServer);
+    console.warn('[Blog] Blog routes (/blog) will fallback gracefully.');
     return;
   }
 
@@ -79,7 +94,25 @@ const launchBlogStandalone = async () => {
     return;
   }
 
-  console.log(`[Blog] Launching Next.js standalone on internal port ${BLOG_PORT}...`);
+  const now = Date.now();
+  if (now - lastBlogRestartTime < 10000) {
+    blogRestartCount++;
+  } else {
+    if (now - lastBlogRestartTime > RESTART_COOLDOWN) {
+      blogRestartCount = 0;
+    } else {
+      blogRestartCount++;
+    }
+  }
+  lastBlogRestartTime = now;
+
+  if (blogRestartCount >= MAX_RESTARTS) {
+    console.error(`[Blog] ❌ Blog crashed ${blogRestartCount} times rapidly. Auto-restart disabled to protect server.`);
+    blogState.ready = false;
+    return;
+  }
+
+  console.log(`[Blog] Launching Next.js standalone on internal port ${BLOG_PORT} (Attempt ${blogRestartCount + 1})...`);
   console.log('[Blog] Using node binary:', process.execPath);
 
   // CRITICAL FIX: Pass absolute paths for data/ and public/uploads/
