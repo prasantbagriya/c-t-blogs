@@ -120,6 +120,18 @@ const getBlogProxy = () => {
           }
         },
         proxyRes: (proxyRes, req, res) => {
+          // Ensure cookies set by Next.js don't have localhost or 127.0.0.1 domains
+          if (proxyRes.headers['set-cookie']) {
+            proxyRes.headers['set-cookie'] = proxyRes.headers['set-cookie'].map(cookie => {
+              let newCookie = cookie.replace(/Domain=[^;]+;?\s*/gi, '');
+              // Force Path=/ to be safe
+              if (!newCookie.includes('Path=')) {
+                newCookie += '; Path=/';
+              }
+              return newCookie;
+            });
+          }
+
           // Extra safety: manually rewrite any leaked localhost/127.0.0.1 or port Location headers
           // Next.js uses BOTH 'location' and 'x-nextjs-redirect' depending on client-side or server-side routing
           const headersToRewrite = ['location', 'x-nextjs-redirect'];
