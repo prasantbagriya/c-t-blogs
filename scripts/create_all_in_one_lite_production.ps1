@@ -7,7 +7,7 @@ $scriptPath = $PSScriptRoot
 $rootPath = (Resolve-Path "$scriptPath\..").Path
 $blogPath = Join-Path $rootPath "blog"
 $stagePath = Join-Path $rootPath ".lite-package"
-$zipName = "chatwizs-all-in-one-lite.zip"
+$zipName = "chatwiz_lite_final.zip"
 $zipPath = Join-Path $rootPath $zipName
 
 function Assert-Success($message) {
@@ -92,11 +92,13 @@ Copy-Dir "$rootPath\shims" "$stagePath\shims"
 
 Copy-Dir $blogPath "$stagePath\blog" @("/XD", $dirExcludes, "/XF", $fileExcludes)
 Copy-Dir "$blogPath\.next\standalone" "$stagePath\blog\.next\standalone" @("/XD", ".git", "/XF", "*.log")
-Copy-Dir "$blogPath\.next\static" "$stagePath\blog\.next\static"
+Copy-Dir "$blogPath\.next\static" "$stagePath\blog\.next\standalone\.next\static"
+Copy-Dir "$blogPath\public" "$stagePath\blog\.next\standalone\public"
 
 $files = @(
     "package.json",
     "package-lock.json",
+    "server.cjs",
     "app.js",
     "blog-state.js",
     ".htaccess",
@@ -117,7 +119,8 @@ if (Test-Path $zipPath) {
 
 Write-Host "Step 5: Creating zip archive..."
 Set-Location $stagePath
-tar.exe -a -c -f $zipPath .
+$zipItems = Get-ChildItem -Path . -Force | Select-Object -ExpandProperty Name
+& tar.exe -a -c -f $zipPath $zipItems
 Assert-Success "Archive creation"
 Set-Location $rootPath
 

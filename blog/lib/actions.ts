@@ -46,7 +46,7 @@ async function isUrlReferenced(url: string, excludeId?: string): Promise<boolean
 async function deleteUploadFile(fileUrl: string) {
   try {
     const filename = path.basename(fileUrl);
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+    const uploadDir = process.env.BLOG_UPLOADS_DIR || path.join(process.cwd(), 'public', 'uploads');
     const filepath = path.join(uploadDir, filename);
 
     // Prevent directory traversal

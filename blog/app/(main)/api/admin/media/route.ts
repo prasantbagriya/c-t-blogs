@@ -6,7 +6,7 @@ import { getPosts, getStories, getAuthors } from '@/lib/db';
 
 export async function GET() {
   try {
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
+    const uploadsDir = process.env.BLOG_UPLOADS_DIR || path.join(process.cwd(), 'public', 'uploads');
     
     // Check if directory exists
     try {
@@ -110,10 +110,11 @@ export async function DELETE(req: Request) {
     const filename = searchParams.get('filename');
     if (!filename) return NextResponse.json({ error: 'Filename is required' }, { status: 400 });
 
-    const filePath = path.join(process.cwd(), 'public', 'uploads', path.basename(filename));
+    const uploadDir = process.env.BLOG_UPLOADS_DIR || path.join(process.cwd(), 'public', 'uploads');
+    const filePath = path.join(uploadDir, path.basename(filename));
     
     // Prevent directory traversal
-    if (!filePath.startsWith(path.join(process.cwd(), 'public', 'uploads'))) {
+    if (!filePath.startsWith(uploadDir)) {
        return NextResponse.json({ error: 'Invalid path' }, { status: 400 });
     }
 
@@ -155,7 +156,7 @@ export async function POST(req: Request) {
     const newUrl = `/uploads/${newFilename}`;
     const oldUrl = `/uploads/${oldFilename}`;
 
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+    const uploadDir = process.env.BLOG_UPLOADS_DIR || path.join(process.cwd(), 'public', 'uploads');
     const newFilepath = path.join(uploadDir, newFilename);
     const oldFilepath = path.join(uploadDir, oldFilename);
 

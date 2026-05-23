@@ -122,6 +122,26 @@ const launchBlogStandalone = async () => {
   const blogDataDir = path.join(__dirname, 'blog', 'data');
   const blogUploadsDir = path.join(__dirname, 'blog', 'public', 'uploads');
 
+  // CRITICAL FIX: Next.js standalone server looks for static files and images in its own cwd/public.
+  // We must create a junction/symlink from .next/standalone/public/uploads to the persistent blogUploadsDir.
+  const standalonePublicDir = path.join(blogStandaloneDir, 'public');
+  const standaloneUploadsDir = path.join(standalonePublicDir, 'uploads');
+
+  try {
+    if (!fs.existsSync(standalonePublicDir)) {
+      fs.mkdirSync(standalonePublicDir, { recursive: true });
+    }
+    // If it exists but is not a symlink, or it's a broken symlink, remove it
+    if (fs.existsSync(standaloneUploadsDir) || fs.lstatSync(standaloneUploadsDir).isSymbolicLink()) {
+      fs.rmSync(standaloneUploadsDir, { recursive: true, force: true });
+    }
+    // Create directory junction (works on Windows without admin, and Linux)
+    fs.symlinkSync(blogUploadsDir, standaloneUploadsDir, 'junction');
+    console.log(`[Blog] ✅ Created symlink for uploads: ${standaloneUploadsDir} -> ${blogUploadsDir}`);
+  } catch (err) {
+    console.error(`[Blog] ⚠️ Failed to create uploads symlink:`, err.message);
+  }
+
   const blogProcess = spawn(process.execPath, [blogStandaloneServer], {
     cwd: blogStandaloneDir,
     shell: false,
