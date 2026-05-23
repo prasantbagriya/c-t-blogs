@@ -34,6 +34,7 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react', 'framer-motion', 'date-fns'],
     serverActions: {
       bodySizeLimit: '10mb',
+      allowedOrigins: ['chatwizs.com', 'www.chatwizs.com', 'localhost:3001', 'localhost:4000', '127.0.0.1:4000']
     },
   },
 
