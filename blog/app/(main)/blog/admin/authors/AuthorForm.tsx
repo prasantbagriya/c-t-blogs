@@ -74,7 +74,7 @@ export default function AuthorForm({ author }: { author?: AuthorProfile }) {
         body: JSON.stringify(newAuthor)
       });
       if (res.ok) {
-        router.push('/admin/authors');
+        router.push('/blog/admin/authors');
         router.refresh();
       } else {
         alert('Failed to save');

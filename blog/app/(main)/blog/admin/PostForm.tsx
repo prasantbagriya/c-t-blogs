@@ -940,7 +940,10 @@ export default function PostForm({ post }: PostFormProps) {
          };
 
          await handleSavePost(updatedPost);
-         router.push('/admin');
+         setTimeout(() => {
+            router.push('/blog/admin');
+            router.refresh();
+         });
       });
    };
 

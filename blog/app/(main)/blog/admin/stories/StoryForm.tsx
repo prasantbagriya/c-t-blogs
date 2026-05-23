@@ -123,7 +123,7 @@ export default function StoryForm({ story }: { story?: WebStory }) {
         }
 
         await new Promise(resolve => setTimeout(resolve, 1000));
-        router.push('/admin/stories');
+        router.push('/blog/admin/stories');
       } catch (error) {
         console.error('Save failed:', error);
         alert('Critical error: Web Story could not be deployed.');

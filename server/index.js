@@ -487,6 +487,9 @@ app.use('/uploads', express.static(UPLOAD_DIR));
 
 // Fallback static serving for build environments
 app.use('/uploads', express.static(path.join(__dirname, '../dist/uploads')));
+// Serve Blog Uploads (both dev and standalone production)
+app.use('/uploads', express.static(path.join(__dirname, '../blog/public/uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '../blog/.next/standalone/public/uploads')));
 
 // Wildcard route to serve index.html for React routing
 app.get('*', (req, res) => {
