@@ -80,7 +80,7 @@ export async function handleAdminLogin(password: string) {
     const cookieStore = await cookies();
     cookieStore.set('admin_session', sessionToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // True on Hostinger
+      secure: false, // Set to false to support local testing and proxies where X-Forwarded-Proto might not be reliable
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: '/',
