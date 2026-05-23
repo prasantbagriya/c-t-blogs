@@ -103,12 +103,10 @@ const getBlogProxy = () => {
       router: () => `http://127.0.0.1:${blogState.port}`,
       on: {
         proxyReq: (proxyReq, req, res) => {
-          // CRITICAL FIX: Next.js Server Actions enforce strict Origin/Host matching.
-          proxyReq.setHeader('Origin', `http://127.0.0.1:${blogState.port}`);
-          proxyReq.setHeader('Host', `127.0.0.1:${blogState.port}`);
-          proxyReq.removeHeader('x-forwarded-host');
-          proxyReq.removeHeader('x-forwarded-proto');
-          proxyReq.removeHeader('x-forwarded-port');
+          // Pass real Host to Next.js so cookies and redirects generate correctly
+          if (req.headers.host) {
+            proxyReq.setHeader('Host', req.headers.host);
+          }
         },
         error: (err, req, res) => {
           // Do NOT set blogState.ready = false here! 
@@ -120,43 +118,7 @@ const getBlogProxy = () => {
           }
         },
         proxyRes: (proxyRes, req, res) => {
-          // Ensure cookies set by Next.js don't have localhost or 127.0.0.1 domains
-          if (proxyRes.headers['set-cookie']) {
-            proxyRes.headers['set-cookie'] = proxyRes.headers['set-cookie'].map(cookie => {
-              let newCookie = cookie.replace(/Domain=[^;]+;?\s*/gi, '');
-              // Force Path=/ to be safe
-              if (!newCookie.includes('Path=')) {
-                newCookie += '; Path=/';
-              }
-              return newCookie;
-            });
-          }
-
-          // Extra safety: manually rewrite any leaked localhost/127.0.0.1 or port Location headers
-          // Next.js uses BOTH 'location' and 'x-nextjs-redirect' depending on client-side or server-side routing
-          const headersToRewrite = ['location', 'x-nextjs-redirect'];
-
-          headersToRewrite.forEach(headerName => {
-            if (proxyRes.headers[headerName]) {
-              let loc = proxyRes.headers[headerName];
-              const externalProto = req.headers['x-forwarded-proto'] || 'https';
-              const externalHost = req.headers['x-forwarded-host'] || req.headers.host || 'chatwizs.com';
-
-              // If the redirect is absolute and contains localhost or 127.0.0.1, replace it with external host
-              loc = loc.replace(/^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?/i, `${externalProto}://${externalHost}`);
-
-              // If the redirect contains the external host BUT leaked the internal port (e.g. chatwizs.com:4000), strip the port
-              if (loc.includes(`${externalHost}:${blogState.port}`)) {
-                loc = loc.replace(`${externalHost}:${blogState.port}`, externalHost);
-              }
-
-              // Also explicitly strip :4000 and :4001 just in case
-              if (loc.includes(':4000')) loc = loc.replace(':4000', '');
-              if (loc.includes(':4001')) loc = loc.replace(':4001', '');
-
-              proxyRes.headers[headerName] = loc;
-            }
-          });
+          // No manual rewriting needed since Next.js sees the real Host.
         },
       },
     });
