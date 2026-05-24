@@ -35,6 +35,10 @@ export default function AuthorForm({ author }: { author?: AuthorProfile }) {
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
+    
+    // Clear the input so the same file can be selected again if needed
+    event.target.value = '';
+
     const formData = new FormData();
     formData.append('file', file);
     try {
@@ -42,11 +46,11 @@ export default function AuthorForm({ author }: { author?: AuthorProfile }) {
       if (result.success && result.url) {
         setImage(result.url);
       } else {
-        alert('Upload failed');
+        alert(`Upload failed: ${result.error || 'Unknown error'}`);
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      alert('Upload error');
+      alert(`Upload error: ${e.message || 'Unknown error'}`);
     }
   };
 

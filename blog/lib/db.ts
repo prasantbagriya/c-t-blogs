@@ -245,9 +245,53 @@ export async function getAuthorById(id: string): Promise<import('./types').Autho
 export async function saveAuthor(author: import('./types').AuthorProfile) {
   const authors = await getAuthors();
   const index = authors.findIndex(a => a.id === author.id);
-  if (index > -1) authors[index] = author;
-  else authors.push(author);
+  
+  let oldName: string | null = null;
+  if (index > -1) {
+    oldName = authors[index].name;
+    authors[index] = author;
+  } else {
+    authors.push(author);
+  }
+  
   await fastWrite(AUTHORS_PATH, authors);
+
+  if (oldName) {
+    const posts = await getPosts();
+    let postsChanged = false;
+    for (const post of posts) {
+      if (post.author === oldName) {
+        post.author = author.name;
+        post.authorBio = author.bio || '';
+        post.authorImage = author.image || '';
+        post.authorJobTitle = author.jobTitle || '';
+        post.authorExperienceYears = author.experienceYears;
+        post.authorAwards = author.awards;
+        post.authorAlumniOf = author.alumniOf;
+        post.authorSocials = author.socials || {};
+        post.authorKnowsAbout = author.knowsAbout;
+        postsChanged = true;
+      }
+    }
+    if (postsChanged) {
+      await fastWrite(DB_PATH, posts);
+    }
+
+    const stories = await getStories();
+    let storiesChanged = false;
+    for (const story of stories) {
+      if (story.author === oldName) {
+        story.author = author.name;
+        story.authorBio = author.bio || '';
+        story.authorImage = author.image || '';
+        story.authorSocials = author.socials || {};
+        storiesChanged = true;
+      }
+    }
+    if (storiesChanged) {
+      await fastWrite(STORIES_PATH, stories);
+    }
+  }
 }
 
 export async function deleteAuthor(id: string) {

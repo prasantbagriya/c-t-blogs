@@ -710,6 +710,10 @@ export default function PostForm({ post }: PostFormProps) {
    const handleAuthorImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
        const file = event.target.files?.[0];
        if (!file) return;
+
+       // Clear input to allow uploading same file again if needed
+       event.target.value = '';
+
        const formData = new FormData();
        formData.append('file', file);
        try {
@@ -719,9 +723,9 @@ export default function PostForm({ post }: PostFormProps) {
           } else {
              alert(`Author image upload failed: ${result.error || 'Unknown error'}`);
           }
-       } catch (error) {
+       } catch (error: any) {
           console.error('Author image upload failed:', error);
-          alert('Author image upload failed. Please check connection and file size limits.');
+          alert(`Author image upload failed: ${error.message || 'Unknown error'}`);
        }
     };
 

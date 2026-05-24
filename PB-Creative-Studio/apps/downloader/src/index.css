@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 240 10% 2%;
+  --foreground: 0 0% 100%;
+  --card: 240 10% 4%;
+  --card-foreground: 0 0% 100%;
+  --primary: 199 89% 48%; /* Sky 500 equivalent */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 221 83% 53%; /* Blue 600 equivalent */
+  --border: 0 0% 12%;
+  --radius: 1.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border selection:bg-sky-500/30 selection:text-white;
+  }
+  body {
+    @apply bg-[#030408] text-white font-outfit;
+    margin: 0;
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-slate-950/40 backdrop-blur-3xl border border-white/[0.04] shadow-2xl;
+  }
+
+  .text-gradient-stellar {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-slate-100 via-sky-400 to-blue-500;
+  }
+
+  .btn-stellar {
+    @apply bg-white text-black font-black transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:shadow-[0_0_50px_rgba(56,189,248,0.4)] active:scale-95;
+  }
+
+  .console-terminal {
+    @apply font-mono text-[10px] tracking-widest text-sky-400/60 uppercase;
+  }
+}
+
+.search-glow-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.search-glow-wrapper::before {
+  content: '';
+  position: absolute;
+  top: var(--mouse-y, 0);
+  left: var(--mouse-x, 0);
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(56,189,248,0.08) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.console-card {
+  background: linear-gradient(135deg, rgba(15,23,42,0.8) 0%, rgba(2,6,23,0.9) 100%);
+  border: 1px solid rgba(56,189,248,0.1);
+  box-shadow: 0 20px 60px -15px rgba(0,0,0,0.7);
+  backdrop-filter: blur(40px);
+}
+
+.extraction-scanline {
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(to right, transparent, #38bdf8, transparent);
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: scan 3s linear infinite;
+  opacity: 0.3;
+}
+
+@keyframes scan {
+  from { top: 0%; }
+  to { top: 100%; }
+}
+
+.status-dot {
+  @apply w-2 h-2 rounded-full bg-sky-400 shadow-[0_0_10px_#38bdf8];
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+::-webkit-scrollbar-thumb {
+  background: #1a1a1a;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #252525;
+}
