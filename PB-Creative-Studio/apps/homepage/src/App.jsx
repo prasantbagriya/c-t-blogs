@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+﻿import React, { useState, useEffect, useRef } from 'react'
 import { motion, useScroll, useSpring, useTransform, AnimatePresence, useMotionValue } from 'framer-motion'
 import { 
   Rocket, Download, Globe, ArrowRight, Shield, Zap, Star, 
@@ -7,6 +7,16 @@ import {
   Activity, Command, MousePointer2, Box, Sparkles, Mail,
   Send, Lock, FileText, ExternalLink, Quote, ChevronDown
 } from 'lucide-react'
+
+// ── DEVELOPMENT PATH HELPER ──────────────────────────────────────────────────
+const getDevPath = (path) => {
+  if (import.meta.env && import.meta.env.DEV) {
+    if (path.startsWith('/youtubevideodownload')) return `http://localhost:5173${path}`
+    if (path.startsWith('/tool')) return `http://localhost:5175${path}`
+    if (path.startsWith('/portal')) return `http://localhost:5176${path}`
+  }
+  return path
+}
 
 // ── CUSTOM CURSOR COMPONENT ───────────────────────────────────────────────
 const CustomCursor = () => {
@@ -59,11 +69,11 @@ const AuraOrb = () => {
 // ── TESTIMONIAL MARQUEE ──────────────────────────────────────────────────
 const TestimonialMarquee = () => {
   const testimonials = [
-    { name: "Arjun V.", role: "Lead Architect", text: "PB Studio transformed our exam infrastructure. The multi-tenant logic is flawless." },
+    { name: "Arjun V.", role: "Lead Architect", text: "chatwizs studio transformed our exam infrastructure. The multi-tenant logic is flawless." },
     { name: "Sarah K.", role: "Backend Engineer", text: "The Solar Extractor is a masterpiece of media engineering. Fast and precise." },
     { name: "Vikram R.", role: "Product Manager", text: "Engineering elegance redefined. The UI feels like it's from the future." },
     { name: "Elena D.", role: "UI Designer", text: "The attention to detail in the Indigo Engine is unmatched. Pure digital art." },
-    { name: "David M.", role: "Security Officer", text: "Robust security protocols. PB Studio is our go-to for sensitive architectures." }
+    { name: "David M.", role: "Security Officer", text: "Robust security protocols. chatwizs studio is our go-to for sensitive architectures." }
   ]
 
   return (
@@ -96,21 +106,21 @@ const ProductShowcase = () => {
     { 
       title: 'EduExam Pro', 
       desc: 'Advanced Examination Management System for institutes. Automated builders, class analytics, and secure portals.',
-      path: '/portal', 
+      path: getDevPath('/portal'), 
       icon: <GraduationCap size={32} />,
       tags: ['Security', 'Analytics', 'Automated']
     },
     { 
       title: 'Solar Extractor', 
       desc: 'High-fidelity YouTube video & audio downloader. Direct extraction with peak performance headers.',
-      path: '/youtubevideodownload', 
+      path: getDevPath('/youtubevideodownload'), 
       icon: <Download size={32} />,
       tags: ['Media', 'Direct', 'Fast']
     },
     { 
       title: 'DevForge Kit', 
       desc: 'Financial & Developer utility node containing SIP Forecaster, Compound Interest Simulator, and Prop Firm Evaluator.',
-      path: '/tool', 
+      path: getDevPath('/tool'), 
       icon: <Command size={32} />,
       tags: ['Financial', 'DevTools', 'Essential']
     },
@@ -187,7 +197,7 @@ const ContactView = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           ...formData, 
-          source: 'PB Studio Main Homepage',
+          source: 'chatwizs studio Main Homepage',
           type: 'Direct Inquiry'
         })
       });
@@ -213,7 +223,7 @@ const ContactView = () => {
               </div>
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.3em] text-white/30">Direct Inbox Access</p>
-                <p className="text-xl font-bold text-white">support@prasantbagriya.online</p>
+                <p className="text-xl font-bold text-white">support@chatwizs.com</p>
               </div>
             </div>
           </div>
@@ -315,12 +325,12 @@ const App = () => {
   }, [activeView])
 
   const products = [
-    { title: 'EduExam Pro', path: '/portal', icon: <GraduationCap size={16} /> },
-    { title: 'Solar Extractor', path: '/youtubevideodownload', icon: <Download size={16} /> },
-    { title: 'DevForge Kit', path: '/tool', icon: <Command size={16} /> },
-    { title: '▻ SIP Calculator', path: '/tool/sip-calculator', icon: <Activity size={16} /> },
-    { title: '▻ Compound Growth', path: '/tool/compound-interest-calculator', icon: <Sparkles size={16} /> },
-    { title: '▻ Prop Firm Evaluator', path: '/tool/prop-firm', icon: <Terminal size={16} /> },
+    { title: 'EduExam Pro', path: getDevPath('/portal'), icon: <GraduationCap size={16} /> },
+    { title: 'Solar Extractor', path: getDevPath('/youtubevideodownload'), icon: <Download size={16} /> },
+    { title: 'DevForge Kit', path: getDevPath('/tool'), icon: <Command size={16} /> },
+    { title: '▻ SIP Calculator', path: getDevPath('/tool/sip-calculator'), icon: <Activity size={16} /> },
+    { title: '▻ Compound Growth', path: getDevPath('/tool/compound-interest-calculator'), icon: <Sparkles size={16} /> },
+    { title: '▻ Prop Firm Evaluator', path: getDevPath('/tool/prop-firm'), icon: <Terminal size={16} /> },
   ]
 
   return (
@@ -337,7 +347,7 @@ const App = () => {
           <div className="flex items-center gap-4 group cursor-pointer" onClick={() => setActiveView('home')}>
             <div className="w-12 h-12 rounded-[1.2rem] bg-indigo-600 text-white flex items-center justify-center font-black text-xl transition-all group-hover:rotate-12 shadow-xl shadow-indigo-600/30">P</div>
             <div className="flex flex-col">
-              <span className="text-2xl font-black tracking-tighter uppercase leading-none">PB STUDIO</span>
+              <span className="text-2xl font-black tracking-tighter uppercase leading-none">chatwizs studio</span>
               <span className="text-[11px] text-indigo-400 font-bold tracking-[0.4em] uppercase mt-1">Indigo Hub</span>
             </div>
           </div>
@@ -459,13 +469,13 @@ const App = () => {
         {activeView === 'privacy' && <LegalLayout title="Privacy Policy">
           <section>
             <h3 className="text-2xl font-black text-white uppercase tracking-[0.2em] mb-6">01. Data Governance</h3>
-            <p>PB Studio implements strict data localization. All temporary buffers are flushed post-session execution.</p>
+            <p>chatwizs studio implements strict data localization. All temporary buffers are flushed post-session execution.</p>
           </section>
         </LegalLayout>}
         {activeView === 'terms' && <LegalLayout title="Terms Of Use">
           <section>
             <h3 className="text-2xl font-black text-white uppercase tracking-[0.2em] mb-6">01. Usage License</h3>
-            <p>Subject is granted limited access to PB Studio infrastructure for personal and legitimate operational use.</p>
+            <p>Subject is granted limited access to chatwizs studio infrastructure for personal and legitimate operational use.</p>
           </section>
         </LegalLayout>}
         
@@ -478,7 +488,7 @@ const App = () => {
             <div className="md:col-span-1">
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-10 h-10 rounded-[1rem] bg-indigo-600 text-white flex items-center justify-center font-black text-xl shadow-lg shadow-indigo-600/20">P</div>
-                <span className="text-xl font-black tracking-tighter uppercase">PB STUDIO</span>
+                <span className="text-xl font-black tracking-tighter uppercase">chatwizs studio</span>
               </div>
               <p className="text-white/30 text-xs font-medium leading-relaxed">Defining the digital frontier through code and aesthetic excellence. High-fidelity architecture for the visionaries.</p>
             </div>
@@ -495,7 +505,7 @@ const App = () => {
               <div className="flex flex-col gap-5">
                 <button onClick={() => setActiveView('home')} className="text-left premium-link">Vision Hub</button>
                 <button onClick={() => setActiveView('contact')} className="text-left premium-link">Collaborate</button>
-                <a href="mailto:support@prasantbagriya.online" className="text-left premium-link">Direct Support</a>
+                <a href="mailto:support@chatwizs.com" className="text-left premium-link">Direct Support</a>
               </div>
             </div>
 

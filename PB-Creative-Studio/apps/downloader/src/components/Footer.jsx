@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-2xl font-black mb-6 tracking-tighter">PB STUDIO</h3>
+            <h3 className="text-2xl font-black mb-6 tracking-tighter">chatwizs studio</h3>
             <p className="text-zinc-500 max-w-sm mb-8 leading-relaxed">
               Empowering creators and archivists with the next generation of media extraction tools. Fast, secure, and built for the high-fidelity future.
             </p>
@@ -38,7 +38,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-xs text-zinc-600 font-medium tracking-wide">
-          <p>© 2026 PB Studio Architecture. All rights reserved. Precision Harvesting Infrastructure.</p>
+          <p>© 2026 chatwizs studio Architecture. All rights reserved. Precision Harvesting Infrastructure.</p>
           <div className="flex space-x-8 mt-4 md:mt-0 italic">
             <a href="#" className="hover:text-white transition-colors uppercase">System Status ↗</a>
             <a href="#" className="hover:text-white transition-colors uppercase">Cookies</a>

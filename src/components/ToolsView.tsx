@@ -4,7 +4,12 @@ import {
   Zap,
   LayoutDashboard,
   Smartphone,
-  Plus
+  Plus,
+  Calculator,
+  PieChart,
+  TrendingUp,
+  ExternalLink,
+  Video
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { API_URL, safeJson } from '../api';
@@ -133,6 +138,99 @@ export const ToolsView = ({ user, showToast }: ToolsViewProps) => {
         </div>
       </div>
 
+      <div className="py-2 sm:py-4 mt-8 text-center sm:text-left border-t border-slate-200 dark:border-white/5 pt-8">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-1">Financial Calculators</h2>
+        <p className="text-[11px] sm:text-sm text-slate-500 dark:text-slate-200">Tools to forecast and calculate financial growth.</p>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        {/* SIP Calculator Card */}
+        <div 
+          onClick={() => {
+            window.history.pushState({}, '', '/sip-calculator');
+            window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/sip-calculator' }));
+          }}
+          className="cursor-pointer bg-white dark:bg-[#16161d] p-5 sm:p-6 rounded-lg border border-slate-200 dark:border-white/5 hover:border-blue-500 transition-colors group flex flex-col justify-between"
+        >
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2 sm:p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl">
+                <PieChart className="w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <ExternalLink className="w-4 h-4 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
+            <h3 className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white mb-2">SIP Forecaster</h3>
+            <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400">Calculate estimated returns on your monthly SIP investments over time.</p>
+          </div>
+        </div>
+
+        {/* Compound Interest Card */}
+        <div 
+          onClick={() => {
+            window.history.pushState({}, '', '/compound-interest');
+            window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/compound-interest' }));
+          }}
+          className="cursor-pointer bg-white dark:bg-[#16161d] p-5 sm:p-6 rounded-lg border border-slate-200 dark:border-white/5 hover:border-emerald-500 transition-colors group flex flex-col justify-between"
+        >
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2 sm:p-3 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-xl">
+                <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <ExternalLink className="w-4 h-4 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
+            <h3 className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white mb-2">Compound Interest</h3>
+            <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400">Find out how much your lumpsum investment will grow with compound interest.</p>
+          </div>
+        </div>
+
+        {/* Prop Firm Card */}
+        <div 
+          onClick={() => {
+            window.history.pushState({}, '', '/prop-firm');
+            window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/prop-firm' }));
+          }}
+          className="cursor-pointer bg-white dark:bg-[#16161d] p-5 sm:p-6 rounded-lg border border-slate-200 dark:border-white/5 hover:border-purple-500 transition-colors group flex flex-col justify-between"
+        >
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2 sm:p-3 bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-xl">
+                <Calculator className="w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <ExternalLink className="w-4 h-4 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
+            <h3 className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white mb-2">Prop Firm Calculator</h3>
+            <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400">Calculate trading objectives and drawdown limits for prop firm challenges.</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="py-2 sm:py-4 mt-8 text-center sm:text-left border-t border-slate-200 dark:border-white/5 pt-8">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-1">Media Tools</h2>
+        <p className="text-[11px] sm:text-sm text-slate-500 dark:text-slate-200">Tools for media extraction and generation.</p>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        {/* YouTube Downloader Card */}
+        <div 
+          onClick={() => {
+            window.history.pushState({}, '', '/youtube-downloader');
+            window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/youtube-downloader' }));
+          }}
+          className="cursor-pointer bg-white dark:bg-[#16161d] p-5 sm:p-6 rounded-lg border border-slate-200 dark:border-white/5 hover:border-red-500 transition-colors group flex flex-col justify-between"
+        >
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2 sm:p-3 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-xl">
+                <Video className="w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <ExternalLink className="w-4 h-4 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
+            <h3 className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white mb-2">YouTube Downloader</h3>
+            <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400">Download high-quality videos and audio from YouTube and other platforms.</p>
+          </div>
+        </div>
+      </div>
 
     </div>
   );

@@ -5,16 +5,16 @@
     <link rel="icon" type="image/svg+xml" href="/tool/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DevForge Kit - Professional Developer Utility Suite & Architecture Hub</title>
-    <meta name="description" content="DevForge Kit by PB Studio: A high-fidelity suite of developer tools and utility stabilizers. Code acceleration, structural normalization, and engineering-grade snippets." />
-    <meta name="keywords" content="developer tools, code snippets, web utility, PB Studio, DevForge, structural stabilizers, engineering tools" />
-    <link rel="canonical" href="https://prasantbagriya.online/tools" />
+    <meta name="description" content="DevForge Kit by chatwizs studio: A high-fidelity suite of developer tools and utility stabilizers. Code acceleration, structural normalization, and engineering-grade snippets." />
+    <meta name="keywords" content="developer tools, code snippets, web utility, chatwizs studio, DevForge, structural stabilizers, engineering tools" />
+    <link rel="canonical" href="http://chatwizs.com/tools" />
     <meta name="google-site-verification" content="DuaeTY0egQMDdbt9PPEsFAvjSY9CgZa6EbuyaaPABpo" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="DevForge Kit - Structural Engineering Suite" />
     <meta property="og:description" content="Accelerate your digital architecture with engineering-grade utilities." />
-    <meta property="og:url" content="https://prasantbagriya.online/tools" />
+    <meta property="og:url" content="http://chatwizs.com/tools" />
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -30,12 +30,28 @@
     </script>
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KBM8FP4GSM"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-KBM8FP4GSM');
+      (function() {
+        var loaded = false;
+        function loadGTM() {
+          if (loaded) return;
+          loaded = true;
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = window.gtag || function(){ dataLayer.push(arguments); };
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=G-KBM8FP4GSM';
+          s.onload = function() {
+            gtag('js', new Date());
+            gtag('config', 'G-KBM8FP4GSM', { send_page_view: true });
+          };
+          document.head.appendChild(s);
+        }
+        var schedule = function(cb) { return setTimeout(cb, 4000); };
+        window.addEventListener('load', function() { schedule(loadGTM); });
+        window.addEventListener('scroll', loadGTM, { once: true, passive: true });
+        window.addEventListener('pointerdown', loadGTM, { once: true, passive: true });
+      })();
     </script>
     <script type="module" crossorigin src="/tool/assets/index-C9Xq33QP.js"></script>
     <link rel="stylesheet" crossorigin href="/tool/assets/index-DsSZ3LGY.css">

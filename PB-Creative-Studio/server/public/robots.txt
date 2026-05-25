@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://prasantbagriya.online/sitemap.xml
+Sitemap: http://chatwizs.com/sitemap.xml

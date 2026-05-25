@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import LegalLayout from '../../components/LegalLayout';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 
@@ -72,7 +72,7 @@ export default function ContactUsPage() {
           <Mail className="text-indigo-400" />
           <div>
             <div style={{ fontWeight: 700 }}>Email Support</div>
-            <div style={{ color: '#94a3b8' }}>support@prasantbagriya.online</div>
+            <div style={{ color: '#94a3b8' }}>support@chatwizs.com</div>
           </div>
         </div>
         

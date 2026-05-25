@@ -3,12 +3,14 @@ const cors = require('cors');
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
+const compression = require('compression');
 const examRoutes = require('./exam_routes');
 
 console.log("--- SYSTEM BOOT ---");
 console.log("Starting Node.js Application...");
 
 const app = express();
+app.use(compression());
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
@@ -16,13 +18,27 @@ app.use(express.json());
 
 // 1. Static Asset Serving
 const homePublicPath = path.resolve(__dirname, 'public');
+
+const staticCacheOptions = {
+    maxAge: '0',
+    setHeaders: (res, filepath) => {
+        if (filepath.includes(path.sep + 'assets' + path.sep)) {
+            res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        } else if (filepath.endsWith('.html')) {
+            res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+        } else {
+            res.setHeader('Cache-Control', 'public, max-age=2592000');
+        }
+    }
+};
+
 // Root static serving
-app.use('/', express.static(homePublicPath));
+app.use('/', express.static(homePublicPath, staticCacheOptions));
 // Explicit sub-app static serving (prevents catch-all overlap for assets)
-app.use('/portal', express.static(path.join(homePublicPath, 'portal')));
-app.use('/hub', express.static(path.join(homePublicPath, 'hub')));
-app.use('/tool', express.static(path.join(homePublicPath, 'tool')));
-app.use('/youtubevideodownload', express.static(path.join(homePublicPath, 'youtubevideodownload')));
+app.use('/portal', express.static(path.join(homePublicPath, 'portal'), staticCacheOptions));
+app.use('/hub', express.static(path.join(homePublicPath, 'hub'), staticCacheOptions));
+app.use('/tool', express.static(path.join(homePublicPath, 'tool'), staticCacheOptions));
+app.use('/youtubevideodownload', express.static(path.join(homePublicPath, 'youtubevideodownload'), staticCacheOptions));
 
 // Unified Admin Redirect
 app.get(['/admin', '/admin/*'], (req, res) => {
@@ -31,7 +47,7 @@ app.get(['/admin', '/admin/*'], (req, res) => {
 });
 
 // Uploads for Exam Pro
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), { maxAge: '30d' }));
 const uploadsDir = path.join(__dirname, 'uploads/tmp');
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 
@@ -152,22 +168,27 @@ app.use('/api', examRoutes);
 
 // SPA Internal Catch-Alls
 app.get(['/tool', '/tool/*'], (req, res) => {
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     res.sendFile(path.resolve(__dirname, 'public', 'tool', 'index.html'));
 });
 
 app.get(['/youtubevideodownload', '/youtubevideodownload/*'], (req, res) => {
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     res.sendFile(path.resolve(__dirname, 'public', 'youtubevideodownload', 'index.html'));
 });
 
 app.get(['/portal', '/portal/*'], (req, res) => {
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     res.sendFile(path.resolve(__dirname, 'public', 'portal', 'index.html'));
 });
 
 app.get(['/hub', '/hub/*'], (req, res) => {
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     res.sendFile(path.resolve(__dirname, 'public', 'hub', 'index.html'));
 });
 
 app.get(/.*/, (req, res) => {
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
 

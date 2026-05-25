@@ -54,4 +54,12 @@ if (fs.existsSync('blog')) {
   });
 }
 
+// Add PB-Creative-Studio directory (excluding node_modules)
+if (fs.existsSync('PB-Creative-Studio')) {
+  archive.glob('PB-Creative-Studio/**', {
+    dot: true,
+    ignore: ['PB-Creative-Studio/node_modules/**', 'PB-Creative-Studio/**/node_modules/**']
+  });
+}
+
 archive.finalize();

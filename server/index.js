@@ -11,6 +11,7 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import http from 'http';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import compression from 'compression';
 
 // Import shared blog state (avoids circular dependency with app.js)
 import { blogState } from '../blog-state.js';
@@ -39,6 +40,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+app.use(compression());
 
 function lazyRouter(importRouter) {
   let routerPromise = null;
@@ -428,7 +430,7 @@ try {
 app.use('/api/inquiries', inquiryRoutes);
 app.use('/api/payments', lazyRouter(() => import('./routes/payments.js')));
 app.use('/api/google-sheets', lazyRouter(() => import('./routes/googleSheets.js')));
-
+app.use('/api/downloader', lazyRouter(() => import('./routes/downloader.js')));
 // 404 handler for API routes
 app.use('/api', (req, res) => {
   res.status(404).json({
@@ -443,20 +445,45 @@ const DIST_PATH = path.join(__dirname, '../dist');
 if (!fs.existsSync(DIST_PATH)) {
   console.warn('[Server] ⚠️ WARNING: dist folder not found at ' + DIST_PATH);
 }
-app.use(express.static(DIST_PATH));
-app.use('/leads-manager', express.static(path.join(__dirname, '../leads-manager')));
-app.use('/uploads', express.static(UPLOAD_DIR));
+
+// Caching strategy for PageSpeed Optimization
+const staticCacheOptions = {
+  maxAge: '0',
+  setHeaders: (res, filepath) => {
+    if (filepath.includes(path.sep + 'assets' + path.sep)) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    } else if (filepath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=2592000'); // 30 days
+    }
+  }
+};
+
+app.use(express.static(DIST_PATH, staticCacheOptions));
+app.use('/leads-manager', express.static(path.join(__dirname, '../leads-manager'), {
+  maxAge: '0',
+  setHeaders: (res, filepath) => {
+    if (filepath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=2592000');
+    }
+  }
+}));
+app.use('/uploads', express.static(UPLOAD_DIR, { maxAge: '30d' }));
 
 // Fallback static serving for build environments
-app.use('/uploads', express.static(path.join(__dirname, '../dist/uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '../dist/uploads'), { maxAge: '30d' }));
 // Serve Blog Uploads (both dev and standalone production)
-app.use('/uploads', express.static(path.join(__dirname, '../blog/public/uploads')));
-app.use('/uploads', express.static(path.join(__dirname, '../blog/.next/standalone/public/uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '../blog/public/uploads'), { maxAge: '30d' }));
+app.use('/uploads', express.static(path.join(__dirname, '../blog/.next/standalone/public/uploads'), { maxAge: '30d' }));
 
 // Wildcard route to serve index.html for React routing
 app.get('*', (req, res) => {
   const indexPath = path.join(DIST_PATH, 'index.html');
   if (fs.existsSync(indexPath)) {
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     res.sendFile(indexPath);
   } else {
     res.status(200).send('ChatWizs Server is running, but the frontend build (dist) is missing or being generated. Please wait 1-2 minutes.');

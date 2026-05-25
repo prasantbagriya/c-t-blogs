@@ -9,16 +9,16 @@ const router = express.Router();
 // In a real app, this would check against a user DB, but for "independent" folder, 
 // we can have a hardcoded or env-based admin or just use the main user DB.
 // The user asked for "admin login aor pass bana lo".
-const ADMIN_USER = "admin@chatwizs.com";
-const ADMIN_PASS = "admin123"; // User should change this
+const ADMIN_USER = process.env.INQUIRY_ADMIN_USER;
+const ADMIN_PASS = process.env.INQUIRY_ADMIN_PASS;
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  if (email === ADMIN_USER && password === ADMIN_PASS) {
+  if (ADMIN_USER && ADMIN_PASS && email === ADMIN_USER && password === ADMIN_PASS) {
     const token = jwt.sign({ email, role: 'inquiry_admin' }, JWT_SECRET, { expiresIn: '24h' });
     return res.json({ success: true, token });
   }
-  res.status(401).json({ error: 'Invalid credentials' });
+  res.status(401).json({ error: 'Invalid credentials or service unconfigured' });
 });
 
 // Middleware to protect admin routes

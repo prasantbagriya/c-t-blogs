@@ -48,7 +48,7 @@ export default function Navbar() {
   }, [isOpen])
 
   const logoElement = (
-    <a href="/" className="flex items-center gap-3 group shrink-0">
+    <a href={import.meta.env && import.meta.env.DEV ? "http://localhost:5174/" : "/"} className="flex items-center gap-3 group shrink-0">
       <div className="w-9 h-9 bg-white rounded-full flex items-center justify-center text-black group-hover:scale-110 transition-transform duration-500 shadow-[0_0_25px_rgba(255,255,255,0.2)]">
         <Download size={18} strokeWidth={3} />
       </div>

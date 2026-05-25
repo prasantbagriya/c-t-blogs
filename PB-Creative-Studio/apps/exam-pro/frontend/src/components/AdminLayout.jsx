@@ -58,7 +58,7 @@ export default function AdminLayout({ children, title }) {
           <div className="sidebar-brand">
             <div className="sidebar-brand-icon">P</div>
             <div>
-              <div className="sidebar-brand-name">PB STUDIO</div>
+              <div className="sidebar-brand-name">chatwizs studio</div>
               <div className="sidebar-brand-sub text-[9px] uppercase tracking-widest font-black opacity-40">Nebula Engine</div>
             </div>
           </div>

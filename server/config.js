@@ -11,9 +11,16 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '../.env') });
 dotenv.config({ path: path.join(__dirname, '.env'), override: true });
 
-// C-6 FIX: Auto-generate a strong secret if not configured
+// C-6 FIX: Ensure JWT_SECRET is cryptographically secure
 function getSecret() {
-  const secret = process.env.JWT_SECRET || 'wa_saas_secret_2026_fallback';
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error("FATAL CONFIG ERROR: JWT_SECRET environment variable is required in production!");
+    }
+    // Generate secure random secret for local dev if missing
+    return crypto.randomBytes(32).toString('hex');
+  }
   return secret.replace(/['"]/g, '').trim();
 }
 

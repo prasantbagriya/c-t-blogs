@@ -1,4 +1,4 @@
-import { Outlet, Link } from 'react-router-dom';
+﻿import { Outlet, Link } from 'react-router-dom';
 
 const Layout = () => {
     return (
@@ -14,6 +14,7 @@ const Layout = () => {
                         TopStore Tools
                     </Link>
                     <nav className="flex gap-8 text-sm font-medium text-gray-400">
+                        <a href={import.meta.env && import.meta.env.DEV ? "http://localhost:5174/" : "/"} className="hover:text-white transition-colors">chatwizs studio</a>
                         <Link to="/" className="hover:text-white transition-colors">All Tools</Link>
                     </nav>
                 </div>
@@ -29,7 +30,7 @@ const Layout = () => {
                 <div className="flex justify-center gap-10 mb-8 text-sm text-gray-400">
                     <Link to="/privacy" className="hover:text-white">Privacy</Link>
                     <Link to="/terms" className="hover:text-white">Terms</Link>
-                    <a href="mailto:support@prasantbagriya.online" className="hover:text-white">Contact</a>
+                    <a href="mailto:support@chatwizs.com" className="hover:text-white">Contact</a>
                 </div>
                 <p className="text-gray-600 text-sm">&copy; 2026 TopStore Tools. Crafted for performance.</p>
             </footer>

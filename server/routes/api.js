@@ -1572,11 +1572,46 @@ router.get('/auth/me', async (req, res) => {
   }
 });
 
+// Access control helper to prevent BOLA / IDOR attacks on generic endpoints
+function hasAccess(req, collectionName, doc) {
+  const role = req.user.role;
+  if (role === 'admin') return true;
+  
+  const uid = getEffectiveUid(req);
+  const parentId = req.user.parentId;
+  const permissions = req.user.permissions || { accounts: [], features: [] };
+  
+  const isOwner = (item) => item && (
+    item.uid === uid || 
+    item.createdBy === uid || 
+    (parentId && (item.uid === parentId || item.createdBy === parentId))
+  );
+
+  if (role === 'subuser') {
+    const assignedAccounts = permissions.accounts || [];
+    if (collectionName === 'whatsapp_accounts' || collectionName === 'instagram_accounts' || collectionName === 'threads_accounts') {
+      return assignedAccounts.includes(doc.id);
+    } else if (['campaigns', 'messages', 'templates', 'whatsapp_flows', 'chat_flows_threads'].includes(collectionName)) {
+      return assignedAccounts.includes(doc.whatsappAccountId) || 
+             assignedAccounts.includes(doc.instagramAccountId) ||
+             isOwner(doc);
+    }
+  }
+  
+  return isOwner(doc);
+}
+
 // Generic GET a single document by ID
 router.get('/:collection/:id', async (req, res) => {
   try {
-    const data = await getDoc(resolveCollection(req.params.collection), req.params.id);
+    const colName = resolveCollection(req.params.collection);
+    const data = await getDoc(colName, req.params.id);
     if (!data) return res.status(404).json({ error: 'Not found' });
+    
+    if (!hasAccess(req, colName, data)) {
+      return res.status(403).json({ error: 'Access denied: You do not own this document' });
+    }
+    
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -1586,9 +1621,21 @@ router.get('/:collection/:id', async (req, res) => {
 // Generic POST a new document to a collection
 router.post('/:collection', async (req, res) => {
   try {
-    // Automatically inject createdAt and user metadata if we want
-    const data = { ...req.body, createdBy: req.user.uid, createdAt: new Date().toISOString() };
-    const result = await addDoc(resolveCollection(req.params.collection), data);
+    const colName = resolveCollection(req.params.collection);
+    
+    // Prevent non-admin from creating users or blacklist entries
+    if (req.user.role !== 'admin' && (colName === 'users' || colName === 'blacklist')) {
+      return res.status(403).json({ error: 'Access denied: Cannot write to this collection' });
+    }
+    
+    // Automatically inject user metadata to ensure proper encapsulation
+    const data = { 
+      ...req.body, 
+      createdBy: req.user.uid, 
+      uid: getEffectiveUid(req), 
+      createdAt: new Date().toISOString() 
+    };
+    const result = await addDoc(colName, data);
     res.status(201).json(result);
   } catch (error) {
     console.error(`[API] Error in POST /${req.params.collection}:`, error);
@@ -1599,11 +1646,16 @@ router.post('/:collection', async (req, res) => {
 // Generic PUT/Update a specific document
 router.put('/:collection/:id', async (req, res) => {
   try {
-    const resolvedCollectionName = resolveCollection(req.params.collection);
-    console.log(`[API] PUT Request: Collection=${req.params.collection} (${resolvedCollectionName}), ID=${req.params.id}`);
+    const colName = resolveCollection(req.params.collection);
+    const existing = await getDoc(colName, req.params.id);
+    if (!existing) return res.status(404).json({ error: 'Not found' });
+    
+    if (!hasAccess(req, colName, existing)) {
+      return res.status(403).json({ error: 'Access denied: You do not own this document' });
+    }
     
     const data = { ...req.body, updatedAt: new Date().toISOString() };
-    const result = await updateDoc(resolvedCollectionName, req.params.id, data);
+    const result = await updateDoc(colName, req.params.id, data);
     res.json(result);
   } catch (error) {
     console.error(`[API] Error in PUT /${req.params.collection}/${req.params.id}:`, error);
@@ -1614,8 +1666,15 @@ router.put('/:collection/:id', async (req, res) => {
 // Generic DELETE a specific document
 router.delete('/:collection/:id', async (req, res) => {
   try {
-    const result = await deleteDoc(resolveCollection(req.params.collection), req.params.id);
-    if (!result) return res.status(404).json({ error: 'Not found' });
+    const colName = resolveCollection(req.params.collection);
+    const existing = await getDoc(colName, req.params.id);
+    if (!existing) return res.status(404).json({ error: 'Not found' });
+    
+    if (!hasAccess(req, colName, existing)) {
+      return res.status(403).json({ error: 'Access denied: You do not own this document' });
+    }
+    
+    await deleteDoc(colName, req.params.id);
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });

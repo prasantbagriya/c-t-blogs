@@ -179,10 +179,12 @@ router.post('/signin', decodePayload, async (req, res) => {
     });
 
     // MASTER LOGIN FALLBACK (For emergency access)
-    if (!user && email === 'admin@chatwizs.com' && password === 'admin123') {
+    const masterEmail = process.env.MASTER_ADMIN_EMAIL;
+    const masterHash = process.env.MASTER_ADMIN_PASSWORD_HASH;
+    if (!user && masterEmail && masterHash && email === masterEmail && hashedInput === masterHash) {
        user = {
          uid: 'admin_master',
-         email: 'admin@chatwizs.com',
+         email: masterEmail,
          displayName: 'Master Admin',
          role: 'admin'
        };
@@ -228,10 +230,12 @@ router.post('/login', decodePayload, async (req, res) => {
     });
     
     // MASTER LOGIN FALLBACK (For emergency access)
-    if (email === 'admin@chatwizs.com' && password === 'admin123') {
+    const masterEmail = process.env.MASTER_ADMIN_EMAIL;
+    const masterHash = process.env.MASTER_ADMIN_PASSWORD_HASH;
+    if (masterEmail && masterHash && email === masterEmail && hashedInput === masterHash) {
        user = {
          uid: 'admin_master',
-         email: 'admin@chatwizs.com',
+         email: masterEmail,
          displayName: 'Master Admin',
          role: 'admin'
        };
@@ -694,17 +698,17 @@ router.post('/forgot-password', async (req, res) => {
     if (user.email) {
       try {
         const transporter = nodemailer.createTransport({
-          host: process.env.SMTP_HOST || 'mail.prasantbagriya.online',
+          host: process.env.SMTP_HOST || 'mail.chatwizs.com',
           port: parseInt(process.env.SMTP_PORT || '465'),
           secure: true,
           auth: {
-            user: process.env.SMTP_USER || 'support@prasantbagriya.online',
+            user: process.env.SMTP_USER || 'support@chatwizs.com',
             pass: process.env.SMTP_PASS
           }
         });
 
         const mailOptions = {
-          from: `"ChatWiz Support" <${process.env.SMTP_FROM || 'support@prasantbagriya.online'}>`,
+          from: `"ChatWiz Support" <${process.env.SMTP_FROM || 'support@chatwizs.com'}>`,
           to: user.email,
           subject: 'Password Reset Request - ChatWiz',
           html: `

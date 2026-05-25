@@ -101,6 +101,10 @@ const PricingPage = lazy(() => import('./theme_migration/components/pricing-page
 const ThemeDirectMessagePage = lazy(() => import('./theme_migration/components/direct-message'));
 const ThemeFormPage = lazy(() => import('./theme_migration/components/form-to-link'));
 const ThemeToolsPage = lazy(() => import('./theme_migration/app/tools/page'));
+const SIPCalculator = lazy(() => import('./components/tools/SIPCalculator'));
+const CompoundInterest = lazy(() => import('./components/tools/CompoundInterest'));
+const PropFirm = lazy(() => import('./components/tools/PropFirm'));
+const YouTubeDownloader = lazy(() => import('./components/tools/YouTubeDownloader'));
 
 import Navbar from './theme_migration/components/navbar';
 
@@ -122,7 +126,7 @@ const Toast = lazy(() => import('./theme_migration/components/ui/toast'));
 type User = any;
 
 // --- Types ---
-type Page = 'landing' | 'dashboard' | 'auth' | 'pay' | 'reset-password' | 'services' | 'service-detail' | 'about' | 'success-stories' | 'contact' | 'privacy' | 'terms' | 'deletion' | 'careers' | 'pricing' | 'whatsapp-link-generator' | 'whatsapp-direct-message' | 'whatsapp-form-generator' | 'threads-callback' | 'instagram-callback' | 'artists';
+type Page = 'landing' | 'dashboard' | 'auth' | 'pay' | 'reset-password' | 'services' | 'service-detail' | 'about' | 'success-stories' | 'contact' | 'privacy' | 'terms' | 'deletion' | 'careers' | 'pricing' | 'whatsapp-link-generator' | 'whatsapp-direct-message' | 'whatsapp-form-generator' | 'threads-callback' | 'instagram-callback' | 'artists' | 'sip-calculator' | 'compound-interest' | 'prop-firm' | 'youtube-downloader';
 type UserRole = 'admin' | 'manager' | 'user';
 // type DashboardTab = 'overview' | 'accounts' | 'inbox' | 'whatsapp' | 'instagram' | 'flows' | 'bulk-wa-legacy' | 'ads' | 'automations' | 'contacts' | 'agent' | 'leads' | 'knowledge' | 'tools' | 'settings' | 'help' | 'profile';
 
@@ -143,7 +147,7 @@ export default function App() {
   // Initialize state based on URL path
   const [currentPage, setCurrentPage] = useState<Page>(() => {
     const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '') || 'landing';
-    const publicRoutes = ['services', 'service-detail', 'contact', 'about', 'success-stories', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'auth', 'dashboard', 'reset-password', 'threads-callback', 'instagram-callback', 'artists'];
+    const publicRoutes = ['services', 'service-detail', 'contact', 'about', 'success-stories', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'auth', 'dashboard', 'reset-password', 'threads-callback', 'instagram-callback', 'artists', 'sip-calculator', 'compound-interest', 'prop-firm', 'youtube-downloader'];
     
     if (path.startsWith('services/')) return 'service-detail';
     if (path === 'get-started') return 'auth';
@@ -271,7 +275,7 @@ export default function App() {
       const path = window.location.pathname.replace(/^\//, '') || 'landing';
       const hash = window.location.hash.replace(/^#/, '');
 
-      const validPages = ['landing', 'dashboard', 'auth', 'reset-password', 'services', 'service-detail', 'about', 'success-stories', 'contact', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'artists'];
+      const validPages = ['landing', 'dashboard', 'auth', 'reset-password', 'services', 'service-detail', 'about', 'success-stories', 'contact', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'artists', 'sip-calculator', 'compound-interest', 'prop-firm', 'youtube-downloader'];
       if (path.startsWith('services/')) {
         setSelectedServiceId(path.split('/').pop() || null);
         setCurrentPage('service-detail');
@@ -913,6 +917,12 @@ export default function App() {
       return <MarketingShell><PricingPage onNavigate={setCurrentPage} /></MarketingShell>;
     }
 
+    if (currentPage === 'sip-calculator') return <MarketingShell><Suspense fallback={null}><SIPCalculator /></Suspense></MarketingShell>;
+    if (currentPage === 'compound-interest') return <MarketingShell><Suspense fallback={null}><CompoundInterest /></Suspense></MarketingShell>;
+    if (currentPage === 'prop-firm') return <MarketingShell><Suspense fallback={null}><PropFirm /></Suspense></MarketingShell>;
+    
+    if (currentPage === 'youtube-downloader') return <Suspense fallback={null}><YouTubeDownloader /></Suspense>;
+
     if (currentPage === 'whatsapp-link-generator') return <Suspense fallback={null}><ThemeToolsPage onNavigate={setCurrentPage} /></Suspense>;
 
     if (currentPage === 'whatsapp-direct-message') return <Suspense fallback={null}><ThemeDirectMessagePage onNavigate={setCurrentPage} /></Suspense>;
@@ -962,7 +972,8 @@ export default function App() {
     'landing', 'services', 'service-detail', 'about', 'success-stories',
     'contact', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'pay',
     'whatsapp-link-generator', 'artists',
-    'whatsapp-direct-message', 'whatsapp-form-generator', 'threads-callback', 'instagram-callback'
+    'whatsapp-direct-message', 'whatsapp-form-generator', 'threads-callback', 'instagram-callback',
+    'sip-calculator', 'compound-interest', 'prop-firm', 'youtube-downloader'
   ];
 
   if (publicPages.includes(currentPage)) {
