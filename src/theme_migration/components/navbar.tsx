@@ -3,13 +3,14 @@
 import React, { useState } from "react"
 import { Link } from "./ui/shim"
 import { Button } from "./ui/button"
-import { Menu, X, Zap, ChevronDown, Link as LinkIcon, MessageSquare, MessageSquareText, FileText } from "lucide-react"
+import { Menu, X, Zap, ChevronDown, Link as LinkIcon, MessageSquare, MessageSquareText, FileText, Activity, TrendingUp, Terminal, Video } from "lucide-react"
 import { motion, AnimatePresence } from "motion/react"
 import { ThemeToggle } from "./theme-toggle"
 
 export default function Navbar({ onNavigate }: { onNavigate?: (page: string) => void }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isToolsOpen, setIsToolsOpen] = useState(false)
+  const [isCompanyOpen, setIsCompanyOpen] = useState(false)
 
   const handleNavClick = (page: string) => {
     if (page === 'blog') {
@@ -19,6 +20,7 @@ export default function Navbar({ onNavigate }: { onNavigate?: (page: string) => 
     onNavigate?.(page)
     setIsMenuOpen(false)
     setIsToolsOpen(false)
+    setIsCompanyOpen(false)
   }
 
   const navLinks = [
@@ -27,6 +29,24 @@ export default function Navbar({ onNavigate }: { onNavigate?: (page: string) => 
     { label: 'Blog', page: 'blog' },
     { label: 'Success Stories', page: 'success-stories' },
     { label: 'Contact', page: 'contact' }
+  ]
+
+  const toolsList = [
+    { label: 'Link Generator', page: 'whatsapp-link-generator', icon: LinkIcon, color: 'text-blue-400' },
+    { label: 'Direct Message', page: 'whatsapp-direct-message', icon: MessageSquareText, color: 'text-blue-400' },
+    { label: 'Form Generator', page: 'whatsapp-form-generator', icon: FileText, color: 'text-emerald-400' },
+    { label: 'SIP Calculator', page: 'sip-calculator', icon: Activity, color: 'text-purple-400' },
+    { label: 'Compound Growth', page: 'compound-interest', icon: TrendingUp, color: 'text-emerald-400' },
+    { label: 'Prop Firm Calc', page: 'prop-firm', icon: Terminal, color: 'text-indigo-400' },
+    { label: 'YouTube Downloader', page: 'youtubevideodownload', icon: Video, color: 'text-red-400' }
+  ]
+
+  const companyList = [
+    { label: 'About Us', page: 'about' },
+    { label: 'Careers', page: 'careers' },
+    { label: 'Artists', page: 'artists' },
+    { label: 'Privacy Policy', page: 'privacy' },
+    { label: 'Terms of Service', page: 'terms' }
   ]
 
   return (
@@ -68,6 +88,36 @@ export default function Navbar({ onNavigate }: { onNavigate?: (page: string) => 
 
                 <div
                   className="relative"
+                  onMouseEnter={() => setIsCompanyOpen(true)}
+                  onMouseLeave={() => setIsCompanyOpen(false)}
+                >
+                  <button className="flex items-center gap-1.5 text-sm font-medium text-gray-400 hover:text-white transition-colors py-4">
+                    Company <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isCompanyOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  <AnimatePresence>
+                    {isCompanyOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute top-[80%] left-1/2 -translate-x-1/2 w-48 p-2 bg-slate-950 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl"
+                      >
+                        {companyList.map(comp => (
+                          <button
+                            key={comp.page}
+                            onClick={() => handleNavClick(comp.page)}
+                            className="flex items-center w-full p-3 rounded-xl hover:bg-white/5 transition-colors text-left"
+                          >
+                            <span className="text-sm font-bold text-white">{comp.label}</span>
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                <div
+                  className="relative"
                   onMouseEnter={() => setIsToolsOpen(true)}
                   onMouseLeave={() => setIsToolsOpen(false)}
                 >
@@ -83,12 +133,7 @@ export default function Navbar({ onNavigate }: { onNavigate?: (page: string) => 
                         exit={{ opacity: 0, y: 10 }}
                         className="absolute top-[80%] left-1/2 -translate-x-1/2 w-64 p-2 bg-slate-950 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl"
                       >
-                        {[
-                          { label: 'Link Generator', page: 'whatsapp-link-generator', icon: LinkIcon, color: 'text-blue-400' },
-
-                          { label: 'Direct Message', page: 'whatsapp-direct-message', icon: MessageSquareText, color: 'text-blue-400' },
-                          { label: 'Form Generator', page: 'whatsapp-form-generator', icon: FileText, color: 'text-emerald-400' }
-                        ].map(tool => (
+                        {toolsList.map(tool => (
                           <button
                             key={tool.page}
                             onClick={() => handleNavClick(tool.page)}
@@ -138,17 +183,17 @@ export default function Navbar({ onNavigate }: { onNavigate?: (page: string) => 
                 className="md:hidden border-t border-white/5 bg-black/95 backdrop-blur-md overflow-hidden p-6 space-y-6"
               >
                 <div className="grid grid-cols-2 gap-4">
-                  {navLinks.map(link => (
+                  {[...navLinks, ...companyList].map(link => (
                     <button key={link.page} onClick={() => handleNavClick(link.page)} className="text-left text-gray-400 hover:text-white font-bold text-sm py-2">{link.label}</button>
                   ))}
                 </div>
 
                 <div className="space-y-3">
                   <p className="text-[10px] font-black text-gray-600 uppercase tracking-[0.2em]">Free Tools</p>
-                  <div className="grid grid-cols-1 gap-2">
-                    {['whatsapp-link-generator', 'whatsapp-direct-message', 'whatsapp-form-generator'].map(tool => (
-                      <button key={tool} onClick={() => handleNavClick(tool)} className="flex items-center gap-3 w-full p-3 rounded-xl bg-white/5 text-sm font-bold text-white capitalize">
-                        {tool.replace('whatsapp-', '').replace(/-/g, ' ')}
+                  <div className="grid grid-cols-1 gap-2 max-h-[30vh] overflow-y-auto pr-2">
+                    {toolsList.map(tool => (
+                      <button key={tool.page} onClick={() => handleNavClick(tool.page)} className="flex items-center gap-3 w-full p-3 rounded-xl bg-white/5 text-sm font-bold text-white capitalize text-left">
+                        {tool.label}
                       </button>
                     ))}
                   </div>

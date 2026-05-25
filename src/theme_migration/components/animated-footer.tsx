@@ -24,9 +24,12 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
       title: "Free Tools",
       links: [
         { label: "Link Generator", page: "whatsapp-link-generator" },
-
         { label: "Direct Message", page: "whatsapp-direct-message" },
-        { label: "Form Generator", page: "whatsapp-form-generator" }
+        { label: "Form Generator", page: "whatsapp-form-generator" },
+        { label: "SIP Calculator", page: "sip-calculator" },
+        { label: "Compound Growth", page: "compound-interest" },
+        { label: "Prop Firm Calc", page: "prop-firm" },
+        { label: "YouTube Downloader", page: "youtubevideodownload" }
       ]
     },
     {
