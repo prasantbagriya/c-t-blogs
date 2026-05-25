@@ -126,7 +126,7 @@ const Toast = lazy(() => import('./theme_migration/components/ui/toast'));
 type User = any;
 
 // --- Types ---
-type Page = 'landing' | 'dashboard' | 'auth' | 'pay' | 'reset-password' | 'services' | 'service-detail' | 'about' | 'success-stories' | 'contact' | 'privacy' | 'terms' | 'deletion' | 'careers' | 'pricing' | 'whatsapp-link-generator' | 'whatsapp-direct-message' | 'whatsapp-form-generator' | 'threads-callback' | 'instagram-callback' | 'artists' | 'sip-calculator' | 'compound-interest' | 'prop-firm' | 'youtube-downloader';
+type Page = 'landing' | 'dashboard' | 'auth' | 'pay' | 'reset-password' | 'services' | 'service-detail' | 'about' | 'success-stories' | 'contact' | 'privacy' | 'terms' | 'deletion' | 'careers' | 'pricing' | 'whatsapp-link-generator' | 'whatsapp-direct-message' | 'whatsapp-form-generator' | 'threads-callback' | 'instagram-callback' | 'artists' | 'sip-calculator' | 'compound-interest' | 'prop-firm' | 'youtubevideodownload';
 type UserRole = 'admin' | 'manager' | 'user';
 // type DashboardTab = 'overview' | 'accounts' | 'inbox' | 'whatsapp' | 'instagram' | 'flows' | 'bulk-wa-legacy' | 'ads' | 'automations' | 'contacts' | 'agent' | 'leads' | 'knowledge' | 'tools' | 'settings' | 'help' | 'profile';
 
@@ -147,7 +147,7 @@ export default function App() {
   // Initialize state based on URL path
   const [currentPage, setCurrentPage] = useState<Page>(() => {
     const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '') || 'landing';
-    const publicRoutes = ['services', 'service-detail', 'contact', 'about', 'success-stories', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'auth', 'dashboard', 'reset-password', 'threads-callback', 'instagram-callback', 'artists', 'sip-calculator', 'compound-interest', 'prop-firm', 'youtube-downloader'];
+    const publicRoutes = ['services', 'service-detail', 'contact', 'about', 'success-stories', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'auth', 'dashboard', 'reset-password', 'threads-callback', 'instagram-callback', 'artists', 'sip-calculator', 'compound-interest', 'prop-firm', 'youtubevideodownload'];
     
     if (path.startsWith('services/')) return 'service-detail';
     if (path === 'get-started') return 'auth';
@@ -275,7 +275,7 @@ export default function App() {
       const path = window.location.pathname.replace(/^\//, '') || 'landing';
       const hash = window.location.hash.replace(/^#/, '');
 
-      const validPages = ['landing', 'dashboard', 'auth', 'reset-password', 'services', 'service-detail', 'about', 'success-stories', 'contact', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'artists', 'sip-calculator', 'compound-interest', 'prop-firm', 'youtube-downloader'];
+      const validPages = ['landing', 'dashboard', 'auth', 'reset-password', 'services', 'service-detail', 'about', 'success-stories', 'contact', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'artists', 'sip-calculator', 'compound-interest', 'prop-firm', 'youtubevideodownload'];
       if (path.startsWith('services/')) {
         setSelectedServiceId(path.split('/').pop() || null);
         setCurrentPage('service-detail');
@@ -921,7 +921,7 @@ export default function App() {
     if (currentPage === 'compound-interest') return <MarketingShell><Suspense fallback={null}><CompoundInterest /></Suspense></MarketingShell>;
     if (currentPage === 'prop-firm') return <MarketingShell><Suspense fallback={null}><PropFirm /></Suspense></MarketingShell>;
     
-    if (currentPage === 'youtube-downloader') return <Suspense fallback={null}><YouTubeDownloader /></Suspense>;
+    if (currentPage === 'youtubevideodownload') return <Suspense fallback={null}><YouTubeDownloader /></Suspense>;
 
     if (currentPage === 'whatsapp-link-generator') return <Suspense fallback={null}><ThemeToolsPage onNavigate={setCurrentPage} /></Suspense>;
 
@@ -973,7 +973,7 @@ export default function App() {
     'contact', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'pay',
     'whatsapp-link-generator', 'artists',
     'whatsapp-direct-message', 'whatsapp-form-generator', 'threads-callback', 'instagram-callback',
-    'sip-calculator', 'compound-interest', 'prop-firm', 'youtube-downloader'
+    'sip-calculator', 'compound-interest', 'prop-firm', 'youtubevideodownload'
   ];
 
   if (publicPages.includes(currentPage)) {

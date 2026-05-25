@@ -214,8 +214,8 @@ export const ToolsView = ({ user, showToast }: ToolsViewProps) => {
         {/* YouTube Downloader Card */}
         <div 
           onClick={() => {
-            window.history.pushState({}, '', '/youtube-downloader');
-            window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/youtube-downloader' }));
+            window.history.pushState({}, '', '/youtubevideodownload');
+            window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/youtubevideodownload' }));
           }}
           className="cursor-pointer bg-white dark:bg-[#16161d] p-5 sm:p-6 rounded-lg border border-slate-200 dark:border-white/5 hover:border-red-500 transition-colors group flex flex-col justify-between"
         >
