@@ -3,12 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inquiry Admin Login | ChatWizs</title>
+    <title>Admin Login | Leads Manager — ChatWizs</title>
+    <meta name="description" content="Secure admin login for ChatWizs Leads Manager dashboard." />
+    <!-- SECURITY FIX: Admin pages MUST be noindex — prevents Google from indexing your admin portal -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-</head>
+    <!-- FIX: Non-blocking font loading (PageSpeed 100 pattern) -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    </noscript>
+    <!-- FIX: Critical CSS inline to prevent FOUC -->
+    <style>
+      *,*::before,*::after{box-sizing:border-box}
+      html,body{margin:0;padding:0;min-height:100vh}
+      body{font-family:'Inter',ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+    </style>
 <body>
     <div class="login-container">
         <div class="login-card">

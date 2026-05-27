@@ -110,9 +110,13 @@ import Navbar from './theme_migration/components/navbar';
 
 const ServiceDetailView = lazy(() => import('./theme_migration/components/service-detail-view'));
 const AnimatedFooter = lazy(() => import('./theme_migration/components/animated-footer'));
-const BackgroundPaths = lazy(() => import('./theme_migration/components/background-paths'));
+// FIX: BackgroundPaths converted to static import
+// Reason: 7 other files already statically import this — lazy() had no effect
+// and caused Vite warning: "dynamically imported but also statically imported"
+import BackgroundPaths from './theme_migration/components/background-paths';
 const AnimatedBackground = lazy(() => import('./theme_migration/components/animated-background'));
 const BackgroundStripes = lazy(() => import('./theme_migration/components/background-stripes'));
+
 
 import type { DashboardTab } from './components/dashboard/DashboardLayout';
 import type { ToastType } from './theme_migration/components/ui/toast';
@@ -175,32 +179,41 @@ export default function App() {
 
 
   const [toasts, setToasts] = useState<Array<{ id: string, message: string, type: ToastType }>>([]);
-  const showToast = (message: string, type: ToastType = "info") => {
+  // Use useCallback to keep stable function reference (avoids re-creating on each render)
+  const showToast = React.useCallback((message: string, type: ToastType = "info") => {
     const id = Math.random().toString(36).substring(2, 9);
     setToasts(prev => [...prev, { id, message, type }]);
-    // Auto-remove after 1 second
+    // Auto-remove after 3 seconds (increased from 1s for better UX)
     setTimeout(() => {
       setToasts(prev => prev.filter(t => t.id !== id));
-    }, 1000);
-  };
+    }, 3000);
+  }, []);
+
   const removeToast = (id: string) => {
     setToasts(prev => prev.filter(t => t.id !== id));
   };
 
-  const handleSetActiveTab = (tab: DashboardTab) => {
+  const handleSetActiveTab = React.useCallback((tab: DashboardTab) => {
     setActiveTab(tab);
     window.location.hash = `#${tab}`;
-    // Default to 'inbox' for social modules
-    if (tab === 'instagram' || tab === 'threads') {
-      setActiveSubTab('overview');
-    } else {
-      setActiveSubTab('overview');
-    }
-  };
+    setActiveSubTab('overview');
+  }, []);
+
+  // FIX: Use useEffect with cleanup to expose global helpers
+  // Pattern: assign on mount, cleanup on unmount
+  const showToastRef = React.useRef(showToast);
+  const setActiveTabRef = React.useRef(handleSetActiveTab);
+  React.useEffect(() => { showToastRef.current = showToast; }, [showToast]);
+  React.useEffect(() => { setActiveTabRef.current = handleSetActiveTab; }, [handleSetActiveTab]);
 
   useEffect(() => {
-    (window as any).showToast = showToast;
-    (window as any).setActiveTab = handleSetActiveTab;
+    // Expose via stable proxy functions so window refs never go stale
+    (window as any).showToast = (msg: string, type?: ToastType) => showToastRef.current(msg, type);
+    (window as any).setActiveTab = (tab: DashboardTab) => setActiveTabRef.current(tab);
+    return () => {
+      delete (window as any).showToast;
+      delete (window as any).setActiveTab;
+    };
   }, []);
 
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
@@ -444,7 +457,10 @@ export default function App() {
       if (unsubscribeAccounts) unsubscribeAccounts();
       if (unsubscribeGlobalAccs) unsubscribeGlobalAccs(); // H-1 FIX: Clean up global accounts subscription
     };
-  }, [currentPage]);
+  // FIX: Remove `currentPage` from deps — it caused re-subscribing to auth on every navigation.
+  // Instead, we read currentPage as a snapshot inside the effect (closure is fine here).
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Sync Campaigns and Messages
   useEffect(() => {

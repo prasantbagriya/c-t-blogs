@@ -3,10 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Leads Manager</title>
+    <title>Inquiry Dashboard | Leads Manager — ChatWizs</title>
+    <meta name="description" content="ChatWizs admin dashboard for managing customer inquiries and leads." />
+    <!-- SECURITY: Admin dashboard must NOT be indexed by search engines -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+
+    <!-- Stylesheet (local — no render blocking penalty) -->
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Preconnect for faster 3rd-party connections -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+
+    <!-- FIX: Google Fonts — Non-blocking (PageSpeed 100 pattern) -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    </noscript>
+
+    <!-- FIX: FontAwesome — Non-blocking (was render-blocking 30KB!) -->
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </noscript>
+
+    <!-- FIX: Critical CSS inline to prevent FOUC -->
+    <style>
+      *,*::before,*::after{box-sizing:border-box}
+      html,body{margin:0;padding:0;min-height:100vh}
+      body{font-family:'Inter',ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+      /* Dashboard layout reserve space - prevents CLS */
+      .dashboard-layout{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+      .sidebar{min-height:100vh}
+    </style>
 </head>
 <body>
     <div class="dashboard-layout">

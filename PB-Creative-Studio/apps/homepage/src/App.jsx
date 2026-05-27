@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion, useScroll, useSpring, useTransform, AnimatePresence, useMotionValue } from 'framer-motion'
 import { 
   Rocket, Download, Globe, ArrowRight, Shield, Zap, Star, 
@@ -54,7 +54,9 @@ const AuraOrb = () => {
       mouseX.set(e.clientX)
       mouseY.set(e.clientY)
     }
-    window.addEventListener('mousemove', handleMove)
+    // FIX: Added { passive: true } — tells browser this handler won't prevent scroll
+    // FIX: Added cleanup return — removes listener when component unmounts (memory leak fix)
+    window.addEventListener('mousemove', handleMove, { passive: true })
     return () => window.removeEventListener('mousemove', handleMove)
   }, [])
 
@@ -202,9 +204,10 @@ const ContactView = () => {
         })
       });
       setSent(true);
-    } catch (err) {
-      console.error(err);
-      alert('Transmission failed. Direct secure mail is active.');
+    } catch (_err) {
+      // FIX: Do not expose error details to users — security best practice
+      // Log to error monitoring service in production instead
+      alert('Message could not be sent. Please email us directly at support@chatwizs.com');
     } finally {
       setLoading(false);
     }

@@ -7,42 +7,58 @@
     <title>EduExam Pro - Advanced Online Examination Management System</title>
     <meta name="description" content="EduExam Pro: A premium CBT and examination management platform for schools and institutes. Secure testing, real-time analytics, and automated question building." />
     <meta name="keywords" content="online exam system, CBT software, institute management, examination platform, student portal, school testing software" />
-    <link rel="canonical" href="http://chatwizs.com/portal" />
-    <link rel="alternate" hreflang="x-default" href="http://chatwizs.com/portal" />
+    <!-- FIX: Changed http to https for security and Google trust -->
+    <link rel="canonical" href="https://chatwizs.com/portal" />
+    <link rel="alternate" hreflang="en" href="https://chatwizs.com/portal" />
+    <link rel="alternate" hreflang="x-default" href="https://chatwizs.com/portal" />
     <meta name="google-site-verification" content="DuaeTY0egQMDdbt9PPEsFAvjSY9CgZa6EbuyaaPABpo" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="author" content="chatwizs studio" />
     <meta name="theme-color" content="#0a0b1a" />
 
-    <!-- Open Graph / Social -->
+    <!-- Open Graph / Social (FIX: upgraded to https + added dimensions) -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="EduExam Pro - Enterprise Testing Platform" />
-    <meta property="og:description" content="Manage exams, students, and results with surgical precision." />
-    <meta property="og:url" content="http://chatwizs.com/portal" />
-    <meta property="og:image" content="http://chatwizs.com/eduexam_pro_og.png" />
+    <meta property="og:description" content="Manage exams, students, and results with surgical precision. Secure CBT platform for schools and institutes." />
+    <meta property="og:url" content="https://chatwizs.com/portal" />
+    <meta property="og:image" content="https://chatwizs.com/eduexam_pro_og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="EduExam Pro — Enterprise Online Examination System" />
     <meta property="og:site_name" content="chatwizs studio" />
     <meta property="og:locale" content="en_US" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@PBStudio" />
-    <meta name="twitter:creator" content="@PBStudio" />
+    <meta name="twitter:site" content="@chatwizs" />
+    <meta name="twitter:creator" content="@chatwizs" />
     <meta name="twitter:title" content="EduExam Pro - Enterprise Testing Platform" />
     <meta name="twitter:description" content="Manage exams, students, and results with surgical precision." />
-    <meta name="twitter:image" content="http://chatwizs.com/eduexam_pro_og.png" />
+    <meta name="twitter:image" content="https://chatwizs.com/eduexam_pro_og.png" />
 
-    <!-- Structured Data -->
+    <!-- Structured Data (FIX: added offers and url fields) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "EduExam Pro",
+      "url": "https://chatwizs.com/portal",
       "operatingSystem": "Web browser",
       "applicationCategory": "EducationApplication",
       "description": "Enterprise-grade online examination management system for educational institutions.",
-      "featureList": ["Safe-Cheat Interface", "Real-time Analytics", "Automated Question Generator"]
+      "featureList": ["Safe-Cheat Interface", "Real-time Analytics", "Automated Question Generator", "Multi-tenant Support"],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "chatwizs studio",
+        "url": "https://chatwizs.com"
+      }
     }
     </script>
 
-    <!-- Google tag (gtag.js) -->
+    <!-- Google tag (gtag.js) — lazy loaded for PageSpeed -->
     <script>
       (function() {
         var loaded = false;
@@ -66,9 +82,24 @@
         window.addEventListener('pointerdown', loadGTM, { once: true, passive: true });
       })();
     </script>
+
+    <!-- FIX: Preconnect before fonts for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- FIX: Google Fonts Non-Blocking (eliminates render-blocking resource) -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" />
+    </noscript>
+
+    <!-- FIX: Critical CSS inline to prevent FOUC + improve FCP -->
+    <style>
+      *,*::before,*::after{box-sizing:border-box}
+      html,body{margin:0;padding:0;overflow-x:hidden}
+      body{font-family:'Inter',ui-sans-serif,system-ui,sans-serif;background:#0a0b1a;color:#fff;-webkit-font-smoothing:antialiased}
+      #root{min-height:100vh}
+    </style>
   </head>
   <body>
     <div id="root"></div>

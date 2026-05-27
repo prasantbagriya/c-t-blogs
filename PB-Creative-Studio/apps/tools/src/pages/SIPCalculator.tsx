@@ -12,6 +12,19 @@ const SIPCalculator = () => {
     const [years, setYears] = useState(10);
     const [result, setResult] = useState({ invested: 0, returns: 0, total: 0 });
 
+    // FIX: Dynamic SEO — set page-specific title and description on mount
+    useEffect(() => {
+      const prevTitle = document.title;
+      const prevDesc = document.querySelector('meta[name="description"]')?.getAttribute('content') || '';
+      document.title = 'SIP Calculator — Free Monthly Investment Return Calculator | DevForge Kit';
+      document.querySelector('meta[name="description"]')?.setAttribute('content',
+        'Calculate your SIP (Systematic Investment Plan) returns. Enter monthly investment, rate, and tenure to see projected wealth with our free SIP calculator.');
+      return () => {
+        document.title = prevTitle;
+        document.querySelector('meta[name="description"]')?.setAttribute('content', prevDesc);
+      };
+    }, []);
+
     useEffect(() => {
         const p = parseFloat(monthlyInvestment.toString());
         const i = parseFloat(rate.toString()) / 12 / 100;
@@ -52,7 +65,7 @@ const SIPCalculator = () => {
                 <ArrowLeft className="w-4 h-4 mr-2" /> Back to Tools
             </Link>
 
-            <h1 className="text-3xl font-bold mb-8">SIP Forcaster</h1>
+            <h1 className="text-3xl font-bold mb-8">SIP Calculator</h1>
 
             <div className="grid md:grid-cols-12 gap-10">
                 {/* Inputs */}

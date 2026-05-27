@@ -16,7 +16,8 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 86400, // 24-hour browser cache for images
+    // FIX: Increased from 24h to 7 days — better LCP caching on repeat visits
+    minimumCacheTTL: 604800, // 7 days
     dangerouslyAllowSVG: false,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
@@ -24,20 +25,28 @@ const nextConfig = {
       { protocol: 'https', hostname: '**.googleusercontent.com' },
       { protocol: 'https', hostname: '**.githubusercontent.com' },
       { protocol: 'https', hostname: 'chatwizs.com' },
+      { protocol: 'https', hostname: '**.cloudinary.com' }, // Future CDN
+      { protocol: 'https', hostname: '**.imgur.com' },
     ],
   },
   
   reactCompiler: false,
   experimental: {
-    cpus: 1,
-    workerThreads: false,
-    optimizePackageImports: ['lucide-react', 'framer-motion', 'date-fns'],
+    // FIX: Auto-detect CPU count for optimal build parallelism
+    // (was hardcoded to 1 which is very slow on multi-core machines)
+    cpus: Math.max(1, (require('os').cpus().length || 1) - 1),
+    workerThreads: true,
+    optimizePackageImports: ['lucide-react', 'framer-motion', 'date-fns', '@radix-ui/react-icons'],
     serverActions: {
       bodySizeLimit: '10mb',
       allowedOrigins: ['chatwizs.com', 'www.chatwizs.com', 'localhost:3001', 'localhost:4000', '127.0.0.1:4000']
     },
+    // FIX: Router cache staleTimes — reduce re-fetching on back navigation
+    staleTimes: {
+      dynamic: 30,   // 30s for dynamic pages
+      static: 300,   // 5 min for static pages (increased from 3 min)
+    },
   },
-
   async redirects() {
     return [
       {

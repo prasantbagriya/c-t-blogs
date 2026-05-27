@@ -196,6 +196,86 @@ const launchBlogStandalone = async () => {
 launchBlogStandalone();
 // ─────────────────────────────────────────────────────────────────────────────
 
+// ─── STUDIO SERVER LAUNCHER ──────────────────────────────────────────────────
+const STUDIO_PORT = 5000;
+const studioAppPath = path.join(__dirname, 'PB-Creative-Studio', 'server', 'app.js');
+
+let studioRestartCount = 0;
+let lastStudioRestartTime = 0;
+const MAX_STUDIO_RESTARTS = 3;
+
+const launchStudioServer = async () => {
+  if (!fs.existsSync(studioAppPath)) {
+    console.warn('[Studio] ⚠️ Studio app.js not found at:', studioAppPath);
+    return;
+  }
+
+  const alreadyRunning = await isPortInUse(STUDIO_PORT);
+  if (alreadyRunning) {
+    console.log(`[Studio] ✅ Port ${STUDIO_PORT} already in use. Reusing existing studio server.`);
+    return;
+  }
+
+  const now = Date.now();
+  if (now - lastStudioRestartTime < 10000) {
+    studioRestartCount++;
+  } else {
+    if (now - lastStudioRestartTime > RESTART_COOLDOWN) {
+      studioRestartCount = 0;
+    } else {
+      studioRestartCount++;
+    }
+  }
+  lastStudioRestartTime = now;
+
+  if (studioRestartCount >= MAX_STUDIO_RESTARTS) {
+    console.error(`[Studio] ❌ Studio crashed ${studioRestartCount} times rapidly. Auto-restart disabled.`);
+    return;
+  }
+
+  console.log(`[Studio] Launching PB-Creative-Studio on internal port ${STUDIO_PORT}...`);
+
+  const studioProcess = spawn(process.execPath, [studioAppPath], {
+    cwd: path.dirname(studioAppPath),
+    shell: false,
+    stdio: 'inherit',
+    env: {
+      ...process.env,
+      PORT: String(STUDIO_PORT),
+      NODE_ENV: 'production',
+      JWT_SECRET: process.env.JWT_SECRET || 'pb_studio_secret_2026',
+    },
+  });
+
+  studioProcess.on('spawn', async () => {
+    console.log(`[Studio] ✅ Process spawned (PID: ${studioProcess.pid})`);
+    try {
+      await waitForPort(STUDIO_PORT);
+      console.log(`[Studio] ✅ Studio LIVE on internal port ${STUDIO_PORT}`);
+    } catch (e) {
+      console.error('[Studio] ❌ Studio port never became reachable:', e.message);
+    }
+  });
+
+  studioProcess.on('error', (err) => {
+    console.error('[Studio] ❌ Spawn error:', err.message);
+  });
+
+  studioProcess.on('exit', async (code, signal) => {
+    console.warn(`[Studio] Exited (code=${code}, signal=${signal}).`);
+    const sibling = await isPortInUse(STUDIO_PORT);
+    if (sibling) {
+      console.log(`[Studio] ✅ Port ${STUDIO_PORT} still held by sibling.`);
+      return;
+    }
+    console.log(`[Studio] Port gone. Restarting in 5s...`);
+    setTimeout(launchStudioServer, 5000);
+  });
+};
+
+launchStudioServer();
+// ─────────────────────────────────────────────────────────────────────────────
+
 // Import the Express API server (must come after blog launcher is set up)
 const serverModule = await import('./server/index.js');
 export const app = serverModule.app;

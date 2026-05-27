@@ -81,6 +81,52 @@ app.use(cors({
   credentials: true
 }));
 
+// ✅ PB-Creative-Studio Proxy Setup
+const STUDIO_PATHS = [
+  '/tool', '/youtubevideodownload', '/portal', '/hub',
+  '/info', '/download',
+  '/api/info', '/api/download',
+  '/api/admin', '/api/student', '/api/hub', '/api/leads'
+];
+
+let _studioProxy = null;
+const getStudioProxy = () => {
+  if (!_studioProxy) {
+    _studioProxy = createProxyMiddleware({
+      target: 'http://127.0.0.1:5000',
+      xfwd: false,
+      autoRewrite: true,
+      protocolRewrite: 'https',
+      on: {
+        proxyReq: (proxyReq, req, res) => {
+          if (req.headers.host) {
+            proxyReq.setHeader('Host', req.headers.host);
+          }
+        },
+        error: (err, req, res) => {
+          console.error(`[Studio Proxy Error] ${err.code}: ${err.message} on ${req.url}`);
+          if (!res.headersSent) {
+            res.status(502).send('Bad Gateway: Unable to reach the studio service.');
+          }
+        }
+      }
+    });
+  }
+  return _studioProxy;
+};
+
+// Route studio-related paths to the studio server on port 5000
+app.use((req, res, next) => {
+  const path = req.path;
+  const isStudioPath = STUDIO_PATHS.some(p =>
+    path === p || path.startsWith(p + '/') || path === p + '/'
+  );
+  if (isStudioPath) {
+    return getStudioProxy()(req, res, next);
+  }
+  next();
+});
+
 // ✅ Blog Proxy — ROOT LEVEL MOUNT (critical fix)
 // PROBLEM: app.use('/auth', proxy) → Express strips '/auth' → proxy sends GET /login → 404
 //          app.use('/admin', proxy) → Express strips '/admin' → proxy sends GET / → Homepage!

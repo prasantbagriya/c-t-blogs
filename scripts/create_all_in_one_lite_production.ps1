@@ -89,6 +89,7 @@ Copy-Dir "$rootPath\dist" "$stagePath\dist"
 Copy-Dir "$rootPath\server" "$stagePath\server" @("/XD", "node_modules", ".git", "/XF", "*.log")
 Copy-Dir "$rootPath\leads-manager" "$stagePath\leads-manager"
 Copy-Dir "$rootPath\shims" "$stagePath\shims"
+Copy-Dir "$rootPath\PB-Creative-Studio" "$stagePath\PB-Creative-Studio" @("/XD", $dirExcludes, "/XF", $fileExcludes)
 
 Copy-Dir $blogPath "$stagePath\blog" @("/XD", $dirExcludes, "/XF", $fileExcludes)
 Copy-Dir "$blogPath\.next\standalone" "$stagePath\blog\.next\standalone" @("/XD", ".git", "/XF", "*.log")

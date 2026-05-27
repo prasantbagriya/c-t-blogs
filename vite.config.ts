@@ -81,14 +81,24 @@ export default defineConfig(({ mode }) => {
       },
       // Minify CSS aggressively
       cssMinify: true,
-      // Inline small assets to avoid extra requests
-      assetsInlineLimit: 4096,
+      // Split CSS per chunk for better caching
+      cssCodeSplit: true,
+      // Inline small assets to avoid extra requests (increased to 8KB)
+      assetsInlineLimit: 8192,
+      // Skip reporting compressed sizes — speeds up build
+      reportCompressedSize: false,
       // P-3 FIX: Strip all console.log and debugger from production build
       // This removes ~25 debug statements — faster execution, no info leaks
       ...(mode === 'production' ? {
         minify: 'esbuild',
         esbuildOptions: {
           drop: ['console', 'debugger'],
+          // Tree-shake more aggressively
+          treeShaking: true,
+          // Minify identifiers
+          minifyIdentifiers: true,
+          minifySyntax: true,
+          minifyWhitespace: true,
         },
       } : {}),
     },

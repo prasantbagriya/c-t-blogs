@@ -8,6 +8,19 @@ const PropFirm = () => {
     const [dailyProfitInput, setDailyProfitInput] = useState<string>('');
     const [dailyProfits, setDailyProfits] = useState<number[]>([]);
 
+    // FIX: Dynamic SEO — unique page title and description for Prop Firm tool
+    useEffect(() => {
+      const prevTitle = document.title;
+      const prevDesc = document.querySelector('meta[name="description"]')?.getAttribute('content') || '';
+      document.title = 'Prop Firm Evaluator — Free Consistency Rule Checker | DevForge Kit';
+      document.querySelector('meta[name="description"]')?.setAttribute('content',
+        'Check if your prop firm trading meets the consistency rule. Enter daily profits to evaluate if your single-day profit exceeds the allowed percentage of total profit.');
+      return () => {
+        document.title = prevTitle;
+        document.querySelector('meta[name="description"]')?.setAttribute('content', prevDesc);
+      };
+    }, []);
+
     // Stats
     const [stats, setStats] = useState({
         totalProfit: 0,

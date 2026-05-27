@@ -12,6 +12,19 @@ const CompoundInterest = () => {
     const [years, setYears] = useState(10);
     const [result, setResult] = useState({ invested: 0, interest: 0, total: 0 });
 
+    // FIX: Dynamic SEO — each tool page has unique title/description
+    useEffect(() => {
+      const prevTitle = document.title;
+      const prevDesc = document.querySelector('meta[name="description"]')?.getAttribute('content') || '';
+      document.title = 'Compound Interest Calculator — Free Investment Growth Tool | DevForge Kit';
+      document.querySelector('meta[name="description"]')?.setAttribute('content',
+        'Calculate compound interest growth on any investment. Enter principal, annual rate, and time period to see projected wealth growth with our free compound interest calculator.');
+      return () => {
+        document.title = prevTitle;
+        document.querySelector('meta[name="description"]')?.setAttribute('content', prevDesc);
+      };
+    }, []);
+
     useEffect(() => {
         const p = parseFloat(principal.toString());
         const r = parseFloat(rate.toString()) / 100;
