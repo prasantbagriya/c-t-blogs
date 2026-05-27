@@ -275,19 +275,32 @@ export default function RootLayout({
         ` }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
         <link rel="alternate" type="application/rss+xml" title="ChatWizs RSS Feed" href="/feed.xml" />
-        {/* ✅ Google Analytics (gtag.js) */}
-        <Script 
-          src="https://www.googletagmanager.com/gtag/js?id=G-1DRLZ66BX0" 
-          strategy="afterInteractive" 
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-1DRLZ66BX0');
-          `}
-        </Script>
+        {/* ✅ Google Analytics (gtag.js) - Unified & Non-blocking */}
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              var loaded = false;
+              function loadGTM() {
+                if (loaded) return;
+                loaded = true;
+                window.dataLayer = window.dataLayer || [];
+                window.gtag = window.gtag || function(){ dataLayer.push(arguments); };
+                var s = document.createElement('script');
+                s.async = true;
+                s.src = 'https://www.googletagmanager.com/gtag/js?id=G-P9267BP0W6';
+                s.onload = function() {
+                  gtag('js', new Date());
+                  gtag('config', 'G-P9267BP0W6', { send_page_view: true });
+                };
+                document.head.appendChild(s);
+              }
+              var schedule = function(cb) { return setTimeout(cb, 4000); };
+              window.addEventListener('load', function() { schedule(loadGTM); });
+              window.addEventListener('scroll', loadGTM, { once: true, passive: true });
+              window.addEventListener('pointerdown', loadGTM, { once: true, passive: true });
+            })();
+          `
+        }} />
 
         {/* ✅ Google AdSense (Auto Ads) - lazyOnload = loads after page idle
              FIX: Changed from afterInteractive to lazyOnload to prevent CLS
