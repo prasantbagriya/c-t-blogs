@@ -10,6 +10,18 @@ import { Instagram, Twitter, Linkedin, Github, Facebook } from "@/src/components
 export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: string) => void }) {
   const [email, setEmail] = useState("")
 
+  const handleNavClick = (page: string) => {
+    if (page === 'blog') {
+      window.location.href = '/blog';
+      return;
+    }
+    if (page === 'portal') {
+      window.location.href = '/portal/';
+      return;
+    }
+    onNavigate?.(page);
+  }
+
   const footerSections = [
     {
       title: "Navigation",
@@ -29,7 +41,8 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
         { label: "SIP Calculator", page: "sip-calculator" },
         { label: "Compound Growth", page: "compound-interest" },
         { label: "Prop Firm Calc", page: "prop-firm" },
-        { label: "YouTube Downloader", page: "youtubevideodownload" }
+        { label: "YouTube Downloader", page: "youtubevideodownload" },
+        { label: "Exam Portal", page: "portal" }
       ]
     },
     {
@@ -51,7 +64,7 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
         <div className="grid grid-cols-2 lg:grid-cols-6 gap-12 mb-16">
 
           <div className="col-span-2 lg:col-span-2 space-y-8">
-            <div className="flex items-center space-x-2 group cursor-pointer" onClick={() => onNavigate?.('landing')}>
+            <div className="flex items-center space-x-2 group cursor-pointer" onClick={() => handleNavClick('landing')}>
               <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                 <Zap className="text-black w-5 h-5 fill-black" />
               </div>
@@ -82,7 +95,7 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
                     return (
                       <li key={link.label}>
                         <button
-                          onClick={() => onNavigate?.(link.page)}
+                          onClick={() => handleNavClick(link.page)}
                           className="text-sm text-gray-400 hover:text-white hover:translate-x-1 transition-all text-left"
                         >
                           {link.label}

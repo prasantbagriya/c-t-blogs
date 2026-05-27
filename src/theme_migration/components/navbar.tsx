@@ -3,7 +3,7 @@
 import React, { useState } from "react"
 import { Link } from "./ui/shim"
 import { Button } from "./ui/button"
-import { Menu, X, Zap, ChevronDown, Link as LinkIcon, MessageSquare, MessageSquareText, FileText, Activity, TrendingUp, Terminal, Video } from "lucide-react"
+import { Menu, X, Zap, ChevronDown, Link as LinkIcon, MessageSquare, MessageSquareText, FileText, Activity, TrendingUp, Terminal, Video, GraduationCap } from "lucide-react"
 import { motion, AnimatePresence } from "motion/react"
 import { ThemeToggle } from "./theme-toggle"
 
@@ -15,6 +15,10 @@ export default function Navbar({ onNavigate }: { onNavigate?: (page: string) => 
   const handleNavClick = (page: string) => {
     if (page === 'blog') {
       window.location.href = '/blog';
+      return;
+    }
+    if (page === 'portal') {
+      window.location.href = '/portal/';
       return;
     }
     onNavigate?.(page)
@@ -38,7 +42,8 @@ export default function Navbar({ onNavigate }: { onNavigate?: (page: string) => 
     { label: 'SIP Calculator', page: 'sip-calculator', icon: Activity, color: 'text-purple-400' },
     { label: 'Compound Growth', page: 'compound-interest', icon: TrendingUp, color: 'text-emerald-400' },
     { label: 'Prop Firm Calc', page: 'prop-firm', icon: Terminal, color: 'text-indigo-400' },
-    { label: 'YouTube Downloader', page: 'youtubevideodownload', icon: Video, color: 'text-red-400' }
+    { label: 'YouTube Downloader', page: 'youtubevideodownload', icon: Video, color: 'text-red-400' },
+    { label: 'Exam Portal', page: 'portal', icon: GraduationCap, color: 'text-indigo-400' }
   ]
 
   const companyList = [
