@@ -70,9 +70,9 @@ const infoHandler = (req, res) => {
     const url = req.method === 'POST' ? req.body.url : req.query.url;
     if (!url) return res.status(400).json({ error: 'URL is required' });
 
-    console.log(`Processing Info Request for: ${url}`);
-
-    const ytDlp = spawn('yt-dlp', [
+    const localYtDlp = path.join(__dirname, 'yt-dlp');
+    const ytDlpBin = fs.existsSync(localYtDlp) ? localYtDlp : 'yt-dlp';
+    const ytDlp = spawn(ytDlpBin, [
         '--dump-json',
         '--no-playlist',
         '--no-warnings',
@@ -140,7 +140,9 @@ const downloadHandler = (req, res) => {
     const args = ['-o', '-', '--no-warnings', url];
     if (format_id) args.push('-f', format_id);
 
-    const ytDlp = spawn('yt-dlp', args);
+    const localYtDlp = path.join(__dirname, 'yt-dlp');
+    const ytDlpBin = fs.existsSync(localYtDlp) ? localYtDlp : 'yt-dlp';
+    const ytDlp = spawn(ytDlpBin, args);
 
     ytDlp.on('error', (err) => {
         console.error(`FATAL: yt-dlp binary missing for download.`);

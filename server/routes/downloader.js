@@ -1,5 +1,7 @@
 import express from 'express';
 import { spawn } from 'child_process';
+import fs from 'fs';
+import path from 'path';
 
 const router = express.Router();
 
@@ -9,7 +11,9 @@ const infoHandler = (req, res) => {
 
     console.log(`[Downloader] Processing Info Request for: ${url}`);
 
-    const ytDlp = spawn('yt-dlp', [
+    const localYtDlp = path.join(process.cwd(), 'yt-dlp');
+    const ytDlpBin = fs.existsSync(localYtDlp) ? localYtDlp : 'yt-dlp';
+    const ytDlp = spawn(ytDlpBin, [
         '--dump-json',
         '--no-playlist',
         '--no-warnings',
@@ -72,7 +76,9 @@ const downloadHandler = (req, res) => {
     const args = ['-o', '-', '--no-warnings', url];
     if (format_id) args.push('-f', format_id);
 
-    const ytDlp = spawn('yt-dlp', args);
+    const localYtDlp = path.join(process.cwd(), 'yt-dlp');
+    const ytDlpBin = fs.existsSync(localYtDlp) ? localYtDlp : 'yt-dlp';
+    const ytDlp = spawn(ytDlpBin, args);
 
     ytDlp.on('error', (err) => {
         console.error(`[Downloader] FATAL: yt-dlp binary missing for download.`);
