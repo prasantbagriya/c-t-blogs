@@ -7,7 +7,25 @@ import autoprefixer from 'autoprefixer'
 // https://vite.dev/config/
 export default defineConfig({
   base: '/youtubevideodownload/',
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: 'redirect-to-base',
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          if (req.url) {
+            const url = new URL(req.url, 'http://localhost');
+            if (url.pathname === '/' || url.pathname === '/youtubevideodownload') {
+              res.writeHead(302, { Location: '/youtubevideodownload/' + url.search });
+              res.end();
+              return;
+            }
+          }
+          next();
+        });
+      }
+    }
+  ],
   server: {
     proxy: {
       '/youtubevideodownload/info': {

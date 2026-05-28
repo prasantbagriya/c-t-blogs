@@ -98,6 +98,7 @@ const infoHandler = (req, res) => {
                     quality:  f.format_note || f.resolution || 'N/A',
                     vcodec:   f.vcodec,
                     acodec:   f.acodec,
+                    abr:      f.abr || 0,
                     filesize: f.filesize || f.filesize_approx || 0,
                     url:      f.url
                 })).reverse();
@@ -106,7 +107,7 @@ const infoHandler = (req, res) => {
                 title:     info.title || 'Unknown Video',
                 thumbnail: info.thumbnail || '',
                 duration:  info.duration_string || 'N/A',
-                formats:   formats.slice(0, 15)
+                formats:   formats
             });
         } catch (e) {
             res.status(500).json({ error: 'Failed to parse metadata.' });
@@ -123,6 +124,7 @@ app.all('/youtubevideodownload/api/info', infoHandler);
 const downloadHandler = (req, res) => {
     const url       = req.method === 'POST' ? req.body.url       : req.query.url;
     const format_id = req.method === 'POST' ? req.body.format_id : req.query.format_id;
+    const ext       = req.method === 'POST' ? req.body.ext       : req.query.ext;
     if (!url) return res.status(400).send('URL is required');
 
     const args = ['-o', '-', '--no-warnings', url];
@@ -133,8 +135,18 @@ const downloadHandler = (req, res) => {
         if (!res.headersSent) res.status(500).send('yt-dlp missing on server.');
     });
 
-    res.setHeader('Content-Disposition', 'attachment; filename="video.mp4"');
-    res.setHeader('Content-Type', 'video/mp4');
+    // Determine if this is an audio format download
+    const targetExt = ext || 'mp4';
+    const isAudio = ['mp3', 'm4a', 'webm', 'wav', 'aac'].includes(targetExt);
+    
+    if (isAudio) {
+        res.setHeader('Content-Disposition', `attachment; filename="audio.${targetExt}"`);
+        res.setHeader('Content-Type', `audio/${targetExt === 'm4a' ? 'mp4' : targetExt}`);
+    } else {
+        res.setHeader('Content-Disposition', `attachment; filename="video.mp4"`);
+        res.setHeader('Content-Type', 'video/mp4');
+    }
+
     ytDlp.stdout.pipe(res);
     ytDlp.on('close', code => { if (code !== 0) console.error(`Download failed: ${code}`); });
     req.on('close', () => ytDlp.kill());

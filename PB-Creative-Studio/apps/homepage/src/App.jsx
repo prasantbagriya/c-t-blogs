@@ -108,21 +108,21 @@ const ProductShowcase = () => {
     { 
       title: 'EduExam Pro', 
       desc: 'Advanced Examination Management System for institutes. Automated builders, class analytics, and secure portals.',
-      path: getDevPath('/portal'), 
+      path: getDevPath('/portal/'), 
       icon: <GraduationCap size={32} />,
       tags: ['Security', 'Analytics', 'Automated']
     },
     { 
       title: 'Solar Extractor', 
       desc: 'High-fidelity YouTube video & audio downloader. Direct extraction with peak performance headers.',
-      path: getDevPath('/youtubevideodownload'), 
+      path: getDevPath('/youtubevideodownload/'), 
       icon: <Download size={32} />,
       tags: ['Media', 'Direct', 'Fast']
     },
     { 
       title: 'DevForge Kit', 
       desc: 'Financial & Developer utility node containing SIP Forecaster, Compound Interest Simulator, and Prop Firm Evaluator.',
-      path: getDevPath('/tool'), 
+      path: getDevPath('/tool/'), 
       icon: <Command size={32} />,
       tags: ['Financial', 'DevTools', 'Essential']
     },
@@ -328,12 +328,12 @@ const App = () => {
   }, [activeView])
 
   const products = [
-    { title: 'EduExam Pro', path: getDevPath('/portal'), icon: <GraduationCap size={16} /> },
-    { title: 'Solar Extractor', path: getDevPath('/youtubevideodownload'), icon: <Download size={16} /> },
-    { title: 'DevForge Kit', path: getDevPath('/tool'), icon: <Command size={16} /> },
-    { title: '▻ SIP Calculator', path: getDevPath('/tool/sip-calculator'), icon: <Activity size={16} /> },
-    { title: '▻ Compound Growth', path: getDevPath('/tool/compound-interest-calculator'), icon: <Sparkles size={16} /> },
-    { title: '▻ Prop Firm Evaluator', path: getDevPath('/tool/prop-firm'), icon: <Terminal size={16} /> },
+    { title: 'EduExam Pro', path: getDevPath('/portal/'), icon: <GraduationCap size={16} /> },
+    { title: 'Solar Extractor', path: getDevPath('/youtubevideodownload/'), icon: <Download size={16} /> },
+    { title: 'DevForge Kit', path: getDevPath('/tool/'), icon: <Command size={16} /> },
+    { title: '▻ SIP Calculator', path: getDevPath('/tool/sip-calculator/'), icon: <Activity size={16} /> },
+    { title: '▻ Compound Growth', path: getDevPath('/tool/compound-interest-calculator/'), icon: <Sparkles size={16} /> },
+    { title: '▻ Prop Firm Evaluator', path: getDevPath('/tool/prop-firm/'), icon: <Terminal size={16} /> },
   ]
 
   return (

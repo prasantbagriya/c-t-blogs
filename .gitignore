@@ -9,3 +9,4 @@ coverage/
 *.zip
 temp_build/
 .codex-runtime/
+PB-Creative-Studio/server/bin/

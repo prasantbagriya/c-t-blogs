@@ -3,7 +3,7 @@ import { Code, Send, Globe, Video } from "lucide-react"
 
 export default function Footer() {
   return (
-    <footer className="py-20 border-t border-white/5 relative z-10" style={{ backgroundColor: '#040608' }}>
+    <footer className="py-20 border-t border-white/5 relative z-10 bg-black/40 backdrop-blur-md">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="col-span-1 md:col-span-2">

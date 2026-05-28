@@ -7,7 +7,25 @@ import react from '@vitejs/plugin-react'
 // ═══════════════════════════════════════════════════════════════
 export default defineConfig(({ mode }) => ({
   base: '/portal/',
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: 'redirect-to-base',
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          if (req.url) {
+            const url = new URL(req.url, 'http://localhost');
+            if (url.pathname === '/' || url.pathname === '/portal') {
+              res.writeHead(302, { Location: '/portal/' + url.search });
+              res.end();
+              return;
+            }
+          }
+          next();
+        });
+      }
+    }
+  ],
 
   build: {
     chunkSizeWarningLimit: 600,
