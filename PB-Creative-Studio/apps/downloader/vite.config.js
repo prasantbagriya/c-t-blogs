@@ -38,6 +38,10 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    outDir: '../../server/public/youtubevideodownload',
+    emptyOutDir: true,
+  },
   css: {
     postcss: {
       plugins: [tailwindcss(), autoprefixer()],

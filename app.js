@@ -194,6 +194,20 @@ const launchBlogStandalone = async () => {
 };
 
 launchBlogStandalone();
+
+// Monitor blog port health periodically (fixes sibling process deadlocks under Passenger)
+setInterval(async () => {
+  const active = await isPortInUse(BLOG_PORT);
+  if (!active) {
+    if (blogState.ready) {
+      console.warn(`[Blog Monitor] Port ${BLOG_PORT} went offline. Attempting self-healing restart...`);
+      blogState.ready = false;
+      launchBlogStandalone();
+    }
+  } else {
+    blogState.ready = true;
+  }
+}, 15000);
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ─── STUDIO SERVER LAUNCHER ──────────────────────────────────────────────────

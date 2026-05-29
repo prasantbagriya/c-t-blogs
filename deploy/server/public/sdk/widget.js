@@ -101,7 +101,7 @@ style.innerHTML = `
     .cw-msg.user { align-self: flex-end !important; background: #6366f1 !important; color: white !important; border-bottom-right-radius: 4px !important; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2) !important; }
 
     .cw-input-area { padding: 15px !important; border-top: 1px solid #f1f5f9 !important; display: flex !important; gap: 10px !important; background: white !important; box-sizing: border-box !important; }
-    .cw-input { flex: 1 !important; border: 1px solid #e2e8f0 !important; border-radius: 12px !important; padding: 10px 14px !important; outline: none !important; font-size: 14px !important; transition: border 0.2s !important; display: block !important; box-sizing: border-box !important; background: #f8fafc !important; }
+    .cw-input { flex: 1 !important; border: 1px solid #e2e8f0 !important; border-radius: 12px !important; padding: 10px 14px !important; outline: none !important; font-size: 14px !important; transition: border 0.2s !important; display: block !important; box-sizing: border-box !important; background: #f8fafc !important; color: #1e293b !important; }
     .cw-input:focus { border-color: #6366f1 !important; background: white !important; }
     .cw-send-btn { width: 40px !important; height: 40px !important; border-radius: 12px !important; background: #6366f1 !important; color: white !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important; transition: transform 0.2s !important; }
     .cw-send-btn:active { transform: scale(0.95) !important; }
@@ -168,7 +168,7 @@ const initWidget = () => {
             </div>
             <div class="cw-messages" id="cw-messages"></div>
             <div class="cw-input-area">
-                <input type="text" class="cw-input" id="cw-input" placeholder="Type a message...">
+                <input type="text" class="cw-input" id="cw-input" placeholder="Type a message..." style="color: #1e293b !important;">
                 <button class="cw-send-btn" id="cw-send">
                     <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
                 </button>

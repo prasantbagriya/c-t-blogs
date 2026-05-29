@@ -39,7 +39,7 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react', 'framer-motion', 'date-fns', '@radix-ui/react-icons'],
     serverActions: {
       bodySizeLimit: '10mb',
-      allowedOrigins: ['chatwizs.com', 'www.chatwizs.com', 'localhost:3001', 'localhost:4000', '127.0.0.1:4000']
+      allowedOrigins: ['chatwizs.com', 'www.chatwizs.com', 'localhost:3001', 'localhost:4000', '127.0.0.1:4000', 'localhost:4289', '127.0.0.1:4289']
     },
     // FIX: Router cache staleTimes — reduce re-fetching on back navigation
     staleTimes: {
