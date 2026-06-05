@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { ZipArchive } from 'archiver';
 
-const output = fs.createWriteStream(path.join(process.cwd(), 'chatwiz_hostinger.zip'));
+const output = fs.createWriteStream(path.join(process.cwd(), 'chatwiz_hostinger_lite.zip'));
 const archive = new ZipArchive({
   zlib: { level: 9 } // Sets the compression level.
 });
@@ -46,19 +46,28 @@ for (const dir of includeDirs) {
   }
 }
 
-// Add blog directory (excluding node_modules)
+// Add blog directory (excluding node_modules and cache)
 if (fs.existsSync('blog')) {
   archive.glob('blog/**', {
     dot: true,
-    ignore: ['blog/node_modules/**', 'blog/.env.local', 'blog/.env']
+    ignore: [
+      'blog/node_modules/**', 
+      'blog/.env.local', 
+      'blog/.env',
+      'blog/.next/cache/**'
+    ]
   });
 }
 
-// Add PB-Creative-Studio directory (excluding node_modules)
+// Add PB-Creative-Studio directory (excluding node_modules and caches)
 if (fs.existsSync('PB-Creative-Studio')) {
   archive.glob('PB-Creative-Studio/**', {
     dot: true,
-    ignore: ['PB-Creative-Studio/node_modules/**', 'PB-Creative-Studio/**/node_modules/**']
+    ignore: [
+      'PB-Creative-Studio/node_modules/**', 
+      'PB-Creative-Studio/**/node_modules/**',
+      'PB-Creative-Studio/**/.next/cache/**'
+    ]
   });
 }
 

@@ -118,6 +118,16 @@ const getStudioProxy = () => {
 // Route studio-related paths to the studio server on port 5000
 app.use((req, res, next) => {
   const path = req.path;
+  
+  // FIX: Exempt Next.js Blog API admin paths from being intercepted by Studio
+  const isBlogApiAdminPath = path.startsWith('/api/admin/') && 
+    ['posts', 'media', 'seo-audit', 'categories', 'authors', 'stories']
+      .some(ep => path.startsWith(`/api/admin/${ep}`));
+      
+  if (isBlogApiAdminPath) {
+    return next();
+  }
+
   const isStudioPath = STUDIO_PATHS.some(p =>
     path === p || path.startsWith(p + '/') || path === p + '/'
   );
@@ -136,6 +146,7 @@ const BLOG_PATHS = [
   '/stories', '/search', '/sitemap.xml', '/feed.xml',
   '/news-sitemap.xml', '/api/admin', '/api/og', '/_next',
   '/about', '/contact', '/privacy', '/terms', '/editorial-policy', '/fact-checking-policy',
+  '/uploads',
 ];
 
 // Lazy proxy instance — created once, reuses the current port from blogState
