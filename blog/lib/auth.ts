@@ -16,17 +16,32 @@ export function signToken(expiry: number): string {
 
 // ✅ Validate session token statelessly
 export function isValidSession(token: string | undefined): boolean {
-  if (!token) return false;
+  if (!token) {
+    console.log('[Auth Debug] No token provided to isValidSession');
+    return false;
+  }
   const parts = token.split('.');
-  if (parts.length !== 2) return false;
+  if (parts.length !== 2) {
+    console.log('[Auth Debug] Invalid token format');
+    return false;
+  }
   
   const expiry = parseInt(parts[0], 10);
   const signature = parts[1];
   
-  if (isNaN(expiry) || Date.now() > expiry) return false;
+  if (isNaN(expiry) || Date.now() > expiry) {
+    console.log(`[Auth Debug] Token expired. Expiry: ${expiry}, Now: ${Date.now()}`);
+    return false;
+  }
   
   const expectedSignature = signToken(expiry).split('.')[1];
-  return signature === expectedSignature;
+  if (signature !== expectedSignature) {
+    console.log(`[Auth Debug] Signature mismatch. Expected: ${expectedSignature}, Got: ${signature}`);
+    return false;
+  }
+  
+  console.log('[Auth Debug] Session is valid!');
+  return true;
 }
 
 // ✅ Centralized Admin Auth verification for both Server Actions & APIs

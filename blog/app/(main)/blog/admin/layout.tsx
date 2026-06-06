@@ -7,8 +7,11 @@ import { isValidSession } from '@/lib/auth';
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
   const session = cookieStore.get('admin_session')?.value;
+  
+  const isValid = isValidSession(session);
+  console.log(`[Blog Admin] Session token: ${session ? 'present' : 'missing'}, Valid: ${isValid}`);
 
-  if (!isValidSession(session)) {
+  if (!isValid) {
     redirect('/blog/auth/login');
   }
 

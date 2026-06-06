@@ -16,11 +16,17 @@ export default function LoginForm() {
     setError('');
     
     try {
-      const result = await handleAdminLogin(password);
+      const response = await fetch('/api/admin/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      });
+      
+      const result = await response.json();
       
       if (result.success) {
-        // Force a hard refresh to ensure the new cookie is recognized by the layout
-        window.location.href = '/blog/admin';
+        // Force a hard refresh with cache-buster to bypass LiteSpeed caching
+        window.location.href = `/blog/admin?t=${Date.now()}`;
       } else {
         setError(result.error || 'Invalid master password');
         setIsPending(false);

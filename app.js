@@ -22,7 +22,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 dotenv.config({ path: path.join(__dirname, '.env') });
-dotenv.config({ path: path.join(__dirname, 'blog', '.env.local'), override: false });
+dotenv.config({ path: path.join(__dirname, 'blog', '.env.local'), override: true });
 
 console.log('[Entry] Initializing ChatWizs Single-Unit Deployment...');
 
@@ -154,7 +154,7 @@ const launchBlogStandalone = async () => {
       // Override data/uploads paths to use blog root (not standalone copy)
       BLOG_DATA_DIR: blogDataDir,
       BLOG_UPLOADS_DIR: blogUploadsDir,
-      ADMIN_PASSWORD: 'admin123',
+      ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || 'admin123',
     },
   });
 
