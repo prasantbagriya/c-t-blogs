@@ -51,11 +51,18 @@ const YouTubeDownloader = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url })
       });
-      if (!res.ok) throw new Error("Failed to fetch info");
+      if (!res.ok) {
+        let errorMsg = "Thermal bypass failed. Video data unreachable. Verify URL.";
+        try {
+          const errorData = await res.json();
+          if (errorData.error) errorMsg = errorData.error;
+        } catch (e) {}
+        throw new Error(errorMsg);
+      }
       const data = await res.json();
       setInfo(data);
-    } catch {
-      setError("Thermal bypass failed. Video data unreachable. Verify URL.");
+    } catch (err: any) {
+      setError(err.message || "Thermal bypass failed. Video data unreachable. Verify URL.");
     }
     setLoading(false);
   };

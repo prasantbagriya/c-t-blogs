@@ -88,7 +88,6 @@ const infoHandler = async (req, res) => {
             '--dump-json',
             '--no-playlist',
             '--no-warnings',
-            '--no-call-home',
             '--no-check-certificates',
             url
         ]);

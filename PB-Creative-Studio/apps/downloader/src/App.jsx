@@ -33,8 +33,12 @@ function App() {
     try {
       const res = await axios.post("info", { url })
       setInfo(res.data)
-    } catch {
-      setError("Thermal bypass failed. Video data unreachable. Verify URL.")
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.error) {
+        setError(err.response.data.error)
+      } else {
+        setError("Thermal bypass failed. Video data unreachable. Verify URL.")
+      }
     }
     setLoading(false)
   }
