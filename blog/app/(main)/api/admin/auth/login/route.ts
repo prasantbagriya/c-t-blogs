@@ -74,6 +74,7 @@ export async function POST(request: Request) {
             'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
           }
         });
+      } else {
         // Native form submission: redirect with a relative URL so we don't leak the internal Next.js port
         // when proxied through Vite or Hostinger.
         return new Response(null, {
@@ -83,6 +84,7 @@ export async function POST(request: Request) {
             'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
           }
         });
+      }
     }
 
     // Increment failed attempts
