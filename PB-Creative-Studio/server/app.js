@@ -158,7 +158,9 @@ const infoHandler = async (req, res) => {
             '--no-warnings',
             '--no-check-certificates',
             url
-        ]);
+        ], {
+            env: { ...process.env, TMPDIR: uploadsDir }
+        });
 
         let output = '';
         let errorOutput = '';
@@ -184,7 +186,7 @@ const infoHandler = async (req, res) => {
                 if (errorOutput.includes('403') || errorOutput.includes('Sign in to confirm')) {
                     return res.status(500).json({ error: 'YouTube blocks request (Bot detection). Try another link, proxy, or upload cookies.' });
                 }
-                return res.status(500).json({ error: 'Extraction failed. Ensure the link is a valid YouTube video.' });
+                return res.status(500).json({ error: `Extraction failed: ${errorOutput || 'No error output'}` });
             }
             try {
                 const info = JSON.parse(output);
@@ -234,7 +236,9 @@ const downloadHandler = async (req, res) => {
 
     try {
         const ytDlpBin = await ensureYtDlp();
-        const ytDlp = spawn(ytDlpBin, args);
+        const ytDlp = spawn(ytDlpBin, args, {
+            env: { ...process.env, TMPDIR: uploadsDir }
+        });
 
         ytDlp.on('error', (err) => {
             console.error(`FATAL: yt-dlp binary missing for download.`);

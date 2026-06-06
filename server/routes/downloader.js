@@ -83,6 +83,11 @@ const infoHandler = async (req, res) => {
     console.log(`[Downloader] Processing Info Request for: ${url}`);
 
     try {
+        const customEnv = { ...process.env };
+        const tmpDir = path.join(process.cwd(), 'server', 'tmp');
+        if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
+        customEnv.TMPDIR = tmpDir;
+
         const ytDlpBin = await ensureYtDlp();
         const ytDlp = spawn(ytDlpBin, [
             '--dump-json',
@@ -90,7 +95,7 @@ const infoHandler = async (req, res) => {
             '--no-warnings',
             '--no-check-certificates',
             url
-        ]);
+        ], { env: customEnv });
 
         let output = '';
         let errorOutput = '';
@@ -154,8 +159,13 @@ const downloadHandler = async (req, res) => {
     if (format_id) args.push('-f', format_id);
 
     try {
+        const customEnv = { ...process.env };
+        const tmpDir = path.join(process.cwd(), 'server', 'tmp');
+        if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
+        customEnv.TMPDIR = tmpDir;
+
         const ytDlpBin = await ensureYtDlp();
-        const ytDlp = spawn(ytDlpBin, args);
+        const ytDlp = spawn(ytDlpBin, args, { env: customEnv });
 
         ytDlp.on('error', (err) => {
             console.error(`[Downloader] FATAL: yt-dlp binary missing for download.`);
