@@ -74,15 +74,15 @@ export async function POST(request: Request) {
             'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
           }
         });
-      } else {
-        // Native form submission: redirect!
-        return NextResponse.redirect(new URL('/blog/admin', request.url), {
+        // Native form submission: redirect with a relative URL so we don't leak the internal Next.js port
+        // when proxied through Vite or Hostinger.
+        return new Response(null, {
           status: 302,
           headers: {
+            'Location': '/blog/admin',
             'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
           }
         });
-      }
     }
 
     // Increment failed attempts
@@ -98,8 +98,13 @@ export async function POST(request: Request) {
           : 'Account locked. Too many failed attempts.',
       }, { status: 401 });
     } else {
-      // Native form redirect back with error
-      return NextResponse.redirect(new URL(`/blog/auth/login?error=Invalid+password`, request.url), { status: 302 });
+      // Native form redirect back with error using relative URL
+      return new Response(null, {
+        status: 302,
+        headers: {
+          'Location': `/blog/auth/login?error=Invalid+password`
+        }
+      });
     }
 
   } catch {
