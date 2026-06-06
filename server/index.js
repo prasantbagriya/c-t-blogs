@@ -121,7 +121,7 @@ app.use((req, res, next) => {
   
   // FIX: Exempt Next.js Blog API admin paths from being intercepted by Studio
   const isBlogApiAdminPath = path.startsWith('/api/admin/') && 
-    ['posts', 'media', 'seo-audit', 'categories', 'authors', 'stories']
+    ['posts', 'media', 'seo-audit', 'categories', 'authors', 'stories', 'auth']
       .some(ep => path.startsWith(`/api/admin/${ep}`));
       
   if (isBlogApiAdminPath) {

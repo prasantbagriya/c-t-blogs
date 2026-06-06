@@ -78,7 +78,7 @@ export async function handleAdminLogin(password: string) {
     const sessionToken = signToken(Date.now() + SESSION_TTL);
 
     const cookieStore = await cookies();
-    cookieStore.set('admin_session', sessionToken, {
+    cookieStore.set('chatwiz_admin_session', sessionToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',

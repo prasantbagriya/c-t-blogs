@@ -6,7 +6,7 @@ import { isValidSession } from '@/lib/auth';
 
 async function checkAuth() {
   const cookieStore = await cookies();
-  const token = cookieStore.get('admin_session')?.value;
+  const token = cookieStore.get('chatwiz_admin_session')?.value;
   return isValidSession(token);
 }
 

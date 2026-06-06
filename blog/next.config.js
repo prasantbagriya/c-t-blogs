@@ -100,7 +100,7 @@ const nextConfig = {
               "frame-src 'self' https://*.youtube.com https://*.youtube-nocookie.com https://googleads.g.doubleclick.net https://*.doubleclick.net https://*.google.com https://*.googlesyndication.com",
               "object-src 'none'",
               "base-uri 'self'",
-              "form-action 'self'",
+              "form-action 'self' http://localhost:* http://127.0.0.1:* https://chatwizs.com",
               "upgrade-insecure-requests",
             ].join('; '),
           },

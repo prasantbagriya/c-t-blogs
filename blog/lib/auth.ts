@@ -47,7 +47,7 @@ export function isValidSession(token: string | undefined): boolean {
 // ✅ Centralized Admin Auth verification for both Server Actions & APIs
 export async function checkAdminAuth() {
   const cookieStore = await cookies();
-  const token = cookieStore.get('admin_session')?.value;
+  const token = cookieStore.get('chatwiz_admin_session')?.value;
   if (!isValidSession(token)) {
     throw new Error('Unauthorized: Valid admin session required.');
   }

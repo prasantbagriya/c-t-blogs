@@ -25,8 +25,16 @@ export async function POST(request: Request) {
   }
 
   try {
-    const body = await request.json();
-    const { password } = body;
+    const contentType = request.headers.get('content-type') || '';
+    let password = '';
+
+    if (contentType.includes('application/json')) {
+      const body = await request.json();
+      password = body.password;
+    } else if (contentType.includes('application/x-www-form-urlencoded') || contentType.includes('multipart/form-data')) {
+      const formData = await request.formData();
+      password = formData.get('password')?.toString() || '';
+    }
 
     if (!password || typeof password !== 'string') {
       return NextResponse.json({ success: false, error: 'Password required' }, { status: 400 });
@@ -52,15 +60,29 @@ export async function POST(request: Request) {
       const sessionToken = signToken(expiry);
 
       const cookieStore = await cookies();
-      cookieStore.set('admin_session', sessionToken, {
-        httpOnly: true,          // ✅ Not accessible via JS (XSS protection)
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',         // ✅ CSRF protection but allows redirects
-        maxAge: 60 * 60 * 24 * 7, // 7 days
+      cookieStore.set('chatwiz_admin_session', sessionToken, {
+        httpOnly: true,
+        secure: false, // ✅ Set false to prevent proxy HTTPS termination mismatch
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 7,
         path: '/',
       });
 
-      return NextResponse.json({ success: true });
+      if (contentType.includes('application/json')) {
+        return NextResponse.json({ success: true }, {
+          headers: {
+            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
+          }
+        });
+      } else {
+        // Native form submission: redirect!
+        return NextResponse.redirect(new URL('/blog/admin', request.url), {
+          status: 302,
+          headers: {
+            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
+          }
+        });
+      }
     }
 
     // Increment failed attempts
@@ -68,12 +90,17 @@ export async function POST(request: Request) {
     loginAttempts.set(ip, { count, lastAttempt: now });
     const remaining = MAX_ATTEMPTS - count;
 
-    return NextResponse.json({
-      success: false,
-      error: remaining > 0
-        ? `Invalid password. ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining.`
-        : 'Account locked. Too many failed attempts.',
-    }, { status: 401 });
+    if (contentType.includes('application/json')) {
+      return NextResponse.json({
+        success: false,
+        error: remaining > 0
+          ? `Invalid password. ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining.`
+          : 'Account locked. Too many failed attempts.',
+      }, { status: 401 });
+    } else {
+      // Native form redirect back with error
+      return NextResponse.redirect(new URL(`/blog/auth/login?error=Invalid+password`, request.url), { status: 302 });
+    }
 
   } catch {
     return NextResponse.json({ success: false, error: 'Internal Server Error' }, { status: 500 });
@@ -83,6 +110,6 @@ export async function POST(request: Request) {
 // ✅ Logout endpoint
 export async function DELETE() {
   const cookieStore = await cookies();
-  cookieStore.delete('admin_session');
+  cookieStore.delete('chatwiz_admin_session');
   return NextResponse.json({ success: true });
 }
