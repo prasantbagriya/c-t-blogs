@@ -139,7 +139,7 @@ app.use((req, res, next) => {
 
 // ✅ Blog Proxy — ROOT LEVEL MOUNT (critical fix)
 // PROBLEM: app.use('/auth', proxy) → Express strips '/auth' → proxy sends GET /login → 404
-//          app.use('/admin', proxy) → Express strips '/admin' → proxy sends GET / → Homepage!
+// app.use('/admin', proxy) → Express strips '/admin' → proxy sends GET / → Homepage!
 // SOLUTION: Mount at root, filter paths manually → full path preserved → correct routing
 const BLOG_PATHS = [
   '/blog', '/blog/admin', '/blog/auth', '/category', '/author',
