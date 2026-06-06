@@ -108,7 +108,10 @@ const infoHandler = async (req, res) => {
         ytDlp.on('close', (code) => {
             if (code !== 0) {
                 console.error(`[Downloader] yt-dlp exit ${code}: ${errorOutput}`);
-                return res.status(500).json({ error: 'Extraction failed. Ensure the link is a valid YouTube video.' });
+                if (errorOutput.includes('403') || errorOutput.includes('Sign in to confirm')) {
+                    return res.status(500).json({ error: 'YouTube blocks request (Bot detection). Try another link, proxy, or upload cookies.' });
+                }
+                return res.status(500).json({ error: `Extraction failed: ${errorOutput}` });
             }
             try {
                 const info = JSON.parse(output);
