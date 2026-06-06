@@ -157,6 +157,8 @@ const infoHandler = async (req, res) => {
             '--no-playlist',
             '--no-warnings',
             '--no-check-certificates',
+            '--extractor-args',
+            'youtube:player_client=android',
             url
         ], {
             env: { ...process.env, TMPDIR: uploadsDir }
@@ -231,7 +233,7 @@ const downloadHandler = async (req, res) => {
 
     console.log(`Processing Download Request: ${url} (Format: ${format_id || 'default'}, Extension: ${ext || 'mp4'})`);
 
-    const args = ['-o', '-', '--no-warnings', url];
+    const args = ['-o', '-', '--no-warnings', '--extractor-args', 'youtube:player_client=android', url];
     if (format_id) args.push('-f', format_id);
 
     try {

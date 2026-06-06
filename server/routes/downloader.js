@@ -94,6 +94,8 @@ const infoHandler = async (req, res) => {
             '--no-playlist',
             '--no-warnings',
             '--no-check-certificates',
+            '--extractor-args',
+            'youtube:player_client=android',
             url
         ], { env: customEnv });
 
@@ -155,7 +157,7 @@ const downloadHandler = async (req, res) => {
 
     console.log(`[Downloader] Processing Download Request: ${url}`);
 
-    const args = ['-o', '-', '--no-warnings', url];
+    const args = ['-o', '-', '--no-warnings', '--extractor-args', 'youtube:player_client=android', url];
     if (format_id) args.push('-f', format_id);
 
     try {
