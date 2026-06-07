@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import { 
   Download, Zap, CloudDownload, 
@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import AnimatedGradientBackground from "./AnimatedGradientBackground";
 import { cn } from "../../theme_migration/lib/utils";
+import YouTubeDownloaderSEO from "./YouTubeDownloaderSEO";
 
 const API_BASE = '/api/downloader';
 
@@ -15,6 +16,36 @@ const YouTubeDownloader = () => {
   const [info, setInfo] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Apply SEO Keywords from the report
+  useEffect(() => {
+    const originalTitle = document.title;
+    document.title = "YouTube Video Downloader - Free 4K, MP4 & MP3 | ChatWizs";
+    
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      document.head.appendChild(metaDesc);
+    }
+    const originalDesc = metaDesc.getAttribute('content');
+    metaDesc.setAttribute('content', 'Free online YouTube video downloader. Download YouTube videos in 4K, 1080p, MP4, and MP3 formats easily. No software or watermark. Fast and secure by ChatWizs.');
+
+    let metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (!metaKeywords) {
+      metaKeywords = document.createElement('meta');
+      metaKeywords.setAttribute('name', 'keywords');
+      document.head.appendChild(metaKeywords);
+    }
+    const originalKeywords = metaKeywords.getAttribute('content');
+    metaKeywords.setAttribute('content', 'youtube video downloader, youtube downloader, download youtube video, youtube to mp4, youtube to mp3, free youtube downloader, online youtube downloader, 4K youtube downloader, chatwizs youtube downloader, youtube shorts downloader');
+
+    return () => {
+      document.title = originalTitle;
+      if (originalDesc) metaDesc.setAttribute('content', originalDesc);
+      if (originalKeywords) metaKeywords.setAttribute('content', originalKeywords);
+    };
+  }, []);
 
   const { scrollY, scrollYProgress } = useScroll();
   const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
@@ -116,11 +147,11 @@ const YouTubeDownloader = () => {
                   Fast & Secure Downloader
                 </div>
                 <h1 className="text-5xl md:text-[6rem] font-black tracking-[-0.05em] mb-6 md:mb-10 leading-[1] uppercase italic text-glow-sharp">
-                  Universal <br />
-                  <span className="text-gradient-stellar not-italic">Video Downloader</span>
+                  Free YouTube <br />
+                  <span className="text-gradient-stellar not-italic">& Video Downloader</span>
                 </h1>
                 <p className="text-slate-400 text-lg md:text-2xl max-w-2xl mx-auto mb-10 md:mb-16 font-medium leading-relaxed tracking-tight px-4">
-                  Download high-quality videos and audio across global platforms. <br className="hidden md:block" />
+                  Download YouTube videos, shorts, and audio in high-quality 4K, MP4, and MP3. <br className="hidden md:block" />
                   Fast. Free. No Limits.
                 </p>
               </motion.div>
@@ -331,6 +362,9 @@ const YouTubeDownloader = () => {
                   </motion.div>
                 )}
               </AnimatePresence>
+
+              {/* Comprehensive SEO Section */}
+              <YouTubeDownloaderSEO />
 
             </div>
           </div>
