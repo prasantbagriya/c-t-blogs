@@ -147,8 +147,7 @@ export const ToolsView = ({ user, showToast }: ToolsViewProps) => {
         {/* SIP Calculator Card */}
         <div 
           onClick={() => {
-            window.history.pushState({}, '', '/sip-calculator');
-            window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/sip-calculator' }));
+            window.location.href = '/tool/sip-calculator';
           }}
           className="cursor-pointer bg-white dark:bg-[#16161d] p-5 sm:p-6 rounded-lg border border-slate-200 dark:border-white/5 hover:border-blue-500 transition-colors group flex flex-col justify-between"
         >
@@ -167,8 +166,7 @@ export const ToolsView = ({ user, showToast }: ToolsViewProps) => {
         {/* Compound Interest Card */}
         <div 
           onClick={() => {
-            window.history.pushState({}, '', '/compound-interest');
-            window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/compound-interest' }));
+            window.location.href = '/tool/compound-interest';
           }}
           className="cursor-pointer bg-white dark:bg-[#16161d] p-5 sm:p-6 rounded-lg border border-slate-200 dark:border-white/5 hover:border-emerald-500 transition-colors group flex flex-col justify-between"
         >
@@ -187,8 +185,7 @@ export const ToolsView = ({ user, showToast }: ToolsViewProps) => {
         {/* Prop Firm Card */}
         <div 
           onClick={() => {
-            window.history.pushState({}, '', '/prop-firm');
-            window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/prop-firm' }));
+            window.location.href = '/tool/prop-firm';
           }}
           className="cursor-pointer bg-white dark:bg-[#16161d] p-5 sm:p-6 rounded-lg border border-slate-200 dark:border-white/5 hover:border-purple-500 transition-colors group flex flex-col justify-between"
         >
@@ -214,8 +211,7 @@ export const ToolsView = ({ user, showToast }: ToolsViewProps) => {
         {/* YouTube Downloader Card */}
         <div 
           onClick={() => {
-            window.history.pushState({}, '', '/youtubevideodownload');
-            window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/youtubevideodownload' }));
+            window.location.href = '/youtubevideodownload';
           }}
           className="cursor-pointer bg-white dark:bg-[#16161d] p-5 sm:p-6 rounded-lg border border-slate-200 dark:border-white/5 hover:border-red-500 transition-colors group flex flex-col justify-between"
         >

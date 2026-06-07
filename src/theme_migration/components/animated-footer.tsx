@@ -19,6 +19,14 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
       window.location.href = '/portal/';
       return;
     }
+    if (page === 'youtubevideodownload') {
+      window.location.href = '/youtubevideodownload';
+      return;
+    }
+    if (['prop-firm', 'sip-calculator', 'compound-interest'].includes(page)) {
+      window.location.href = `/tool/${page}`;
+      return;
+    }
     onNavigate?.(page);
   }
 

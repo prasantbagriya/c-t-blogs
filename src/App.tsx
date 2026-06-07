@@ -151,7 +151,7 @@ export default function App() {
   // Initialize state based on URL path
   const [currentPage, setCurrentPage] = useState<Page>(() => {
     const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '') || 'landing';
-    const publicRoutes = ['services', 'service-detail', 'contact', 'about', 'success-stories', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'auth', 'dashboard', 'reset-password', 'threads-callback', 'instagram-callback', 'artists', 'sip-calculator', 'compound-interest', 'prop-firm', 'youtubevideodownload'];
+    const publicRoutes = ['services', 'service-detail', 'contact', 'about', 'success-stories', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'auth', 'dashboard', 'reset-password', 'threads-callback', 'instagram-callback', 'artists', 'youtubevideodownload'];
     
     if (path.startsWith('services/')) return 'service-detail';
     if (path === 'get-started') return 'auth';
@@ -162,6 +162,10 @@ export default function App() {
     if (path === 'artists') return 'artists';
     if (path === 'instagram' || path === 'instagram-callback') return 'instagram-callback';
     if (path.startsWith('pay/')) return 'pay';
+    // Tool sub-routes with /tool/ prefix
+    if (path === 'tool/sip-calculator') return 'sip-calculator';
+    if (path === 'tool/compound-interest') return 'compound-interest';
+    if (path === 'tool/prop-firm') return 'prop-firm';
     return publicRoutes.includes(path) ? path as Page : 'landing';
   });
   const [activeTab, setActiveTab] = useState<DashboardTab>(() => {
@@ -272,6 +276,10 @@ export default function App() {
     else if (currentPage === 'privacy') path = '/privacy-policy';
     else if (currentPage === 'terms') path = '/terms-of-service';
     else if (currentPage === 'artists') path = '/artists';
+    // Tool sub-routes with /tool/ prefix
+    else if (currentPage === 'sip-calculator') path = '/tool/sip-calculator';
+    else if (currentPage === 'compound-interest') path = '/tool/compound-interest';
+    else if (currentPage === 'prop-firm') path = '/tool/prop-firm';
 
     const hash = currentPage === 'dashboard' ? `#${activeTab}` : '';
     const search = window.location.search; // Preserve query params like ?code=...
@@ -288,7 +296,7 @@ export default function App() {
       const path = window.location.pathname.replace(/^\//, '') || 'landing';
       const hash = window.location.hash.replace(/^#/, '');
 
-      const validPages = ['landing', 'dashboard', 'auth', 'reset-password', 'services', 'service-detail', 'about', 'success-stories', 'contact', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'artists', 'sip-calculator', 'compound-interest', 'prop-firm', 'youtubevideodownload'];
+      const validPages = ['landing', 'dashboard', 'auth', 'reset-password', 'services', 'service-detail', 'about', 'success-stories', 'contact', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'artists', 'youtubevideodownload'];
       if (path.startsWith('services/')) {
         setSelectedServiceId(path.split('/').pop() || null);
         setCurrentPage('service-detail');
@@ -304,6 +312,12 @@ export default function App() {
         setCurrentPage('terms');
       } else if (path === 'artists') {
         setCurrentPage('artists');
+      } else if (path === 'tool/sip-calculator') {
+        setCurrentPage('sip-calculator');
+      } else if (path === 'tool/compound-interest') {
+        setCurrentPage('compound-interest');
+      } else if (path === 'tool/prop-firm') {
+        setCurrentPage('prop-firm');
       } else if (validPages.includes(path)) {
         setCurrentPage(path as Page);
       }
@@ -331,6 +345,10 @@ export default function App() {
       else if (route === '/privacy' || route === '/privacy-policy') setCurrentPage('privacy');
       else if (route === '/terms' || route === '/terms-of-service') setCurrentPage('terms');
       else if (route === '/get-started') setCurrentPage('auth');
+      else if (route === '/tool/sip-calculator' || route === '/sip-calculator') setCurrentPage('sip-calculator');
+      else if (route === '/tool/compound-interest' || route === '/compound-interest') setCurrentPage('compound-interest');
+      else if (route === '/tool/prop-firm' || route === '/prop-firm') setCurrentPage('prop-firm');
+      else if (route === '/youtubevideodownload') setCurrentPage('youtubevideodownload');
     };
     window.addEventListener('popstate', handlePopState);
     window.addEventListener('app-navigate', handleAppNavigate);
@@ -621,11 +639,11 @@ export default function App() {
       contact: "https://chatwizs.com/contact-us",
       privacy: "https://chatwizs.com/privacy-policy",
       terms: "https://chatwizs.com/terms-of-service",
-      auth: "https://chatwizs.com/get-started",
+      'auth': "https://chatwizs.com/get-started",
       'youtubevideodownload': "https://chatwizs.com/youtubevideodownload",
-      'sip-calculator': "https://chatwizs.com/sip-calculator",
-      'compound-interest': "https://chatwizs.com/compound-interest",
-      'prop-firm': "https://chatwizs.com/prop-firm",
+      'sip-calculator': "https://chatwizs.com/tool/sip-calculator",
+      'compound-interest': "https://chatwizs.com/tool/compound-interest",
+      'prop-firm': "https://chatwizs.com/tool/prop-firm",
     };
 
     const tabTitles: Record<string, string> = {
@@ -956,6 +974,17 @@ export default function App() {
     </div>
   );
 
+  // Minimal shell — only Navbar + Footer, no background (for pages with their own bg like YouTubeDownloader)
+  const ToolShell = ({ children }: { children: React.ReactNode }) => (
+    <div className="relative min-h-screen">
+      <div className="relative z-10">
+        <Navbar onNavigate={setCurrentPage} />
+        {children}
+        <AnimatedFooter onNavigate={setCurrentPage} />
+      </div>
+    </div>
+  );
+
   const renderContent = () => {
     if (currentPage === 'artists') {
       return <ThemeArtistsPage onNavigate={setCurrentPage} />;
@@ -988,7 +1017,7 @@ export default function App() {
     if (currentPage === 'compound-interest') return <MarketingShell><Suspense fallback={null}><CompoundInterest /></Suspense></MarketingShell>;
     if (currentPage === 'prop-firm') return <MarketingShell><Suspense fallback={null}><PropFirm /></Suspense></MarketingShell>;
     
-    if (currentPage === 'youtubevideodownload') return <Suspense fallback={null}><YouTubeDownloader /></Suspense>;
+    if (currentPage === 'youtubevideodownload') return <ToolShell><Suspense fallback={null}><YouTubeDownloader /></Suspense></ToolShell>;
 
     if (currentPage === 'whatsapp-link-generator') return <Suspense fallback={null}><ThemeToolsPage onNavigate={setCurrentPage} /></Suspense>;
 

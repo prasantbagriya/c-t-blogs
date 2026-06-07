@@ -21,6 +21,14 @@ export default function Navbar({ onNavigate }: { onNavigate?: (page: string) => 
       window.location.href = '/portal/';
       return;
     }
+    if (page === 'youtubevideodownload') {
+      window.location.href = '/youtubevideodownload';
+      return;
+    }
+    if (['prop-firm', 'sip-calculator', 'compound-interest'].includes(page)) {
+      window.location.href = `/tool/${page}`;
+      return;
+    }
     onNavigate?.(page)
     setIsMenuOpen(false)
     setIsToolsOpen(false)

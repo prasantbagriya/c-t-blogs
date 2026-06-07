@@ -24,6 +24,14 @@ export default function BlogFooter() {
       window.location.href = '/portal/';
       return;
     }
+    if (page === 'youtubevideodownload') {
+      window.location.href = '/youtubevideodownload';
+      return;
+    }
+    if (['prop-firm', 'sip-calculator', 'compound-interest'].includes(page)) {
+      window.location.href = `/tool/${page}`;
+      return;
+    }
     window.location.href = `/${page === 'landing' ? '' : page}`;
   }
 
