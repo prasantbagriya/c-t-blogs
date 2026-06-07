@@ -582,19 +582,50 @@ export default function App() {
   useEffect(() => {
     let title = "ChatWizs | AI-Powered WhatsApp Automation Platform";
     let description = "Empower your business with ChatWizs. The ultimate AI-powered WhatsApp automation platform for marketing, lead generation, and customer support.";
+    let canonicalUrl = "https://chatwizs.com/";
 
     const pageTitles: Record<string, string> = {
       landing: "ChatWizs | Advanced WhatsApp Marketing & AI Automation",
       services: "Our Services | WhatsApp Business API & AI Solutions - ChatWizs",
       'service-detail': `Service Detail | WhatsApp Automation - ChatWizs`,
       'whatsapp-link-generator': "WhatsApp Link & QR Generator | Free Marketing Tools - ChatWizs",
-
       about: "About Us | Our Story & Vision - ChatWizs",
       contact: "Contact Us | Get Started with WhatsApp API - ChatWizs",
       privacy: "Privacy Policy | ChatWizs Data Protection",
       terms: "Terms of Service | ChatWizs Platform Usage",
       auth: "Login & Sign Up | Access ChatWizs Dashboard",
-      dashboard: "Dashboard | Manage Your WhatsApp Campaigns - ChatWizs"
+      dashboard: "Dashboard | Manage Your WhatsApp Campaigns - ChatWizs",
+      'sip-calculator': "SIP Calculator | Plan Your Mutual Fund Investment - ChatWizs",
+      'compound-interest': "Compound Interest Calculator | Free Financial Tool - ChatWizs",
+      'prop-firm': "Prop Firm Calculator | Trading Tool - ChatWizs",
+      'youtubevideodownload': "YouTube Video Downloader Free Online – Download MP4 & MP3 | ChatWizs",
+    };
+
+    const pageDescriptions: Record<string, string> = {
+      landing: "Scale your business with AI-powered WhatsApp automation. Send bulk messages, automate responses, and convert leads with ChatWizs platform.",
+      services: "Explore ChatWizs WhatsApp Business API services — bulk messaging, chatbot automation, lead generation, and Meta Business Partner solutions.",
+      about: "Learn about ChatWizs — India's leading AI-powered WhatsApp marketing platform trusted by thousands of businesses.",
+      contact: "Get in touch with ChatWizs team. Start your WhatsApp Business API integration today and grow your business.",
+      privacy: "Read ChatWizs privacy policy. We are committed to protecting your data and ensuring full GDPR & IT Act compliance.",
+      terms: "ChatWizs terms of service — understand your rights and responsibilities while using our platform.",
+      auth: "Login or sign up to ChatWizs dashboard. Access your WhatsApp campaigns, contacts, and AI automation tools.",
+      'youtubevideodownload': "Download YouTube videos free in MP4 & MP3. Fast online YouTube downloader – no software needed. Supports 4K, 1080p, 720p & Shorts.",
+      'sip-calculator': "Calculate your SIP returns with our free mutual fund SIP calculator. Plan investments for wealth creation with ChatWizs.",
+      'compound-interest': "Calculate compound interest easily with our free online tool. See how your money grows over time.",
+    };
+
+    const pageUrls: Record<string, string> = {
+      landing: "https://chatwizs.com/",
+      services: "https://chatwizs.com/services",
+      about: "https://chatwizs.com/about-us",
+      contact: "https://chatwizs.com/contact-us",
+      privacy: "https://chatwizs.com/privacy-policy",
+      terms: "https://chatwizs.com/terms-of-service",
+      auth: "https://chatwizs.com/get-started",
+      'youtubevideodownload': "https://chatwizs.com/youtubevideodownload",
+      'sip-calculator': "https://chatwizs.com/sip-calculator",
+      'compound-interest': "https://chatwizs.com/compound-interest",
+      'prop-firm': "https://chatwizs.com/prop-firm",
     };
 
     const tabTitles: Record<string, string> = {
@@ -613,21 +644,41 @@ export default function App() {
 
     if (currentPage === 'dashboard') {
       title = tabTitles[activeTab] || pageTitles[currentPage];
+      canonicalUrl = "https://chatwizs.com/dashboard";
     } else {
       title = pageTitles[currentPage] || title;
+      description = pageDescriptions[currentPage] || description;
+      canonicalUrl = pageUrls[currentPage] || canonicalUrl;
     }
 
     document.title = title;
 
     // Update meta description
     const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      metaDesc.setAttribute('content', description);
-    }
+    if (metaDesc) metaDesc.setAttribute('content', description);
 
-    // Update OG Title
+    // Update OG tags
     const ogTitle = document.querySelector('meta[property="og:title"]');
     if (ogTitle) ogTitle.setAttribute('content', title);
+
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', description);
+
+    const ogUrl = document.querySelector('meta[property="og:url"]');
+    if (ogUrl) ogUrl.setAttribute('content', canonicalUrl);
+
+    // Update Twitter tags
+    const twTitle = document.querySelector('meta[name="twitter:title"]');
+    if (twTitle) twTitle.setAttribute('content', title);
+
+    const twDesc = document.querySelector('meta[name="twitter:description"]');
+    if (twDesc) twDesc.setAttribute('content', description);
+
+    // Update canonical link
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) {
+      canonical.setAttribute('href', canonicalUrl);
+    }
 
   }, [currentPage, activeTab]);
 
