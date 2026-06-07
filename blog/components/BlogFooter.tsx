@@ -1,14 +1,19 @@
 "use client"
 
 import React, { useState } from "react"
-import { motion } from "motion/react"
-import {
-  Zap, Mail, Phone, MapPin, ArrowRight
-} from "lucide-react"
-import { Instagram, Twitter, Linkedin, Youtube, Facebook } from "@/src/components/common/BrandIcons"
+import { usePathname } from "next/navigation"
+import { motion } from "framer-motion"
+import { Zap } from "lucide-react"
+import { Instagram, Twitter, Linkedin, Youtube, Facebook } from "./BrandIcons"
 
-export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: string) => void }) {
-  const [email, setEmail] = useState("")
+export default function BlogFooter() {
+  const pathname = usePathname();
+  const [email, setEmail] = useState("");
+
+  // Don't render the public footer in the admin panel
+  if (pathname?.startsWith('/blog/admin')) {
+    return null;
+  }
 
   const handleNavClick = (page: string) => {
     if (page === 'blog') {
@@ -19,7 +24,7 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
       window.location.href = '/portal/';
       return;
     }
-    onNavigate?.(page);
+    window.location.href = `/${page === 'landing' ? '' : page}`;
   }
 
   const footerSections = [
@@ -27,7 +32,7 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
       title: "Navigation",
       links: [
         { label: "Home", page: "landing" },
-        { label: "Artists", page: "artists" },
+        { label: "Blog", page: "blog" },
         { label: "Success Stories", page: "success-stories" },
         { label: "Careers", page: "careers" }
       ]
@@ -49,7 +54,7 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
       title: "Support",
       links: [
         { label: "Help Center", page: "help" },
-        { label: "Tutorials", page: "tutorials" },
+        { label: "Editorial Guidelines", page: "editorial-policy" },
         { label: "Privacy Policy", page: "privacy" },
         { label: "Terms of Service", page: "terms" }
       ]
@@ -57,10 +62,10 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
   ]
 
   return (
-    <footer className="relative bg-black border-t border-white/5 pt-16 pb-10 overflow-hidden">
+    <footer className="relative bg-black border-t border-white/5 pt-16 pb-10 overflow-hidden mt-12 w-full">
       <div className="absolute top-0 left-1/4 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 relative z-10 w-full">
         <div className="grid grid-cols-2 lg:grid-cols-6 gap-12 mb-16">
 
           <div className="col-span-2 lg:col-span-2 space-y-8">
@@ -92,15 +97,15 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
 
           {footerSections.map((section) => {
             return (
-              <div key={section.title} className="lg:col-span-1">
+              <div key={section.title} className="col-span-1 lg:col-span-1">
                 <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-6">{section.title}</h4>
-                <ul className="space-y-4">
+                <ul className="space-y-4 m-0 p-0" style={{ listStyle: 'none' }}>
                   {section.links.map((link) => {
                     return (
-                      <li key={link.label}>
+                      <li key={link.label} className="m-0 p-0" style={{ display: 'flex' }}>
                         <button
                           onClick={() => handleNavClick(link.page)}
-                          className="text-sm text-gray-400 hover:text-white hover:translate-x-1 transition-all text-left"
+                          className="text-sm text-gray-400 hover:text-white hover:translate-x-1 transition-all text-left bg-transparent border-none p-0 cursor-pointer"
                         >
                           {link.label}
                         </button>
@@ -112,14 +117,14 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
             )
           })}
 
-          <div className="lg:col-span-1">
+          <div className="col-span-2 lg:col-span-1">
             <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-6">Stay Updated</h4>
             <div className="space-y-4">
-              <p className="text-xs text-gray-500 leading-relaxed">
+              <p className="text-xs text-gray-500 leading-relaxed m-0">
                 Get the latest AI tips and product updates delivered to your inbox.
               </p>
               <form
-                className="relative group"
+                className="relative group m-0"
                 onSubmit={async (e) => {
                   e.preventDefault();
                   if (!email) return;
@@ -149,7 +154,7 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                <button className="absolute right-2 top-2 bottom-2 bg-white text-black px-4 rounded-lg font-bold text-[10px] uppercase hover:bg-gray-100 transition-colors" type="submit">
+                <button className="absolute right-2 top-2 bottom-2 bg-white text-black px-4 rounded-lg font-bold text-[10px] uppercase hover:bg-gray-100 transition-colors border-none cursor-pointer" type="submit">
                   Join
                 </button>
               </form>
@@ -158,7 +163,7 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
         </div>
 
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-xs text-gray-500 font-medium">
+          <p className="text-xs text-gray-500 font-medium m-0">
             © {new Date().getFullYear()} ChatWizs. All rights reserved.
           </p>
           <div className="flex items-center gap-6">

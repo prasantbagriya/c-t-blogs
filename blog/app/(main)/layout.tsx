@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Copyright from './Copyright';
 import MobileNav from '@/components/MobileNav';
 import SliderInitializer from '@/components/SliderInitializer';
+import BlogFooter from '@/components/BlogFooter';
 
 // FIX: Load ONLY the font weights actually used (400,600,700,800)
 // Reduces font payload by ~40% vs loading all weights
@@ -179,8 +180,11 @@ export default function RootLayout({
         ethicsPolicy: `${baseUrl}/about#editorial-standards`,
         verificationFactCheckingPolicy: `${baseUrl}/about#editorial-standards`,
         sameAs: [
-          'https://twitter.com/chatwizs',
-          'https://linkedin.com/company/chatwizs',
+          'https://x.com/prasantbagriya',
+          'https://www.instagram.com/prasantbagriya/',
+          'https://www.facebook.com/chatwizs/',
+          'https://www.linkedin.com/company/chatwizs/',
+          'https://www.youtube.com/@ChatWizsOffical'
         ],
       },
       {
@@ -359,27 +363,7 @@ export default function RootLayout({
         <main id="main-content" className="container">
           {children}
         </main>
-        <footer className="border-t border-[var(--border)] mt-12 bg-[var(--muted)]">
-          <div className="container py-10 px-6 text-center">
-            <Link href="/" className="text-xl font-extrabold text-[var(--foreground)] no-underline inline-block mb-5">
-              Chat<span className="text-[var(--primary)]">Wizs</span>
-            </Link>
-            <nav aria-label="Footer Navigation" className="flex justify-center gap-5 flex-wrap mb-5 text-sm font-semibold">
-              {/* FIX: Unified all footer links to use Next.js <Link> to prevent hydration mismatch */}
-              <Link href="/about" className="text-[var(--muted-foreground)] no-underline">About Us</Link>
-              <Link href="/blog" className="text-[var(--muted-foreground)] no-underline">Blog</Link>
-              <Link href="/stories" className="text-[var(--muted-foreground)] no-underline">Web Stories</Link>
-              <Link href="/editorial-policy" className="text-[var(--primary)] font-bold no-underline">Editorial Guidelines</Link>
-              <Link href="/fact-checking-policy" className="text-[var(--primary)] font-bold no-underline">Fact-Checking</Link>
-              <Link href="/privacy" className="text-[var(--muted-foreground)] no-underline">Privacy</Link>
-              <Link href="/contact" className="text-[var(--muted-foreground)] no-underline">Contact</Link>
-              <Link href="/terms" className="text-[var(--muted-foreground)] no-underline">Terms</Link>
-            </nav>
-            <p style={{ color: 'var(--muted-foreground)', fontSize: '0.8125rem' }}>
-              <Copyright /> Expert-verified content built for Google&apos;s EEAT standards.
-            </p>
-          </div>
-        </footer>
+        <BlogFooter />
       </body>
     </html>
   );

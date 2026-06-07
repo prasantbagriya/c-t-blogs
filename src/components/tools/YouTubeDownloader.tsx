@@ -52,7 +52,7 @@ const YouTubeDownloader = () => {
         body: JSON.stringify({ url })
       });
       if (!res.ok) {
-        let errorMsg = "Thermal bypass failed. Video data unreachable. Verify URL.";
+        let errorMsg = "Failed to fetch video data. Please verify the URL.";
         try {
           const errorData = await res.json();
           if (errorData.error) errorMsg = errorData.error;
@@ -62,7 +62,7 @@ const YouTubeDownloader = () => {
       const data = await res.json();
       setInfo(data);
     } catch (err: any) {
-      setError(err.message || "Thermal bypass failed. Video data unreachable. Verify URL.");
+      setError(err.message || "Failed to fetch video data. Please verify the URL.");
     }
     setLoading(false);
   };
@@ -113,15 +113,15 @@ const YouTubeDownloader = () => {
               >
                 <div className="inline-flex items-center gap-3 px-6 py-2 bg-sky-500/10 border border-sky-500/20 rounded-full text-[10px] font-black tracking-[0.4em] text-sky-400 mb-12 animate-float uppercase backdrop-blur-3xl">
                   <Activity size={12} className="animate-pulse" />
-                  Stellar Core v7.0.0 Active
+                  Fast & Secure Downloader
                 </div>
-                <h1 className="text-5xl md:text-[8rem] font-black tracking-[-0.05em] mb-6 md:mb-10 leading-[0.8] uppercase italic text-glow-sharp">
-                  Stellar <br />
-                  <span className="text-gradient-stellar not-italic">Extractor</span>.
+                <h1 className="text-5xl md:text-[6rem] font-black tracking-[-0.05em] mb-6 md:mb-10 leading-[1] uppercase italic text-glow-sharp">
+                  Universal <br />
+                  <span className="text-gradient-stellar not-italic">Video Downloader</span>
                 </h1>
                 <p className="text-slate-400 text-lg md:text-2xl max-w-2xl mx-auto mb-10 md:mb-16 font-medium leading-relaxed tracking-tight px-4">
-                  Surgical media harvesting across global digital ecosystems. <br className="hidden md:block" />
-                  Accelerated. Lossless. Engineering-Grade.
+                  Download high-quality videos and audio across global platforms. <br className="hidden md:block" />
+                  Fast. Free. No Limits.
                 </p>
               </motion.div>
 
@@ -143,7 +143,7 @@ const YouTubeDownloader = () => {
                   <div className="flex items-center justify-between mb-10 px-6">
                     <div className="flex items-center gap-3 text-sky-400/80">
                       <Cpu size={20} />
-                      <span className="console-terminal">Stellar Node_01 Initialized</span>
+                      <span className="console-terminal">Ready to Download</span>
                     </div>
                     <div className="hidden md:flex items-center gap-4">
                       {platforms.map(p => (
@@ -159,7 +159,7 @@ const YouTubeDownloader = () => {
                       <input
                         type="url"
                         className="bg-transparent border-none focus:outline-none focus:ring-0 text-white placeholder-slate-700 w-full text-lg font-bold tracking-tight"
-                        placeholder="Feed source URL into the Stellar core..."
+                        placeholder="Paste video URL here..."
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && fetchInfo()}
@@ -176,7 +176,7 @@ const YouTubeDownloader = () => {
                       )}
                     >
                       {loading ? <Cpu className="animate-spin" size={20} /> : <Zap size={20} className="fill-current" />}
-                      <span className="text-[11px] font-black uppercase tracking-[0.3em]">Engage Capture</span>
+                      <span className="text-[11px] font-black uppercase tracking-[0.3em]">Download</span>
                     </button>
                   </div>
 
@@ -184,17 +184,17 @@ const YouTubeDownloader = () => {
                   <div className="mt-8 px-6 flex flex-wrap justify-between items-center gap-6">
                     <div className="flex gap-8">
                       <div className="flex flex-col">
-                        <span className="console-terminal">Integrity</span>
-                        <span className="text-xs font-bold text-zinc-400">99.8% Valid</span>
+                        <span className="console-terminal">Quality</span>
+                        <span className="text-xs font-bold text-zinc-400">Up to 4K</span>
                       </div>
                       <div className="flex flex-col">
-                        <span className="console-terminal">Encryption</span>
-                        <span className="text-xs font-bold text-zinc-400">AES-256</span>
+                        <span className="console-terminal">Security</span>
+                        <span className="text-xs font-bold text-zinc-400">Secure</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-3 px-5 py-2 bg-sky-400/5 rounded-xl border border-sky-400/10">
                       <History size={14} className="text-sky-400" />
-                      <span className="text-[10px] font-black uppercase tracking-widest text-sky-400">Live Status: Optimally Operational</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-sky-400">Status: Ready</span>
                     </div>
                   </div>
                 </div>
@@ -219,7 +219,7 @@ const YouTubeDownloader = () => {
                         
                         <div className="absolute top-4 md:top-8 left-4 md:left-8 flex items-center gap-2 md:gap-3 px-3 py-1.5 md:px-5 md:py-2 bg-black/80 backdrop-blur-2xl border border-white/10 rounded-full">
                           <Activity size={12} className="text-amber-500" />
-                          <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest leading-none">Yield Captured</span>
+                          <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest leading-none">Video Found</span>
                         </div>
 
                         <div className="absolute bottom-4 md:bottom-8 left-4 md:left-8 right-4 md:right-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-3 md:gap-6">
@@ -236,7 +236,7 @@ const YouTubeDownloader = () => {
                             <div className="flex -space-x-3">
                               {[1,2,3].map(i => <div key={i} className="w-10 h-10 rounded-full border-2 border-black bg-zinc-800 flex items-center justify-center text-[10px] font-bold">U{i}</div>)}
                             </div>
-                            <span className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Extracted by Multi-Core Nova</span>
+                            <span className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Processed Successfully</span>
                           </div>
                         </div>
                       </div>
@@ -247,26 +247,31 @@ const YouTubeDownloader = () => {
                         <div className="console-card rounded-[2.5rem] p-8">
                           <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/5">
                             <h3 className="flex items-center gap-3 text-lg font-black uppercase tracking-[0.15em]">
-                              <Download size={18} className="text-amber-500" /> High-Yield Video
+                              <Download size={18} className="text-amber-500" /> Video Formats
                             </h3>
-                            <span className="text-[10px] font-bold text-zinc-600">NVV-EXTRACT-V2</span>
+                            <span className="text-[10px] font-bold text-zinc-600">MP4 / WEBM</span>
                           </div>
                           <div className="grid gap-3">
-                            {(info.formats || []).filter((f: any) => f.vcodec !== "none" && f.quality !== "N/A").slice(0, 5).map((fmt: any, i: number) => (
-                              <button
-                                key={i}
-                                onClick={() => handleDownload(fmt.id)}
-                                className="group flex items-center justify-between p-5 bg-white/[0.03] hover:bg-amber-500/10 border border-white/[0.05] hover:border-amber-500/30 rounded-2xl transition-all"
-                              >
-                                <div className="flex flex-col text-left">
-                                  <span className="text-sm font-black tracking-tight">{fmt.quality}</span>
-                                  <span className="text-[10px] font-bold text-zinc-500 uppercase">{fmt.ext} · {fmt.filesize ? `${(fmt.filesize/1024/1024).toFixed(1)}MB` : 'AUTO'}</span>
-                                </div>
-                                <div className="w-10 h-10 rounded-xl bg-white/5 group-hover:bg-sky-400 flex items-center justify-center transition-all">
-                                  <CloudDownload size={16} className="text-slate-400 group-hover:text-black" />
-                                </div>
-                              </button>
-                            ))}
+                            {(() => {
+                              const vFormats = (info.formats || []).filter((f: any) => f.vcodec !== "none" && f.quality !== "N/A");
+                              let bestFormats = vFormats.filter((f: any) => f.acodec !== "none");
+                              if (bestFormats.length === 0) bestFormats = vFormats;
+                              return bestFormats.slice(0, 5).map((fmt: any, i: number) => (
+                                <button
+                                  key={i}
+                                  onClick={() => handleDownload(fmt.id)}
+                                  className="group flex items-center justify-between p-5 bg-white/[0.03] hover:bg-amber-500/10 border border-white/[0.05] hover:border-amber-500/30 rounded-2xl transition-all"
+                                >
+                                  <div className="flex flex-col text-left">
+                                    <span className="text-sm font-black tracking-tight">{fmt.quality} {fmt.acodec !== "none" ? "(Audio)" : "(No Audio)"}</span>
+                                    <span className="text-[10px] font-bold text-zinc-500 uppercase">{fmt.ext} · {fmt.filesize ? `${(fmt.filesize/1024/1024).toFixed(1)}MB` : 'AUTO'}</span>
+                                  </div>
+                                  <div className="w-10 h-10 rounded-xl bg-white/5 group-hover:bg-sky-400 flex items-center justify-center transition-all">
+                                    <CloudDownload size={16} className="text-slate-400 group-hover:text-black" />
+                                  </div>
+                                </button>
+                              ));
+                            })()}
                           </div>
                         </div>
 
@@ -274,9 +279,9 @@ const YouTubeDownloader = () => {
                         <div className="console-card rounded-[2.5rem] p-8 border-amber-500/5">
                           <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/5">
                             <h3 className="flex items-center gap-3 text-lg font-black uppercase tracking-[0.15em]">
-                              <Zap size={18} className="text-orange-500" /> Sonic Capture
+                              <Zap size={18} className="text-orange-500" /> Audio Formats
                             </h3>
-                            <span className="text-[10px] font-bold text-zinc-600">NVA-CAPTURE-V2</span>
+                            <span className="text-[10px] font-bold text-zinc-600">MP3 / M4A</span>
                           </div>
                           <div className="grid gap-3">
                             {(info.formats || []).filter((f: any) => f.vcodec === "none").slice(0, 5).map((fmt: any, i: number) => (
@@ -320,7 +325,7 @@ const YouTubeDownloader = () => {
                       <X size={20} />
                     </div>
                     <div>
-                      <h4 className="font-black uppercase text-xs tracking-widest">Protocol Exception</h4>
+                      <h4 className="font-black uppercase text-xs tracking-widest">Error</h4>
                       <p className="text-sm font-bold opacity-80">{error}</p>
                     </div>
                   </motion.div>

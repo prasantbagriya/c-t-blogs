@@ -157,7 +157,7 @@ const downloadHandler = async (req, res) => {
 
     console.log(`[Downloader] Processing Download Request: ${url}`);
 
-    const args = ['-o', '-', '--no-warnings', '--extractor-args', 'youtube:player_client=android', url];
+    const args = ['-o', '-', '-q', '--no-warnings', '--no-playlist', '--extractor-args', 'youtube:player_client=android', url];
     if (format_id) args.push('-f', format_id);
 
     try {
@@ -174,8 +174,12 @@ const downloadHandler = async (req, res) => {
             if (!res.headersSent) res.status(500).send('System Error: extraction engine missing.');
         });
 
-        res.setHeader('Content-Disposition', `attachment; filename="video.mp4"`);
-        res.setHeader('Content-Type', 'video/mp4');
+        // Prevent Nginx/Litespeed buffering which causes timeouts for large streams
+        res.setHeader('X-Accel-Buffering', 'no');
+        res.setHeader('Cache-Control', 'no-cache');
+        // Let the browser handle the extension based on the actual stream
+        res.setHeader('Content-Disposition', `attachment; filename="downloaded_media"`);
+        res.setHeader('Content-Type', 'application/octet-stream');
         ytDlp.stdout.pipe(res);
 
         ytDlp.on('close', (code) => {

@@ -18,44 +18,39 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // ✅ Static core pages
   // NOTE: changefreq and priority REMOVED — Google explicitly ignores both
   // https://developers.google.com/search/docs/crawling-indexing/sitemaps/overview
-  const staticPages: MetadataRoute.Sitemap = [
-    {
-      url: BASE_URL,
-      lastModified: new Date(),
-    },
-    {
-      url: `${BASE_URL}/blog`,
-      lastModified: new Date(),
-    },
-    {
-      url: `${BASE_URL}/stories`,
-      lastModified: new Date(),
-    },
-    {
-      url: `${BASE_URL}/about`,
-      lastModified: new Date('2025-01-01'),
-    },
-    {
-      url: `${BASE_URL}/contact`,
-      lastModified: new Date('2025-01-01'),
-    },
-    {
-      url: `${BASE_URL}/editorial-policy`,
-      lastModified: new Date('2025-01-01'),
-    },
-    {
-      url: `${BASE_URL}/fact-checking-policy`,
-      lastModified: new Date('2025-01-01'),
-    },
-    {
-      url: `${BASE_URL}/privacy`,
-      lastModified: new Date('2025-01-01'),
-    },
-    {
-      url: `${BASE_URL}/terms`,
-      lastModified: new Date('2025-01-01'),
-    },
+  const staticRoutesList = [
+    '',
+    '/blog',
+    '/stories',
+    '/about',
+    '/contact',
+    '/editorial-policy',
+    '/fact-checking-policy',
+    '/privacy',
+    '/terms',
+    '/services',
+    '/services/whatsapp-business-api',
+    '/services/ai-chatbot-automation',
+    '/services/omnichannel-marketing',
+    '/services/meta-verified-campaigns',
+    '/careers',
+    '/artists',
+    '/success-stories',
+    '/pricing',
+    '/whatsapp-link-generator',
+    '/whatsapp-direct-message',
+    '/whatsapp-form-generator',
+    '/sip-calculator',
+    '/compound-interest',
+    '/prop-firm',
+    '/youtubevideodownload',
+    '/get-started'
   ];
+
+  const staticPages: MetadataRoute.Sitemap = staticRoutesList.map(route => ({
+    url: `${BASE_URL}${route}`,
+    lastModified: new Date(),
+  }));
 
   // ✅ Dynamic blog post pages (only indexable)
   const postPages: MetadataRoute.Sitemap = publishedPosts.map(post => ({

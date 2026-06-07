@@ -2,6 +2,8 @@
    ChatWizs Global Stylesheet — Google 2026 CWV + SEO Aligned
    ✅ Zero CLS | ✅ GPU Compositing | ✅ Accessibility WCAG 2.2
    ============================================================ */
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 :root {
   --primary: #2563eb; 

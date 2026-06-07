@@ -10,26 +10,50 @@ type Tab = 'dashboard' | 'posts' | 'auditor';
 export default function AdminPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>('dashboard');
 
   useEffect(() => {
-    fetch('/api/admin/posts', { cache: 'no-store' })
+    let isMounted = true;
+    const controller = new AbortController();
+    
+    const timeoutId = setTimeout(() => {
+      if (isMounted) {
+        controller.abort('timeout');
+      }
+    }, 15000); // 15-second timeout
+
+    fetch('/api/admin/posts', { 
+      cache: 'no-store',
+      signal: controller.signal
+    })
       .then(res => {
+        clearTimeout(timeoutId);
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
       })
       .then(data => {
+        if (!isMounted) return;
         if (Array.isArray(data)) {
           setPosts(data);
         } else {
           console.error('[Admin] Invalid data received from /api/admin/posts:', data);
+          setError('Invalid data format received from the server.');
         }
         setLoading(false);
       })
       .catch((err) => {
+        if (!isMounted) return;
+        clearTimeout(timeoutId);
         console.error('[Admin] Fetch error for /api/admin/posts:', err);
+        setError(err.name === 'AbortError' ? 'Request timed out.' : err.message);
         setLoading(false);
       });
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   // ==========================================
@@ -190,6 +214,22 @@ export default function AdminPage() {
         <div style={{ width: '40px', height: '40px', border: '3px solid #e2e8f0', borderTopColor: 'var(--primary)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
         <div style={{ color: 'var(--muted-foreground)', fontWeight: 600 }}>Analyzing Editorial Database...</div>
         <style dangerouslySetInnerHTML={{ __html: '@keyframes spin { to { transform: rotate(360deg); } }' }} />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '300px', gap: '1rem', color: '#ef4444' }}>
+        <div style={{ fontSize: '3rem' }}>⚠️</div>
+        <div style={{ fontWeight: 800, fontSize: '1.25rem' }}>Failed to Load Data</div>
+        <div style={{ color: 'var(--muted-foreground)', fontWeight: 500 }}>{error}</div>
+        <button 
+          onClick={() => window.location.reload()} 
+          style={{ marginTop: '1rem', background: 'var(--primary)', color: '#fff', padding: '0.5rem 1rem', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: 700 }}
+        >
+          Try Again
+        </button>
       </div>
     );
   }
