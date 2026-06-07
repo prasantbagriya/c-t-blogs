@@ -128,12 +128,11 @@ const YouTubeDownloader = () => {
               
               <button 
                 onClick={() => {
-                    window.history.pushState({}, '', '/#tools');
-                    window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/dashboard' }));
+                    window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/' }));
                 }}
                 className="inline-flex items-center text-sm text-gray-400 hover:text-white mb-8 bg-transparent border-none cursor-pointer absolute top-0 left-0 z-50"
               >
-                  <ArrowLeft className="w-4 h-4 mr-2" /> Back to Tools
+                  <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
               </button>
 
               {/* Redesigned Hero Branding */}
