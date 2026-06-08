@@ -1,0 +1,67 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && 
+             (request.auth.token.email == "prashantbagriya7877@gmail.com" || request.auth.uid == "KtDarqI1k3drtHssmtoMZwX2IyX2") &&
+             request.auth.token.email_verified == true;
+    }
+
+    function isValidPlaybook(data) {
+      return data.title is string && data.title.size() <= 200
+          && data.description is string && data.description.size() <= 2000
+          && data.fileType in ["pdf", "ppt", "docx", "other"]
+          && data.fileUrl is string && data.fileUrl.size() <= 1000
+          && data.isActive is bool
+          && data.category is string && data.category.size() <= 100
+          && data.version is string && data.version.size() <= 20
+          && (data.get('downloadCount', 0) is number);
+    }
+
+    function isValidLead(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 200
+          && data.email is string && data.email.size() > 0 && data.email.size() <= 200
+          && data.phone is string && data.phone.size() > 0 && data.phone.size() <= 50
+          && data.playbookId is string && data.playbookId.size() > 0
+          && data.playbookTitle is string && data.playbookTitle.size() > 0
+          && data.createdAt is number;
+    }
+
+    match /playbooks/{itemId} {
+      allow get: if resource.data.isActive == true || isAdmin();
+      allow list: if resource.data.isActive == true || isAdmin();
+      
+      allow create: if isAdmin() && isValidPlaybook(request.resource.data)
+                    && request.resource.data.authorId == request.auth.uid;
+      
+      allow update: if (isAdmin() && isValidPlaybook(request.resource.data))
+                    || (
+                      resource.data.isActive == true &&
+                      request.resource.data.diff(resource.data).affectedKeys().hasOnly(['downloadCount']) &&
+                      request.resource.data.downloadCount == resource.data.downloadCount + 1
+                    );
+      
+      allow delete: if isAdmin();
+    }
+
+    match /leads/{leadId} {
+      allow create: if isValidLead(request.resource.data);
+      allow get, list, delete: if isAdmin();
+      allow update: if false;
+    }
+  }
+}

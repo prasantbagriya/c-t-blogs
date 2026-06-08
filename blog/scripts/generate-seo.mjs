@@ -68,12 +68,12 @@ async function generateSeoAssets() {
     <xhtml:link rel="alternate" hreflang="en-IN" href="${BASE_URL}/stories" />
     <xhtml:link rel="alternate" hreflang="x-default" href="${BASE_URL}/stories" />
   </url>
-  <url><loc>${BASE_URL}/about</loc><lastmod>${new Date().toISOString().split('T')[0]}</lastmod><priority>0.7</priority></url>
-  <url><loc>${BASE_URL}/contact</loc><lastmod>${new Date().toISOString().split('T')[0]}</lastmod><priority>0.5</priority></url>
+  <url><loc>${BASE_URL}/about-us</loc><lastmod>${new Date().toISOString().split('T')[0]}</lastmod><priority>0.7</priority></url>
+  <url><loc>${BASE_URL}/contact-us</loc><lastmod>${new Date().toISOString().split('T')[0]}</lastmod><priority>0.5</priority></url>
   <url><loc>${BASE_URL}/editorial-policy</loc><lastmod>${new Date().toISOString().split('T')[0]}</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
   <url><loc>${BASE_URL}/fact-checking-policy</loc><lastmod>${new Date().toISOString().split('T')[0]}</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>${BASE_URL}/privacy</loc><lastmod>${new Date().toISOString().split('T')[0]}</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
-  <url><loc>${BASE_URL}/terms</loc><lastmod>${new Date().toISOString().split('T')[0]}</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>${BASE_URL}/privacy-policy</loc><lastmod>${new Date().toISOString().split('T')[0]}</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>${BASE_URL}/terms-of-service</loc><lastmod>${new Date().toISOString().split('T')[0]}</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
   ${publishedPosts.map(p => {
     const loc = escapeXml(`${BASE_URL}/blog/${p.slug}`);
     const imgLoc = escapeXml(p.coverImage.startsWith('http') ? p.coverImage : BASE_URL + p.coverImage);

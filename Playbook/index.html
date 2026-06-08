@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Google AI Studio App</title>
+    <script>
+      (function() {
+        try {
+          // Robust fetch fix: ensure window.fetch is writable by providing a setter if needed.
+          function patch(obj) {
+            if (!obj || obj.__fetch_patched) return false;
+            try {
+              var descriptor = Object.getOwnPropertyDescriptor(obj, 'fetch');
+              if (descriptor && !descriptor.configurable) return false;
+              
+              var current = obj.fetch;
+              Object.defineProperty(obj, 'fetch', {
+                get: function() { return current; },
+                set: function(v) { current = v; },
+                configurable: true,
+                enumerable: true
+              });
+              try {
+                Object.defineProperty(obj, '__fetch_patched', { value: true, configurable: true });
+              } catch (e) {}
+              return true;
+            } catch (e) {}
+            return false;
+          }
+
+          // Apply patch to window and Window.prototype
+          patch(window);
+          patch(Window.prototype);
+          // globalThis and self might be the same as window, but patching them separately
+          // if they are different or to be sure. The __fetch_patched check prevents double patching.
+          if (typeof globalThis !== 'undefined') patch(globalThis);
+          if (typeof self !== 'undefined') patch(self);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

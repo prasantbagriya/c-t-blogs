@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 :root {
   --accent: #6366f1;       /* Indigo */
@@ -36,7 +36,11 @@ body::before {
 
 @layer components {
   .hero-heading {
-    @apply font-black tracking-[-0.05em] leading-[1.05] uppercase select-none;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 1.05;
+    text-transform: uppercase;
+    user-select: none;
     font-size: clamp(1.4rem, 8vw, 8rem);
     text-shadow: 0 10px 40px rgba(0,0,0,0.8);
     white-space: nowrap;
@@ -44,20 +48,43 @@ body::before {
   }
 
   .glass-card-neon {
-    @apply bg-black/60 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] transition-all duration-700 hover:border-indigo-500/40 hover:shadow-[0_0_100px_rgba(99,102,241,0.15)];
+    background-color: rgb(0 0 0 / 0.6);
+    backdrop-filter: blur(64px);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    border-radius: 2.5rem;
+    transition-property: all;
+    transition-duration: 700ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .glass-card-neon:hover {
+    border-color: rgb(99 102 241 / 0.4);
+    box-shadow: 0 0 100px rgba(99,102,241,0.15);
   }
 
   .neon-text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-indigo-400 to-indigo-300 font-black italic;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(to right, #6366f1, #818cf8, #a5b4fc);
+    font-weight: 900;
+    font-style: italic;
     filter: drop-shadow(0 0 15px rgba(99,102,241,0.3));
   }
 
   .bento-item {
-    @apply glass-card-neon p-8 relative overflow-hidden flex flex-col justify-between;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   .marquee-content {
-    @apply flex gap-20 items-center animate-marquee whitespace-nowrap;
+    display: flex;
+    gap: 5rem;
+    align-items: center;
+    white-space: nowrap;
   }
   
   .text-glow-sharp {
@@ -205,6 +232,7 @@ body::before {
 .text-premium-gradient {
   background: linear-gradient(135deg, #f1f5f9 0%, #818cf8 50%, #8b5cf6 100%) !important;
   -webkit-background-clip: text !important;
+  background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   font-weight: 900 !important;
 }

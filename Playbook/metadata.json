@@ -1,0 +1,6 @@
+{
+  "name": "Playbook Store & Admin",
+  "description": "An ecommerce-style file repository for PDFs and PPTs with a professional admin management panel.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

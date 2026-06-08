@@ -349,6 +349,7 @@ textarea.form-control {
   font-size: 16px;
   background: linear-gradient(to right, var(--accent-light), var(--violet));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -1118,7 +1119,6 @@ input[type="radio"]:checked+.option-letter {
   border: 1px solid var(--border);
   color: var(--accent-light);
   font-weight: 700;
-  font-mono: monospace;
   font-family: 'Courier New', monospace;
   font-size: 16px;
 }

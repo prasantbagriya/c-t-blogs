@@ -1,0 +1,47 @@
+{
+  "entities": {
+    "playbookItem": {
+      "title": "Playbook Item",
+      "description": "A file asset listed in the playbook store.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "The display name of the file." },
+        "description": { "type": "string", "description": "Short description of the content." },
+        "fileType": { "type": "string", "enum": ["pdf", "ppt", "docx", "other"] },
+        "fileUrl": { "type": "string", "description": "Public URL or path to the file." },
+        "category": { "type": "string", "description": "Category for filtering (e.g., Marketing, Sales)." },
+        "version": { "type": "string", "description": "Document version." },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "authorId": { "type": "string", "description": "UID of the admin who uploaded it." },
+        "isActive": { "type": "boolean", "description": "Visibility in the public store." },
+        "downloadCount": { "type": "number", "description": "Total number of times this file was accessed." }
+      },
+      "required": ["title", "fileType", "fileUrl", "authorId"]
+    },
+    "lead": {
+      "title": "Lead",
+      "description": "User information collected before a download.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Full name of the user." },
+        "email": { "type": "string", "description": "Email address of the user." },
+        "phone": { "type": "string", "description": "Phone or WhatsApp number." },
+        "playbookId": { "type": "string", "description": "The ID of the playbook downloaded." },
+        "playbookTitle": { "type": "string", "description": "The title of the playbook downloaded." },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "phone", "playbookId", "playbookTitle"]
+    }
+  },
+  "firestore": {
+    "/playbooks/{itemId}": {
+      "schema": "playbookItem",
+      "description": "The collection of available playbooks and resources."
+    },
+    "/leads/{leadId}": {
+      "schema": "lead",
+      "description": "The collection of user leads captured before downloads."
+    }
+  }
+}

@@ -4,6 +4,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import ReadingProgress from '@/components/ReadingProgress';
+import parse, { domToReact, HTMLReactParserOptions, Element } from 'html-react-parser';
+import InteractiveQuiz from '@/components/InteractiveQuiz';
+import InteractivePoll from '@/components/InteractivePoll';
 
 const BASE_URL = 'https://chatwizs.com';
 
@@ -606,10 +609,29 @@ export default async function BlogPostPage({ params }: Props) {
           <div
             id="intro"
             className="tiptap-content"
-            dangerouslySetInnerHTML={{ __html: processedContent }}
             style={{ marginBottom: '3rem' }}
             itemProp="articleBody"
-          />
+          >
+            {parse(processedContent, {
+              replace: (domNode) => {
+                if (domNode instanceof Element && domNode.attribs) {
+                  if (domNode.attribs['data-quiz-block'] === 'true') {
+                    const question = domNode.attribs['data-question'] || '';
+                    let options = [];
+                    try { options = JSON.parse(domNode.attribs['data-options'] || '[]'); } catch (e) {}
+                    const correctIndex = parseInt(domNode.attribs['data-correct'] || '0', 10);
+                    return <InteractiveQuiz question={question} options={options} correctIndex={correctIndex} />;
+                  }
+                  if (domNode.attribs['data-poll-block'] === 'true') {
+                    const question = domNode.attribs['data-question'] || '';
+                    let options = [];
+                    try { options = JSON.parse(domNode.attribs['data-options'] || '[]'); } catch (e) {}
+                    return <InteractivePoll question={question} options={options} />;
+                  }
+                }
+              }
+            } as HTMLReactParserOptions)}
+          </div>
         </div>
 
       </div>

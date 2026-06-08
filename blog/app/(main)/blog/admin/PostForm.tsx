@@ -208,6 +208,75 @@ const FaqBlock = Node.create({
   }
 });
 
+const QuizBlock = Node.create({
+  name: 'quizBlock',
+  group: 'block',
+  atom: true,
+  selectable: true,
+  draggable: true,
+  addAttributes() {
+    return {
+      question: { default: '' },
+      options: {
+        default: [],
+        parseHTML: element => {
+          try { return JSON.parse(element.getAttribute('data-options') || '[]'); } catch { return []; }
+        },
+      },
+      correctIndex: {
+        default: 0,
+        parseHTML: element => parseInt(element.getAttribute('data-correct') || '0', 10),
+      }
+    }
+  },
+  parseHTML() { return [{ tag: 'div[data-quiz-block]' }] },
+  renderHTML({ node, HTMLAttributes }) {
+    return ['div', mergeAttributes(HTMLAttributes, { 
+      'data-quiz-block': 'true', 
+      'data-question': node.attrs.question,
+      'data-options': JSON.stringify(node.attrs.options),
+      'data-correct': node.attrs.correctIndex,
+      contenteditable: 'false',
+      style: 'margin: 32px 0; padding: 24px; border: 2px dashed #3b82f6; border-radius: 16px; background: #eff6ff; text-align: center;'
+    }),
+      ['div', { style: 'font-weight: 800; color: #1e3a8a; margin-bottom: 8px;' }, '🧩 INTERACTIVE QUIZ BLOCK'],
+      ['div', { style: 'color: #1e40af; font-weight: 700;' }, node.attrs.question]
+    ];
+  }
+});
+
+const PollBlock = Node.create({
+  name: 'pollBlock',
+  group: 'block',
+  atom: true,
+  selectable: true,
+  draggable: true,
+  addAttributes() {
+    return {
+      question: { default: '' },
+      options: {
+        default: [],
+        parseHTML: element => {
+          try { return JSON.parse(element.getAttribute('data-options') || '[]'); } catch { return []; }
+        },
+      }
+    }
+  },
+  parseHTML() { return [{ tag: 'div[data-poll-block]' }] },
+  renderHTML({ node, HTMLAttributes }) {
+    return ['div', mergeAttributes(HTMLAttributes, { 
+      'data-poll-block': 'true', 
+      'data-question': node.attrs.question,
+      'data-options': JSON.stringify(node.attrs.options),
+      contenteditable: 'false',
+      style: 'margin: 32px 0; padding: 24px; border: 2px dashed #8b5cf6; border-radius: 16px; background: #f5f3ff; text-align: center;'
+    }),
+      ['div', { style: 'font-weight: 800; color: #4c1d95; margin-bottom: 8px;' }, '📊 INTERACTIVE POLL BLOCK'],
+      ['div', { style: 'color: #5b21b6; font-weight: 700;' }, node.attrs.question]
+    ];
+  }
+});
+
 import { Post } from '@/lib/db';
 import { AuthorProfile } from '@/lib/types';
 import { handleSavePost, handleUpload } from '@/lib/actions';
@@ -515,6 +584,67 @@ export default function PostForm({ post }: PostFormProps) {
    const [faqModalOpen, setFaqModalOpen] = useState(false);
    const [tempFaqs, setTempFaqs] = useState<{ question: string; answer: string }[]>([]);
 
+   // Quiz State
+   const [quizModalOpen, setQuizModalOpen] = useState(false);
+   const [tempQuiz, setTempQuiz] = useState<{ question: string; options: string[]; correctIndex: number }>({ question: '', options: ['', '', '', ''], correctIndex: 0 });
+
+   const handleOpenQuizModal = () => {
+      if (!editor) return;
+      if (editor.isActive('quizBlock')) {
+         const attrs = editor.getAttributes('quizBlock');
+         setTempQuiz({
+            question: attrs.question || '',
+            options: attrs.options || ['', '', '', ''],
+            correctIndex: attrs.correctIndex || 0
+         });
+      } else {
+         setTempQuiz({ question: '', options: ['', '', '', ''], correctIndex: 0 });
+      }
+      setQuizModalOpen(true);
+   };
+
+   const handleApplyQuiz = () => {
+      if (!editor || !tempQuiz.question.trim()) return;
+      const validOptions = tempQuiz.options.map(o => o.trim()).filter(Boolean);
+      if (validOptions.length < 2) return; // Must have at least 2 options
+      if (editor.isActive('quizBlock')) {
+         editor.chain().focus().updateAttributes('quizBlock', { question: tempQuiz.question.trim(), options: validOptions, correctIndex: tempQuiz.correctIndex }).run();
+      } else {
+         editor.chain().focus().insertContent({ type: 'quizBlock', attrs: { question: tempQuiz.question.trim(), options: validOptions, correctIndex: tempQuiz.correctIndex } }).run();
+      }
+      setQuizModalOpen(false);
+   };
+
+   // Poll State
+   const [pollModalOpen, setPollModalOpen] = useState(false);
+   const [tempPoll, setTempPoll] = useState<{ question: string; options: string[] }>({ question: '', options: ['', '', '', ''] });
+
+   const handleOpenPollModal = () => {
+      if (!editor) return;
+      if (editor.isActive('pollBlock')) {
+         const attrs = editor.getAttributes('pollBlock');
+         setTempPoll({
+            question: attrs.question || '',
+            options: attrs.options || ['', '', '', '']
+         });
+      } else {
+         setTempPoll({ question: '', options: ['', '', '', ''] });
+      }
+      setPollModalOpen(true);
+   };
+
+   const handleApplyPoll = () => {
+      if (!editor || !tempPoll.question.trim()) return;
+      const validOptions = tempPoll.options.map(o => o.trim()).filter(Boolean);
+      if (validOptions.length < 2) return; // Must have at least 2 options
+      if (editor.isActive('pollBlock')) {
+         editor.chain().focus().updateAttributes('pollBlock', { question: tempPoll.question.trim(), options: validOptions }).run();
+      } else {
+         editor.chain().focus().insertContent({ type: 'pollBlock', attrs: { question: tempPoll.question.trim(), options: validOptions } }).run();
+      }
+      setPollModalOpen(false);
+   };
+
    const handleOpenFaqModal = () => {
       if (!editor) return;
       if (editor.isActive('faqBlock')) {
@@ -769,7 +899,7 @@ export default function PostForm({ post }: PostFormProps) {
          Table.configure({ resizable: true }), TableRow, TableHeader, TableCell,
          CharacterCount, Typography, Highlight, TextAlign.configure({ types: ['heading', 'paragraph'] }),
          TaskList, TaskItem.configure({ nested: true }), Subscript, Superscript, 
-         TextStyle, Color, FontSize, Youtube.configure({ width: 840, height: 480, HTMLAttributes: { style: 'border-radius: 16px; margin: 24px 0; max-width: 100%; height: auto; aspect-ratio: 16/9;' } }), Video, SocialEmbed, ImageSlider, FaqBlock,
+         TextStyle, Color, FontSize, Youtube.configure({ width: 840, height: 480, HTMLAttributes: { style: 'border-radius: 16px; margin: 24px 0; max-width: 100%; height: auto; aspect-ratio: 16/9;' } }), Video, SocialEmbed, ImageSlider, FaqBlock, QuizBlock, PollBlock,
          Placeholder.configure({ placeholder: 'Start your story or type / for commands...' }),
       ],
       content: post?.content || '',
@@ -1244,6 +1374,12 @@ export default function PostForm({ post }: PostFormProps) {
                          <SovereignToolBtn onClick={handleOpenFaqModal} title="Insert FAQ Schema Block">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide" style={{ width: '18px', height: '18px', flexShrink: 0 }}><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
                          </SovereignToolBtn>
+                         <SovereignToolBtn onClick={handleOpenQuizModal} title="Insert Interactive Quiz">
+                            <span style={{ fontSize: '16px', lineHeight: 1 }}>🧩</span>
+                         </SovereignToolBtn>
+                         <SovereignToolBtn onClick={handleOpenPollModal} title="Insert Interactive Poll">
+                            <span style={{ fontSize: '16px', lineHeight: 1 }}>📊</span>
+                         </SovereignToolBtn>
                          <SovereignToolBtn onClick={() => setVideoModalOpen(true)} title="Video Portal">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide" style={{ width: '18px', height: '18px', flexShrink: 0 }}><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m15 8-5 4 5 4V8Z"/><path d="M7 12h1"/></svg>
                          </SovereignToolBtn>
@@ -1290,9 +1426,9 @@ export default function PostForm({ post }: PostFormProps) {
                       const isNodeSel = selection && (selection as any).node;
                       if (isNodeSel) {
                          const nodeType = (selection as any).node.type.name;
-                         return nodeType === 'faqBlock' || nodeType === 'imageSlider' || nodeType === 'image';
+                         return nodeType === 'faqBlock' || nodeType === 'imageSlider' || nodeType === 'image' || nodeType === 'quizBlock' || nodeType === 'pollBlock';
                       }
-                      return editor.isActive('image') || editor.isActive('imageSlider') || editor.isActive('faqBlock');
+                      return editor.isActive('image') || editor.isActive('imageSlider') || editor.isActive('faqBlock') || editor.isActive('quizBlock') || editor.isActive('pollBlock');
                    }}>
                          <div style={bubbleMenuStyle}>
                             {(() => {
@@ -1308,6 +1444,18 @@ export default function PostForm({ post }: PostFormProps) {
                                   <SovereignToolBtn onClick={handleOpenFaqModal} title="Edit FAQ Block">
                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide" style={{ width: '14px', height: '14px' }}><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
                                      <span style={{ fontSize: '11px', fontWeight: 700, marginLeft: '6px' }}>EDIT FAQ</span>
+                                  </SovereignToolBtn>
+                               );
+                               if (selectedNodeType === 'quizBlock' || editor.isActive('quizBlock')) return (
+                                  <SovereignToolBtn onClick={handleOpenQuizModal} title="Edit Quiz Block">
+                                     <span style={{ fontSize: '14px', lineHeight: 1 }}>🧩</span>
+                                     <span style={{ fontSize: '11px', fontWeight: 700, marginLeft: '6px' }}>EDIT QUIZ</span>
+                                  </SovereignToolBtn>
+                               );
+                               if (selectedNodeType === 'pollBlock' || editor.isActive('pollBlock')) return (
+                                  <SovereignToolBtn onClick={handleOpenPollModal} title="Edit Poll Block">
+                                     <span style={{ fontSize: '14px', lineHeight: 1 }}>📊</span>
+                                     <span style={{ fontSize: '11px', fontWeight: 700, marginLeft: '6px' }}>EDIT POLL</span>
                                   </SovereignToolBtn>
                                );
                                return (
@@ -2045,6 +2193,158 @@ export default function PostForm({ post }: PostFormProps) {
                      <div style={{ padding: '12px 20px', background: '#f8fafc', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
                         <button onClick={() => setFaqModalOpen(false)} style={{ ...closeModalBtn, background: '#fff', border: '1px solid #e2e8f0', padding: '6px 14px', fontSize: '12px', fontWeight: 600 }}>Cancel</button>
                         <button onClick={handleApplyFaq} style={{ ...publishBtnStyle, flex: 0, padding: '6px 16px', fontSize: '12px', minWidth: 'max-content', whiteSpace: 'nowrap', color: '#ffffff' }}>{editor.isActive('faqBlock') ? 'Update FAQ Block' : 'Insert FAQ Block'}</button>
+                     </div>
+                  </motion.div>
+               </div>
+            )}
+
+            {/* Quiz Modal */}
+            {quizModalOpen && (
+               <div style={modalBackdropStyle} onClick={() => setQuizModalOpen(false)}>
+                  <motion.div 
+                     initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                     animate={{ opacity: 1, scale: 1, y: 0 }}
+                     exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                     onClick={e => e.stopPropagation()} 
+                     style={{ ...modalContentStyle, maxWidth: '600px', display: 'flex', flexDirection: 'column', maxHeight: '85vh' }}
+                  >
+                     <div style={{ ...modalHeaderStyle, padding: '20px 24px' }}>
+                        <div>
+                           <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: '#1e293b' }}>Interactive Quiz</h2>
+                           <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0 0' }}>Add an engaging quiz to increase dwell time.</p>
+                        </div>
+                        <button onClick={() => setQuizModalOpen(false)} style={closeModalBtn}><X size={20} color="#64748b" /></button>
+                     </div>
+                     <div style={{ padding: '24px', overflowY: 'auto' }}>
+                        <div style={{ marginBottom: '20px' }}>
+                           <label style={{ fontSize: '11px', fontWeight: 800, color: '#94a3b8', display: 'block', marginBottom: '8px' }}>QUESTION</label>
+                           <input 
+                              type="text" 
+                              value={tempQuiz.question} 
+                              onChange={e => setTempQuiz({...tempQuiz, question: e.target.value})}
+                              placeholder="E.g., What is the most important ranking factor?"
+                              style={{ ...metaInputStyle, background: '#f8fafc', fontWeight: 600 }}
+                           />
+                        </div>
+                        <div>
+                           <label style={{ fontSize: '11px', fontWeight: 800, color: '#94a3b8', display: 'block', marginBottom: '8px' }}>OPTIONS & CORRECT ANSWER</label>
+                           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                              {tempQuiz.options.map((opt, i) => (
+                                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#f8fafc', padding: '12px', borderRadius: '12px', border: tempQuiz.correctIndex === i ? '2px solid #22c55e' : '1px solid #e2e8f0' }}>
+                                    <input 
+                                       type="radio" 
+                                       checked={tempQuiz.correctIndex === i} 
+                                       onChange={() => setTempQuiz({...tempQuiz, correctIndex: i})}
+                                       style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                                    />
+                                    <input 
+                                       type="text" 
+                                       value={opt} 
+                                       onChange={e => {
+                                          const newOpts = [...tempQuiz.options];
+                                          newOpts[i] = e.target.value;
+                                          setTempQuiz({...tempQuiz, options: newOpts});
+                                       }}
+                                       placeholder={`Option ${i + 1}`}
+                                       style={{ flex: 1, border: 'none', background: 'transparent', outline: 'none', fontSize: '14px', fontWeight: 500 }}
+                                    />
+                                    <button 
+                                       onClick={() => {
+                                          const newOpts = tempQuiz.options.filter((_, idx) => idx !== i);
+                                          const newCorrect = tempQuiz.correctIndex === i ? 0 : tempQuiz.correctIndex > i ? tempQuiz.correctIndex - 1 : tempQuiz.correctIndex;
+                                          setTempQuiz({...tempQuiz, options: newOpts, correctIndex: newCorrect});
+                                       }}
+                                       style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#ef4444', padding: '4px' }}
+                                    >
+                                       <X size={14} />
+                                    </button>
+                                 </div>
+                              ))}
+                           </div>
+                           <button 
+                              onClick={() => setTempQuiz({...tempQuiz, options: [...tempQuiz.options, '']})}
+                              style={{ ...addNodeBtn, padding: '12px', borderStyle: 'dashed', background: '#f8fafc', marginTop: '16px', color: '#64748b' }}
+                           >
+                              + Add Option
+                           </button>
+                        </div>
+                     </div>
+                     <div style={{ padding: '12px 20px', background: '#f8fafc', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+                        <button onClick={() => setQuizModalOpen(false)} style={{ ...closeModalBtn, background: '#fff', border: '1px solid #e2e8f0', padding: '6px 14px', fontSize: '12px', fontWeight: 600 }}>Cancel</button>
+                        <button onClick={handleApplyQuiz} style={{ ...publishBtnStyle, flex: 0, padding: '6px 16px', fontSize: '12px', minWidth: 'max-content', whiteSpace: 'nowrap', color: '#ffffff', background: '#2563eb' }}>{editor?.isActive('quizBlock') ? 'Update Quiz' : 'Insert Quiz'}</button>
+                     </div>
+                  </motion.div>
+               </div>
+            )}
+
+            {/* Poll Modal */}
+            {pollModalOpen && (
+               <div style={modalBackdropStyle} onClick={() => setPollModalOpen(false)}>
+                  <motion.div 
+                     initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                     animate={{ opacity: 1, scale: 1, y: 0 }}
+                     exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                     onClick={e => e.stopPropagation()} 
+                     style={{ ...modalContentStyle, maxWidth: '600px', display: 'flex', flexDirection: 'column', maxHeight: '85vh' }}
+                  >
+                     <div style={{ ...modalHeaderStyle, padding: '20px 24px' }}>
+                        <div>
+                           <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: '#1e293b' }}>Interactive Poll</h2>
+                           <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0 0' }}>Ask your readers a question to vote on.</p>
+                        </div>
+                        <button onClick={() => setPollModalOpen(false)} style={closeModalBtn}><X size={20} color="#64748b" /></button>
+                     </div>
+                     <div style={{ padding: '24px', overflowY: 'auto' }}>
+                        <div style={{ marginBottom: '20px' }}>
+                           <label style={{ fontSize: '11px', fontWeight: 800, color: '#94a3b8', display: 'block', marginBottom: '8px' }}>POLL QUESTION</label>
+                           <input 
+                              type="text" 
+                              value={tempPoll.question} 
+                              onChange={e => setTempPoll({...tempPoll, question: e.target.value})}
+                              placeholder="E.g., Which framework do you prefer?"
+                              style={{ ...metaInputStyle, background: '#f8fafc', fontWeight: 600 }}
+                           />
+                        </div>
+                        <div>
+                           <label style={{ fontSize: '11px', fontWeight: 800, color: '#94a3b8', display: 'block', marginBottom: '8px' }}>VOTING OPTIONS</label>
+                           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                              {tempPoll.options.map((opt, i) => (
+                                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#f8fafc', padding: '12px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                                    <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 800, color: '#64748b' }}>{i + 1}</div>
+                                    <input 
+                                       type="text" 
+                                       value={opt} 
+                                       onChange={e => {
+                                          const newOpts = [...tempPoll.options];
+                                          newOpts[i] = e.target.value;
+                                          setTempPoll({...tempPoll, options: newOpts});
+                                       }}
+                                       placeholder={`Option ${i + 1}`}
+                                       style={{ flex: 1, border: 'none', background: 'transparent', outline: 'none', fontSize: '14px', fontWeight: 500 }}
+                                    />
+                                    <button 
+                                       onClick={() => {
+                                          const newOpts = tempPoll.options.filter((_, idx) => idx !== i);
+                                          setTempPoll({...tempPoll, options: newOpts});
+                                       }}
+                                       style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#ef4444', padding: '4px' }}
+                                    >
+                                       <X size={14} />
+                                    </button>
+                                 </div>
+                              ))}
+                           </div>
+                           <button 
+                              onClick={() => setTempPoll({...tempPoll, options: [...tempPoll.options, '']})}
+                              style={{ ...addNodeBtn, padding: '12px', borderStyle: 'dashed', background: '#f8fafc', marginTop: '16px', color: '#64748b' }}
+                           >
+                              + Add Poll Option
+                           </button>
+                        </div>
+                     </div>
+                     <div style={{ padding: '12px 20px', background: '#f8fafc', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+                        <button onClick={() => setPollModalOpen(false)} style={{ ...closeModalBtn, background: '#fff', border: '1px solid #e2e8f0', padding: '6px 14px', fontSize: '12px', fontWeight: 600 }}>Cancel</button>
+                        <button onClick={handleApplyPoll} style={{ ...publishBtnStyle, flex: 0, padding: '6px 16px', fontSize: '12px', minWidth: 'max-content', whiteSpace: 'nowrap', color: '#ffffff', background: '#8b5cf6' }}>{editor?.isActive('pollBlock') ? 'Update Poll' : 'Insert Poll'}</button>
                      </div>
                   </motion.div>
                </div>

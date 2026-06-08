@@ -157,8 +157,6 @@ const infoHandler = async (req, res) => {
             '--no-playlist',
             '--no-warnings',
             '--no-check-certificates',
-            '--extractor-args',
-            'youtube:player_client=android',
             url
         ], {
             env: { ...process.env, TMPDIR: uploadsDir }
@@ -231,10 +229,17 @@ const downloadHandler = async (req, res) => {
     const ext = req.method === 'POST' ? req.body.ext : req.query.ext;
     if (!url) return res.status(400).send('URL is required');
 
-    console.log(`Processing Download Request: ${url} (Format: ${format_id || 'default'}, Extension: ${ext || 'mp4'})`);
+    const isVideoOnly = req.query.video_only === 'true' || (req.body && req.body.video_only === true);
 
-    const args = ['-o', '-', '--no-warnings', '--extractor-args', 'youtube:player_client=android', url];
-    if (format_id) args.push('-f', format_id);
+    const args = ['-o', '-', '--no-warnings', url];
+    if (format_id) {
+        if (isVideoOnly) {
+            args.push('-f', `${format_id}+bestaudio[ext=m4a]/bestaudio/best`);
+            args.push('--merge-output-format', 'mkv');
+        } else {
+            args.push('-f', format_id);
+        }
+    }
 
     try {
         const ytDlpBin = await ensureYtDlp();
@@ -249,14 +254,15 @@ const downloadHandler = async (req, res) => {
 
         // Determine if this is an audio format download
         const targetExt = ext || 'mp4';
-        const isAudio = ['mp3', 'm4a', 'webm', 'wav', 'aac'].includes(targetExt);
+        const isAudioFormat = ['mp3', 'm4a', 'webm', 'wav', 'aac'].includes(targetExt);
         
-        if (isAudio) {
+        if (isAudioFormat && !isVideoOnly) {
             res.setHeader('Content-Disposition', `attachment; filename="audio.${targetExt}"`);
             res.setHeader('Content-Type', `audio/${targetExt === 'm4a' ? 'mp4' : targetExt}`);
         } else {
-            res.setHeader('Content-Disposition', `attachment; filename="video.mp4"`);
-            res.setHeader('Content-Type', 'video/mp4');
+            const finalExt = isVideoOnly ? 'mkv' : 'mp4';
+            res.setHeader('Content-Disposition', `attachment; filename="video.${finalExt}"`);
+            res.setHeader('Content-Type', `video/${finalExt === 'mkv' ? 'x-matroska' : 'mp4'}`);
         }
 
         ytDlp.stdout.pipe(res);

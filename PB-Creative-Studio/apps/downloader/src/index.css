@@ -91,3 +91,41 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #27272a;
 }
+
+/* ── PREMIUM TYPOGRAPHY UTILITIES (EXAM-PRO STYLE) ────────────────────── */
+.text-glow-sharp {
+  text-shadow: 0 0 30px rgba(99, 102, 241, 0.4), 0 0 60px rgba(99, 102, 241, 0.2);
+}
+
+.text-premium-gradient {
+  background: linear-gradient(135deg, #f1f5f9 0%, #818cf8 50%, #8b5cf6 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  font-weight: 900 !important;
+}
+
+.premium-link {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-link:hover {
+  color: #fff;
+  letter-spacing: 0.18em;
+  text-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+}
+
+.section-label-premium {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: #6366f1;
+  margin-bottom: 2rem;
+  display: block;
+}

@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
 import AboutSection from "./components/AboutSection"
 import ContactSection from "./components/ContactSection"
+import SeoContent from "./components/SeoContent"
 import { cn } from "./lib/utils"
 
 function App() {
@@ -37,14 +38,14 @@ function App() {
       if (err.response && err.response.data && err.response.data.error) {
         setError(err.response.data.error)
       } else {
-        setError("Thermal bypass failed. Video data unreachable. Verify URL.")
+        setError("Failed to fetch video details. Please verify the URL and try again.")
       }
     }
     setLoading(false)
   }
 
-  const handleDownload = (formatId, ext) => {
-    window.open(`download?url=${encodeURIComponent(url)}&format_id=${formatId}&ext=${ext}`, "_blank")
+  const handleDownload = (formatId, ext, isVideoOnly = false) => {
+    window.open(`download?url=${encodeURIComponent(url)}&format_id=${formatId}&ext=${ext}${isVideoOnly ? '&video_only=true' : ''}`, "_blank")
   }
 
   const platforms = [
@@ -59,116 +60,72 @@ function App() {
     <div className="min-h-screen bg-[#030303] text-zinc-200 font-outfit selection:bg-white/10 selection:text-white">
       <Navbar />
 
-      <main className="relative z-10 pt-20">
-        <section id="downloader" className="relative pt-4 pb-20 md:pt-6 md:pb-24 border-b border-zinc-900 bg-[#030303]">
+      <main className="relative z-10">
+        <section id="downloader" className="relative min-h-screen flex flex-col justify-center items-center pt-24 pb-20 md:pt-32 md:pb-24 border-b border-zinc-900 bg-[#030303]">
           
           <div className="w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
-            <div className="w-full">
+            <div className="w-full mt-8 md:mt-0">
 
               {/* Clean Minimalist Hero Branding */}
               <div className="text-center relative mb-12">
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-zinc-900 border border-zinc-800 rounded-full text-[10px] font-semibold tracking-wider text-zinc-400 mb-6 uppercase">
-                  Stellar Core v8.0 Active
+                  Free Online Downloader
                 </div>
                 
-                <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6 uppercase leading-tight">
-                  Solar Extractor
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+                  YouTube Video Downloader
                 </h1>
                 
-                <p className="text-zinc-500 text-sm md:text-base max-w-xl mx-auto mb-10 font-medium leading-relaxed px-4">
-                  Surgical media extraction across global digital networks. <br />
-                  Accelerated. Lossless. Minimalist.
+                <p className="text-zinc-400 text-sm md:text-base max-w-2xl mx-auto mb-10 font-medium leading-relaxed px-4">
+                  Free Online MP4 & MP3 Download. Fast, safe, and reliable. Download any YouTube video directly from your browser, without installing software.
                 </p>
               </div>
 
-              {/* Minimalist Extraction Console */}
+              {/* Standard Clean Search Bar */}
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="relative w-full max-w-5xl mx-auto mb-16 group"
+                className="relative w-full max-w-3xl mx-auto mb-16"
               >
-                {/* Clean Console Frame */}
-                <div 
-                  ref={searchContainerRef}
-                  onMouseMove={handleSearchMouseMove}
-                  className="search-glow-wrapper console-card relative rounded-2xl p-6 md:p-8 border border-zinc-800/80 bg-zinc-900/10"
-                >
-                  {/* Console Header */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-zinc-800/50">
-                    <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
-                      <span className="font-mono text-[10px] tracking-wider text-zinc-500 uppercase">
-                        Solar extraction console node_01
-                      </span>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                      {platforms.map(p => (
-                        <span 
-                          key={p.name} 
-                          className="text-[9px] font-semibold text-zinc-600 uppercase tracking-widest"
-                        >
-                          {p.name}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Input Matrix */}
-                  <div className="relative mb-6">
-                    <div className="relative flex flex-col sm:flex-row items-center gap-3 bg-zinc-950/80 p-2 rounded-xl border border-zinc-800 focus-within:border-zinc-700 transition-all">
-                      <div className="flex-1 w-full flex items-center gap-3 px-3 py-2">
-                        <Link2 className="text-zinc-500" size={18} />
-                        <input
-                          type="url"
-                          className="bg-transparent border-none focus:outline-none focus:ring-0 text-white placeholder-zinc-700 w-full text-sm font-medium"
-                          placeholder="Feed target media URL..."
-                          value={url}
-                          onChange={(e) => setUrl(e.target.value)}
-                          onKeyDown={(e) => e.key === "Enter" && fetchInfo()}
-                        />
-                        {url && (
-                          <button 
-                            onClick={() => setUrl("")} 
-                            className="p-1 hover:bg-white/5 rounded-full text-zinc-500 hover:text-white"
-                          >
-                            <X size={14} />
-                          </button>
-                        )}
-                      </div>
-
-                      <button
-                        onClick={fetchInfo}
-                        disabled={loading || !url}
-                        className={cn(
-                          "w-full sm:w-auto px-6 py-3 rounded-lg bg-white hover:bg-zinc-200 text-black font-semibold text-xs tracking-wider uppercase transition-all duration-200 shrink-0",
-                          (loading || !url) && "opacity-40 cursor-not-allowed"
-                        )}
+                <div className="flex flex-col sm:flex-row items-center gap-2 bg-zinc-900/60 p-2 rounded-2xl border border-zinc-800/80 focus-within:border-indigo-500/50 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all shadow-2xl backdrop-blur-sm">
+                  <div className="flex-1 w-full flex items-center gap-3 px-4 py-3">
+                    <Link2 className="text-zinc-500" size={22} />
+                    <input
+                      type="url"
+                      className="bg-transparent border-none focus:outline-none focus:ring-0 text-white placeholder-zinc-500 w-full text-lg font-medium"
+                      placeholder="Paste your YouTube video link here..."
+                      value={url}
+                      onChange={(e) => setUrl(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && fetchInfo()}
+                    />
+                    {url && (
+                      <button 
+                        onClick={() => setUrl("")} 
+                        className="p-1.5 hover:bg-white/10 rounded-full text-zinc-400 hover:text-white transition-colors"
                       >
-                        {loading ? "Processing..." : "Capture"}
+                        <X size={18} />
                       </button>
-                    </div>
+                    )}
                   </div>
 
-                  {/* Operational Status */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-zinc-800/50 text-left">
-                    <div>
-                      <span className="font-mono text-[9px] tracking-wider text-zinc-600 uppercase block">CORE INTEGRITY</span>
-                      <span className="text-xs font-semibold text-zinc-400 block mt-0.5">99.8% STABLE</span>
-                    </div>
-                    <div>
-                      <span className="font-mono text-[9px] tracking-wider text-zinc-600 uppercase block">ENCRYPTION LAYER</span>
-                      <span className="text-xs font-semibold text-zinc-400 block mt-0.5">AES-256 SECURE</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      <div>
-                        <span className="font-mono text-[9px] tracking-wider text-zinc-600 uppercase block">LIVE TELEMETRY</span>
-                        <span className="text-xs font-semibold text-emerald-500 block mt-0.5">ONLINE</span>
-                      </div>
-                    </div>
-                  </div>
+                  <button
+                    onClick={fetchInfo}
+                    disabled={loading || !url}
+                    className={cn(
+                      "w-full sm:w-auto px-8 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-base transition-all shrink-0 shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2",
+                      (loading || !url) && "opacity-50 cursor-not-allowed hover:bg-indigo-600 shadow-none"
+                    )}
+                  >
+                    <Download size={18} />
+                    {loading ? "Processing..." : "Download"}
+                  </button>
+                </div>
+                
+                <div className="mt-6 flex flex-wrap justify-center items-center gap-6 text-sm font-medium text-zinc-400">
+                  <span className="flex items-center gap-2"><Shield size={16} className="text-emerald-400" /> 100% Safe & Secure</span>
+                  <span className="flex items-center gap-2"><Zap size={16} className="text-amber-400" /> Lightning Fast</span>
+                  <span className="flex items-center gap-2"><CloudDownload size={16} className="text-blue-400" /> Free Forever</span>
                 </div>
               </motion.div>
 
@@ -215,7 +172,7 @@ function App() {
                             {(info.formats || []).filter(f => f.vcodec && f.vcodec !== "none" && f.vcodec !== "null" && f.quality !== "N/A").slice(0, 6).map((fmt, i) => (
                               <button
                                 key={i}
-                                onClick={() => handleDownload(fmt.id, fmt.ext)}
+                                onClick={() => handleDownload(fmt.id, fmt.ext, fmt.acodec === 'none')}
                                 className="group flex items-center justify-between p-3.5 bg-zinc-950/40 hover:bg-zinc-800/30 border border-zinc-800/50 rounded-lg transition-all"
                               >
                                 <div className="flex flex-col text-left">
@@ -280,7 +237,7 @@ function App() {
                       <X size={16} />
                     </div>
                     <div>
-                      <h4 className="font-bold uppercase text-[10px] tracking-wider">Protocol Exception</h4>
+                      <h4 className="font-bold uppercase text-[10px] tracking-wider">Error</h4>
                       <p className="text-xs font-medium opacity-80 mt-0.5">{error}</p>
                     </div>
                   </motion.div>
@@ -291,7 +248,7 @@ function App() {
           </div>
         </section>
 
-        <AboutSection />
+        <SeoContent />
         <ContactSection />
       </main>
 

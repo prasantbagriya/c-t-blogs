@@ -1,11 +1,6 @@
-"use client"
-
 import React, { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { 
-  Download, GraduationCap, Command, Activity, 
-  Sparkles, Terminal, ChevronDown, Menu, X 
-} from "lucide-react"
+import { Menu, X, Zap, ChevronDown, Link as LinkIcon, MessageSquare, MessageSquareText, FileText, Activity, TrendingUp, Terminal, Video, GraduationCap } from "lucide-react"
 
 const getDevPath = (path) => {
   if (import.meta.env && import.meta.env.DEV) {
@@ -16,139 +11,216 @@ const getDevPath = (path) => {
   return path
 }
 
-const AnimatedNavLink = ({ href, children, target }) => {
-  const defaultTextColor = "text-zinc-500 hover:text-white transition-colors duration-255"
-  const textSizeClass = "text-[10px] font-bold uppercase tracking-[0.2em]"
-
-  return (
-    <a 
-      href={href} 
-      target={target}
-      className={`group relative py-1.5 ${textSizeClass} ${defaultTextColor}`}
-    >
-      {children}
-      <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-white transition-all duration-200 group-hover:w-full" />
-    </a>
-  )
-}
-
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isProductsOpen, setIsProductsOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isToolsOpen, setIsToolsOpen] = useState(false)
+  const [isCompanyOpen, setIsCompanyOpen] = useState(false)
 
-  const products = [
-    { title: 'EduExam Pro', path: getDevPath('/portal/'), icon: <GraduationCap size={14} /> },
-    { title: 'Solar Extractor', path: getDevPath('/youtubevideodownload/'), icon: <Download size={14} /> },
-    { title: 'DevForge Kit', path: getDevPath('/tool/'), icon: <Command size={14} /> },
-    { title: '▻ SIP Calculator', path: getDevPath('/tool/sip-calculator/'), icon: <Activity size={14} /> },
-    { title: '▻ Compound Growth', path: getDevPath('/tool/compound-interest-calculator/'), icon: <Sparkles size={14} /> },
-    { title: '▻ Prop Firm Evaluator', path: getDevPath('/tool/prop-firm/'), icon: <Terminal size={14} /> },
+  const handleNavClick = (page) => {
+    if (page === 'blog') {
+      window.location.href = '/blog';
+      return;
+    }
+    if (page === 'portal') {
+      window.location.href = getDevPath('/portal/');
+      return;
+    }
+    if (page === 'youtubevideodownload') {
+      window.location.href = getDevPath('/youtubevideodownload/');
+      return;
+    }
+    if (['prop-firm', 'sip-calculator', 'compound-interest'].includes(page)) {
+      window.location.href = getDevPath(`/tool/${page}`);
+      return;
+    }
+    window.location.href = `/${page === 'landing' ? '' : page}`;
+  }
+
+  const navLinks = [
+    { label: 'Services', page: 'services' },
+    { label: 'Pricing', page: 'pricing' },
+    { label: 'Blog', page: 'blog' },
+    { label: 'Success Stories', page: 'success-stories' },
+    { label: 'Contact', page: 'contact' }
   ]
 
-  const logoElement = (
-    <a href={getDevPath("/")} className="flex items-center gap-3.5 group cursor-pointer">
-      <div className="w-10 h-10 rounded-lg bg-zinc-900 border border-zinc-800 text-white flex items-center justify-center font-extrabold text-lg transition-colors group-hover:bg-zinc-850">
-        P
-      </div>
-      <div className="flex flex-col text-left">
-        <span className="text-lg font-black tracking-tight text-white leading-none">chatwizs studio</span>
-        <span className="text-[9px] text-zinc-500 font-bold tracking-[0.2em] uppercase mt-1">Solar Extractor</span>
-      </div>
-    </a>
-  )
+  const toolsList = [
+    { label: 'Link Generator', page: 'whatsapp-link-generator', icon: LinkIcon, color: 'text-blue-400' },
+    { label: 'Direct Message', page: 'whatsapp-direct-message', icon: MessageSquareText, color: 'text-blue-400' },
+    { label: 'Form Generator', page: 'whatsapp-form-generator', icon: FileText, color: 'text-emerald-400' },
+    { label: 'SIP Calculator', page: 'sip-calculator', icon: Activity, color: 'text-purple-400' },
+    { label: 'Compound Growth', page: 'compound-interest', icon: TrendingUp, color: 'text-emerald-400' },
+    { label: 'Prop Firm Calc', page: 'prop-firm', icon: Terminal, color: 'text-indigo-400' },
+    { label: 'YouTube Downloader', page: 'youtubevideodownload', icon: Video, color: 'text-red-400' },
+    { label: 'Exam Portal', page: 'portal', icon: GraduationCap, color: 'text-indigo-400' }
+  ]
 
-  const signupButtonElement = (
-    <a 
-      href="http://localhost:5177/hub/" 
-      className="px-5 py-2.5 text-[9px] font-black rounded-lg w-full sm:w-auto bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white transition-all uppercase tracking-[0.15em] inline-flex items-center justify-center"
-    >
-      CONTROL PANEL
-    </a>
-  )
+  const companyList = [
+    { label: 'About Us', page: 'about' },
+    { label: 'Careers', page: 'careers' },
+    { label: 'Artists', page: 'artists' },
+    { label: 'Privacy Policy', page: 'privacy' },
+    { label: 'Terms of Service', page: 'terms' }
+  ]
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[100] border-b border-zinc-900 backdrop-blur-xl bg-zinc-950/60">
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <div className="flex items-center">{logoElement}</div>
+    <header className="fixed top-6 left-0 right-0 z-100 w-full px-4 pointer-events-none">
+      <div className="w-full max-w-7xl mx-auto pointer-events-auto">
+        <motion.nav
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="relative bg-zinc-950/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl"
+        >
+          {/* Animated border glow */}
+          <motion.div
+            className="absolute inset-0 rounded-2xl pointer-events-none border border-blue-500/20"
+            animate={{ opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
 
-        <div className="hidden md:flex items-center gap-8">
-          <AnimatedNavLink href={getDevPath("/")}>Vision</AnimatedNavLink>
-          
-          <div 
-            className="relative py-2" 
-            onMouseEnter={() => setIsProductsOpen(true)} 
-            onMouseLeave={() => setIsProductsOpen(false)}
-          >
-            <button className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 hover:text-white transition-colors duration-200">
-              Products <ChevronDown size={12} className={`transition-transform duration-200 ${isProductsOpen ? 'rotate-180' : ''}`} />
-            </button>
-            <AnimatePresence>
-              {isProductsOpen && (
-                <motion.div 
-                  initial={{ opacity: 0, y: 5, scale: 0.98 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 5, scale: 0.98 }}
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-56 py-2 bg-zinc-900 border border-zinc-800 backdrop-blur-xl rounded-xl shadow-2xl z-50"
+          <div className="px-4">
+            <div className="flex items-center justify-between h-16">
+              {/* Logo */}
+              <button onClick={() => handleNavClick('landing')} className="flex items-center space-x-2 group shrink-0">
+                <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <Zap className="text-black w-4 h-4 fill-black" />
+                </div>
+                <span className="text-xl font-bold text-white tracking-tighter">ChatWizs</span>
+              </button>
+
+              {/* Desktop Nav */}
+              <div className="hidden md:flex flex-1 justify-center items-center space-x-8">
+                {navLinks.map(link => (
+                  <button
+                    key={link.page}
+                    onClick={() => handleNavClick(link.page)}
+                    className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
+                  >
+                    {link.label}
+                  </button>
+                ))}
+
+                <div
+                  className="relative"
+                  onMouseEnter={() => setIsCompanyOpen(true)}
+                  onMouseLeave={() => setIsCompanyOpen(false)}
                 >
-                  {products.map(p => (
-                    <a key={p.title} href={p.path} className="flex items-center gap-3 px-5 py-3 hover:bg-white/5 transition-colors group">
-                      <div className="text-zinc-500 group-hover:text-white group-hover:scale-105 transition-all">{p.icon}</div>
-                      <span className="text-zinc-400 group-hover:text-white transition-colors uppercase tracking-[0.15em] text-[9px] font-bold">{p.title}</span>
-                    </a>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
+                  <button className="flex items-center gap-1.5 text-sm font-medium text-gray-400 hover:text-white transition-colors py-4">
+                    Company <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isCompanyOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  <AnimatePresence>
+                    {isCompanyOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute top-[80%] left-1/2 -translate-x-1/2 w-48 p-2 bg-zinc-950 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl"
+                      >
+                        {companyList.map(comp => (
+                          <button
+                            key={comp.page}
+                            onClick={() => handleNavClick(comp.page)}
+                            className="flex items-center w-full p-3 rounded-xl hover:bg-white/5 transition-colors text-left"
+                          >
+                            <span className="text-sm font-bold text-white">{comp.label}</span>
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                <div
+                  className="relative"
+                  onMouseEnter={() => setIsToolsOpen(true)}
+                  onMouseLeave={() => setIsToolsOpen(false)}
+                >
+                  <button className="flex items-center gap-1.5 text-sm font-medium text-gray-400 hover:text-white transition-colors py-4">
+                    Free Tools <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isToolsOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  <AnimatePresence>
+                    {isToolsOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute top-[80%] left-1/2 -translate-x-1/2 w-64 p-2 bg-zinc-950 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl"
+                      >
+                        {toolsList.map(tool => (
+                          <button
+                            key={tool.page}
+                            onClick={() => handleNavClick(tool.page)}
+                            className="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-white/5 transition-colors group text-left"
+                          >
+                            <div className={`w-8 h-8 bg-zinc-900 rounded-lg flex items-center justify-center ${tool.color} group-hover:scale-110 transition-transform`}>
+                              <tool.icon className="w-4 h-4" />
+                            </div>
+                            <span className="text-sm font-bold text-white">{tool.label}</span>
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
+
+              <div className="hidden md:flex items-center space-x-4">
+                <button onClick={() => handleNavClick('auth')} className="text-gray-400 hover:text-white font-bold text-sm bg-transparent">
+                  Sign In
+                </button>
+                <button
+                  onClick={() => handleNavClick('auth')}
+                  className="bg-white text-black px-5 py-2 rounded-xl font-bold hover:bg-gray-100 transition-all text-sm shadow-xl active:scale-95"
+                >
+                  Get Started
+                </button>
+              </div>
+
+              {/* Mobile Controls */}
+              <div className="md:hidden flex items-center gap-2">
+                <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-400 p-2">
+                  {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                </button>
+              </div>
+            </div>
           </div>
 
-          <AnimatedNavLink href="#downloader">Downloader</AnimatedNavLink>
-          <AnimatedNavLink href="#about">About</AnimatedNavLink>
-          <AnimatedNavLink href="#contact">Contact</AnimatedNavLink>
-        </div>
+          {/* Mobile Menu */}
+          <AnimatePresence>
+            {isMenuOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="md:hidden border-t border-white/5 bg-black/95 backdrop-blur-md overflow-hidden p-6 space-y-6"
+              >
+                <div className="grid grid-cols-2 gap-4">
+                  {[...navLinks, ...companyList].map(link => (
+                    <button key={link.page} onClick={() => handleNavClick(link.page)} className="text-left text-gray-400 hover:text-white font-bold text-sm py-2">{link.label}</button>
+                  ))}
+                </div>
 
-        <div className="hidden sm:flex items-center pl-4 border-l border-zinc-900 transition-colors">
-          {signupButtonElement}
-        </div>
+                <div className="space-y-3">
+                  <p className="text-[10px] font-black text-gray-600 uppercase tracking-[0.2em]">Free Tools</p>
+                  <div className="grid grid-cols-1 gap-2 max-h-[30vh] overflow-y-auto pr-2">
+                    {toolsList.map(tool => (
+                      <button key={tool.page} onClick={() => handleNavClick(tool.page)} className="flex items-center gap-3 w-full p-3 rounded-xl bg-white/5 text-sm font-bold text-white capitalize text-left">
+                        {tool.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-        <button 
-          className="md:hidden p-2 text-zinc-400 hover:text-white transition-colors" 
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X size={26} /> : <Menu size={26} />}
-        </button>
+                <div className="pt-4 border-t border-white/5 flex flex-col gap-3">
+                  <button onClick={() => handleNavClick('auth')} className="w-full bg-white/5 text-white py-3 rounded-xl font-bold text-sm">Sign In</button>
+                  <button onClick={() => handleNavClick('auth')} className="w-full bg-white text-black py-3 rounded-xl font-bold text-sm">Get Started</button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.nav>
       </div>
-
-      {/* Mobile Menu Dropdown */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div 
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-zinc-900 bg-zinc-950/95 backdrop-blur-xl overflow-hidden px-6 py-6 flex flex-col gap-5 text-left"
-          >
-            <a href={getDevPath("/")} className="text-sm font-bold uppercase tracking-[0.15em] text-zinc-400 hover:text-white" onClick={() => setIsOpen(false)}>Vision</a>
-            
-            <div className="flex flex-col gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">Products</span>
-              {products.map(p => (
-                <a key={p.title} href={p.path} className="flex items-center gap-3 py-1.5 pl-3 border-l border-zinc-800 hover:border-zinc-500 transition-all text-xs font-semibold text-zinc-400 hover:text-white uppercase tracking-[0.15em]" onClick={() => setIsOpen(false)}>
-                  <span className="text-zinc-500">{p.icon}</span>
-                  {p.title}
-                </a>
-              ))}
-            </div>
-
-            <a href="#downloader" className="text-sm font-bold uppercase tracking-[0.15em] text-zinc-400 hover:text-white" onClick={() => setIsOpen(false)}>Downloader</a>
-            <a href="#about" className="text-sm font-bold uppercase tracking-[0.15em] text-zinc-400 hover:text-white" onClick={() => setIsOpen(false)}>About</a>
-            <a href="#contact" className="text-sm font-bold uppercase tracking-[0.15em] text-zinc-400 hover:text-white" onClick={() => setIsOpen(false)}>Contact</a>
-            
-            <div className="pt-4 border-t border-zinc-900">
-              {signupButtonElement}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+    </header>
   )
 }
