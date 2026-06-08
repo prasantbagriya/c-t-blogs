@@ -536,6 +536,28 @@ app.use('/uploads', express.static(path.join(__dirname, '../dist/uploads'), { ma
 app.use('/uploads', express.static(path.join(__dirname, '../blog/public/uploads'), { maxAge: '30d' }));
 app.use('/uploads', express.static(path.join(__dirname, '../blog/.next/standalone/public/uploads'), { maxAge: '30d' }));
 
+// Playbook App Routing
+app.use('/playbook', express.static(path.join(__dirname, '../Playbook/dist'), {
+  maxAge: '0',
+  setHeaders: (res, filepath) => {
+    if (filepath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=2592000');
+    }
+  }
+}));
+
+app.get('/playbook/*', (req, res) => {
+  const playbookIndexPath = path.join(__dirname, '../Playbook/dist/index.html');
+  if (fs.existsSync(playbookIndexPath)) {
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    res.sendFile(playbookIndexPath);
+  } else {
+    res.status(404).send('Playbook not built yet.');
+  }
+});
+
 // Wildcard route to serve index.html for React routing
 app.get('*', (req, res) => {
   const indexPath = path.join(DIST_PATH, 'index.html');

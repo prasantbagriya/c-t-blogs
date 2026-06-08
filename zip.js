@@ -71,4 +71,14 @@ if (fs.existsSync('PB-Creative-Studio')) {
   });
 }
 
+// Add Playbook directory (excluding node_modules)
+if (fs.existsSync('Playbook')) {
+  archive.glob('Playbook/**', {
+    dot: true,
+    ignore: [
+      'Playbook/node_modules/**'
+    ]
+  });
+}
+
 archive.finalize();
