@@ -5,8 +5,8 @@ import {
   History, Activity, Shield, Zap
 } from "lucide-react"
 import axios from "axios"
-import Navbar from "./components/Navbar"
-import Footer from "./components/Footer"
+import GlobalNavbar from "./components/GlobalNavbar"
+import GlobalFooter from "./components/GlobalFooter"
 import AboutSection from "./components/AboutSection"
 import ContactSection from "./components/ContactSection"
 import SeoContent from "./components/SeoContent"
@@ -58,7 +58,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#030303] text-zinc-200 font-outfit selection:bg-white/10 selection:text-white">
-      <Navbar />
+      <GlobalNavbar />
 
       <main className="relative z-10">
         <section id="downloader" className="relative min-h-screen flex flex-col justify-center items-center pt-24 pb-20 md:pt-32 md:pb-24 border-b border-zinc-900 bg-[#030303]">
@@ -252,7 +252,7 @@ function App() {
         <ContactSection />
       </main>
 
-      <Footer />
+      <GlobalFooter />
     </div>
   )
 }

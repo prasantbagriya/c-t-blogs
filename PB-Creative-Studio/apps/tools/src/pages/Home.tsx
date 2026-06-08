@@ -90,7 +90,7 @@ const Home = () => {
 
             {/* Features */}
             <section className="py-16 mt-16 border-t border-white/5">
-                <h2 className="text-2xl font-bold mb-8 border-l-4 border-indigo-500 pl-4">Why TopStore Tools?</h2>
+                <h2 className="text-2xl font-bold mb-8 border-l-4 border-indigo-500 pl-4">Why ChatWizs Tools?</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="bg-white/5 border border-white/5 rounded-2xl p-6">
                         <h4 className="text-lg font-semibold mb-2">🔒 Privacy First</h4>

@@ -40,16 +40,13 @@ export default function Navbar({ onNavigate }: { onNavigate?: (page: string) => 
     setIsCompanyOpen(false)
   }
 
-  const navLinks = [
+    const navLinks = [
     { label: 'Blog', page: 'blog' },
-    { label: 'Stories', page: 'stories' },
-    { label: 'Search', page: 'search' },
     { label: 'ChatWizs', page: 'landing' },
-    { label: 'Playbook', page: 'playbook' },
-    { label: 'Contact', page: 'contact' }
+    { label: 'Playbook', page: 'playbook' }
   ]
 
-  const toolsList = [
+    const toolsList = [
     { label: 'Link Generator', page: 'whatsapp-link-generator', icon: LinkIcon, color: 'text-blue-400' },
     { label: 'Direct Message', page: 'whatsapp-direct-message', icon: MessageSquare, color: 'text-blue-400' },
     { label: 'Form Generator', page: 'whatsapp-form-generator', icon: FileText, color: 'text-emerald-400' },
@@ -57,17 +54,14 @@ export default function Navbar({ onNavigate }: { onNavigate?: (page: string) => 
     { label: 'Compound Growth', page: 'compound-interest', icon: TrendingUp, color: 'text-emerald-400' },
     { label: 'Prop Firm Calc', page: 'prop-firm', icon: Terminal, color: 'text-indigo-400' },
     { label: 'YouTube Downloader', page: 'youtubevideodownload', icon: Video, color: 'text-red-400' },
-    { label: 'Exam Portal', page: 'portal', icon: GraduationCap, color: 'text-indigo-400' },
-    { label: 'Playbook', page: 'playbook', icon: FileText, color: 'text-amber-400' }
+    { label: 'Exam Portal', page: 'portal', icon: GraduationCap, color: 'text-indigo-400' }
   ]
 
-  const companyList = [
+    const companyList = [
     { label: 'About Us', page: 'about' },
     { label: 'Contact Us', page: 'contact' },
-    { label: 'Editorial Policy', page: 'editorial-policy' },
-    { label: 'Fact Checking', page: 'fact-checking-policy' },
-    { label: 'Privacy Policy', page: 'privacy' },
-    { label: 'Terms of Service', page: 'terms' }
+    { label: 'Terms of Service', page: 'terms' },
+    { label: 'Privacy Policy', page: 'privacy' }
   ]
 
   return (
