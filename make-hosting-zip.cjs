@@ -49,6 +49,7 @@ if (fs.existsSync('dist')) {
 // ─────────────────────────────────────────────
 if (fs.existsSync('server')) {
   archive.glob('server/**/*', {
+    dot: true,
     ignore: [
       'server/node_modules/**',
       'server/uploads/**',
@@ -81,9 +82,16 @@ rootFiles.forEach(file => {
 // ─────────────────────────────────────────────
 if (fs.existsSync('blog/.next/standalone')) {
   archive.glob('blog/.next/standalone/**/*', {
+    dot: true,
     ignore: ['**/*.map']
   });
   console.log('✓ blog/.next/standalone/ added');
+}
+
+// Next.js static files MUST be inside standalone/.next/static to work properly
+if (fs.existsSync('blog/.next/static')) {
+  archive.directory('blog/.next/static/', 'blog/.next/standalone/.next/static');
+  console.log('✓ blog/.next/static/ added (mapped to standalone/.next/static)');
 }
 
 if (fs.existsSync('blog/public')) {
@@ -108,6 +116,7 @@ if (fs.existsSync('blog/data')) {
 // ─────────────────────────────────────────────
 if (fs.existsSync('PB-Creative-Studio')) {
   archive.glob('PB-Creative-Studio/**/*', {
+    dot: true,
     ignore: [
       'PB-Creative-Studio/node_modules/**',
       'PB-Creative-Studio/**/node_modules/**',
@@ -118,6 +127,14 @@ if (fs.existsSync('PB-Creative-Studio')) {
     ]
   });
   console.log('✓ PB-Creative-Studio/ added (node_modules excluded)');
+}
+
+// ─────────────────────────────────────────────
+// 5.5 Playbook - Built React App
+// ─────────────────────────────────────────────
+if (fs.existsSync('Playbook/dist')) {
+  archive.directory('Playbook/dist/', 'Playbook/dist');
+  console.log('✓ Playbook/dist/ added');
 }
 
 // ─────────────────────────────────────────────

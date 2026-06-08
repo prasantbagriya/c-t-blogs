@@ -207,7 +207,7 @@ export default function Navbar() {
                 className="md:hidden border-t border-white/5 bg-black/95 backdrop-blur-md overflow-hidden p-6 space-y-6"
               >
                 <div className="grid grid-cols-2 gap-4">
-                  {[...navLinks, ...companyList].map(link => (
+                  {[...navLinks, ...portalList].map(link => (
                     <button key={link.page} onClick={() => handleNavClick(link.page)} className="text-left text-gray-400 hover:text-white font-bold text-sm py-2">{link.label}</button>
                   ))}
                 </div>
