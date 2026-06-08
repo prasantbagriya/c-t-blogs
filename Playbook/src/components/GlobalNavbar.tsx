@@ -44,9 +44,10 @@ export default function Navbar({ onNavigate, user }: { onNavigate?: (page: strin
   }
 
     const navLinks = [
+    { label: 'ChatWizs Home', page: 'landing' },
     { label: 'Blog', page: 'blog' },
-    { label: 'ChatWizs', page: 'landing' },
-    { label: 'Playbook', page: 'playbook' }
+    { label: 'Playbook', page: 'playbook' },
+    { label: 'Exam Portal', page: 'portal' }
   ]
 
     const toolsList = [
