@@ -18,12 +18,25 @@ const staticRoutes = [
   '/whatsapp-link-generator',
   '/whatsapp-direct-message',
   '/whatsapp-form-generator',
+  '/tool',
   '/tool/sip-calculator',
   '/tool/compound-interest',
   '/tool/prop-firm',
   '/youtubevideodownload',
   '/get-started',
-  '/blog'
+  '/blog',
+  '/playbook',
+  '/playbook/login',
+  '/playbook/admin',
+  '/portal',
+  '/portal/student/login',
+  '/portal/admin/login',
+  '/portal/about-us',
+  '/portal/contact-us',
+  '/portal/privacy-policy',
+  '/portal/terms-and-conditions',
+  '/portal/cookies-policy',
+  '/portal/refund-policy'
 ];
 
 async function generateSitemap() {

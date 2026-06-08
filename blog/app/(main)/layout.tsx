@@ -6,7 +6,8 @@ import Link from 'next/link';
 import Copyright from './Copyright';
 import MobileNav from '@/components/MobileNav';
 import SliderInitializer from '@/components/SliderInitializer';
-import BlogFooter from '@/components/BlogFooter';
+import GlobalNavbar from '@/components/GlobalNavbar';
+import GlobalFooter from '@/components/GlobalFooter';
 
 // FIX: Load ONLY the font weights actually used (400,600,700,800)
 // Reduces font payload by ~40% vs loading all weights
@@ -255,27 +256,14 @@ export default function RootLayout({
           
           body { margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; background: var(--background); color: var(--foreground); -webkit-font-smoothing: antialiased; text-rendering: optimizeSpeed; }
           .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 1.25rem; }
-          body > header { position: sticky; top: 0; z-index: 100; height: var(--header-height); background: rgba(2,6,23,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); }
-          body > header.glass-panel { border-radius: 0; border-left: 0; border-right: 0; border-top: 0; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
-          body > header > nav { display: flex; justify-content: space-between; align-items: center; height: var(--header-height); }
-          body > header a[aria-label="ChatWizs Home"] { display: inline-flex; align-items: center; color: #ffffff; font-size: 1.5rem; line-height: 1; font-weight: 800; letter-spacing: -0.03em; text-decoration: none; }
-          body > header .desktop-nav a { color: rgba(255,255,255,0.7); font-weight: 600; text-decoration: none; white-space: nowrap; transition: color 0.2s; }
-          body > header .desktop-nav a:hover { color: #ffffff; }
-          body > header .desktop-nav a.nav-cta { color: #000000; background: #ffffff; padding: 0.5rem 1.25rem; border-radius: 0.75rem; font-size: 0.875rem; font-weight: 700; }
-          body > header .desktop-nav a.nav-cta:hover { background: #e2e8f0; }
+
           .hero-skeleton { text-align: center; padding: 3rem 0; min-height: 200px; contain: layout paint; }
           @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
           .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
           main { min-height: 80vh; }
           .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
           .sr-only:focus { position: static; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; }
-          .desktop-nav { display: flex; gap: 1.5rem; list-style: none; align-items: center; margin: 0; padding: 0; }
-          .mobile-nav-btn { display: none; }
-          @media (max-width: 768px) {
-            .desktop-nav { display: none; }
-            .mobile-nav-btn { display: flex; align-items: center; margin-left: auto; }
-            body > header > nav { padding-left: 1rem; padding-right: 1rem; }
-          }
+
         ` }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
         <link rel="alternate" type="application/rss+xml" title="ChatWizs RSS Feed" href="/feed.xml" />
@@ -339,32 +327,11 @@ export default function RootLayout({
         <a href="#main-content" className="sr-only" style={{ top: '1rem', left: '1rem', zIndex: 9999, background: 'var(--primary)', color: 'white', padding: '0.5rem 1rem', borderRadius: 'var(--radius)', textDecoration: 'none' }}>
           Skip to content
         </a>
-        <header className="glass-panel sticky top-0 z-[100] m-0">
-          <nav className="container flex justify-between items-center h-[var(--header-height)]" aria-label="Main Navigation">
-            <a href="/" className="text-2xl font-extrabold tracking-tight text-white no-underline" aria-label="ChatWizs Home">
-              Chat<span style={{color:'#60a5fa'}}>Wizs</span>
-            </a>
-            {/* Desktop Nav */}
-            <ul className="desktop-nav" role="list">
-              <li><a href="/" className="font-semibold no-underline">Home</a></li>
-              <li><Link href="/blog" className="font-semibold no-underline">Blog</Link></li>
-              <li><Link href="/stories" className="font-semibold no-underline">Stories</Link></li>
-              <li><a href="/youtubevideodownload" className="font-semibold no-underline">YT Downloader</a></li>
-              <li><a href="/playbook/" className="font-semibold no-underline">Playbook</a></li>
-              <li><a href="/about" className="font-semibold no-underline">About</a></li>
-              <li><Link href="/search" className="font-semibold no-underline flex items-center gap-1" aria-label="Search articles">🔍 Search</Link></li>
-              <li><a href="/contact" className="nav-cta text-sm font-bold no-underline">Contact</a></li>
-            </ul>
-            {/* Mobile Nav — hamburger */}
-            <div className="mobile-nav-btn">
-              <MobileNav />
-            </div>
-          </nav>
-        </header>
-        <main id="main-content" className="container">
+        <GlobalNavbar />
+        <main id="main-content" className="container pt-32">
           {children}
         </main>
-        <BlogFooter />
+        <GlobalFooter />
       </body>
     </html>
   );

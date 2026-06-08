@@ -12,6 +12,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="compound-interest-calculator" element={<CompoundInterest />} />
+          <Route path="compound-interest" element={<CompoundInterest />} />
           <Route path="sip-calculator" element={<SIPCalculator />} />
           <Route path="prop-firm" element={<PropFirm />} />
         </Route>

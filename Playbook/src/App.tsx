@@ -10,7 +10,8 @@ import { auth } from "./lib/firebase";
 import PlaybookPage from "./pages/PlaybookPage";
 import AdminPage from "./pages/AdminPage";
 import LoginPage from "./pages/LoginPage";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/GlobalNavbar";
+import Footer from "./components/GlobalFooter";
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -36,7 +37,7 @@ export default function App() {
     <BrowserRouter>
       <div className="min-h-screen bg-slate-50 flex flex-col">
         <Navbar user={user} />
-        <main className="flex-grow">
+        <main className="grow">
           <Routes>
             <Route path="/" element={<Navigate to="/playbook" replace />} />
             <Route path="/playbook" element={<PlaybookPage />} />
@@ -47,9 +48,7 @@ export default function App() {
             />
           </Routes>
         </main>
-        <footer className="bg-white border-t py-8 px-4 text-center text-gray-500 text-sm">
-          &copy; {new Date().getFullYear()} Playbook Store. Proper Design Copy Shalom.
-        </footer>
+        <Footer />
       </div>
     </BrowserRouter>
   );

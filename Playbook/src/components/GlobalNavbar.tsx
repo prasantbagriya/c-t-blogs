@@ -1,51 +1,54 @@
+"use client"
+
 import React, { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, Zap, ChevronDown, Link as LinkIcon, MessageSquare, FileText, Activity, TrendingUp, Terminal, Video, GraduationCap } from "lucide-react"
+import { Menu, X, Zap, ChevronDown, Link as LinkIcon, MessageSquare, FileText, Activity, TrendingUp, Terminal, Video, GraduationCap, Crown, LogOut } from "lucide-react"
+import { motion, AnimatePresence } from "motion/react"
+import { Link } from "react-router-dom"
+import { User, signOut } from "firebase/auth"
+import { auth } from "../lib/firebase"
 
-const getDevPath = (path) => {
-  if (import.meta.env && import.meta.env.DEV) {
-    if (path.startsWith('/youtubevideodownload')) return `http://localhost:5173${path}`
-    if (path.startsWith('/tool')) return `http://localhost:5175${path}`
-    if (path.startsWith('/portal')) return `http://localhost:5176${path}`
-  }
-  return path
-}
-
-export default function Navbar() {
+export default function Navbar({ onNavigate, user }: { onNavigate?: (page: string) => void, user?: User | null }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isToolsOpen, setIsToolsOpen] = useState(false)
   const [isCompanyOpen, setIsCompanyOpen] = useState(false)
 
-  const handleNavClick = (page) => {
+  const handleNavClick = (page: string) => {
     if (page === 'blog') {
       window.location.href = '/blog';
       return;
     }
     if (page === 'portal') {
-      window.location.href = getDevPath('/portal/');
+      window.location.href = '/portal/';
       return;
     }
     if (page === 'youtubevideodownload') {
-      window.location.href = getDevPath('/youtubevideodownload/');
+      window.location.href = '/youtubevideodownload';
       return;
     }
-    // All tool/ sub-pages route to the Tools app
+    if (page === 'playbook') {
+      window.location.href = '/playbook/';
+      return;
+    }
     const toolPages = [
       'prop-firm', 'sip-calculator', 'compound-interest',
       'whatsapp-link-generator', 'whatsapp-direct-message', 'whatsapp-form-generator'
     ];
     if (toolPages.includes(page)) {
-      window.location.href = getDevPath(`/tool/${page}`);
+      window.location.href = `/tool/${page}`;
       return;
     }
-    window.location.href = `/${page === 'landing' ? '' : page}`;
+    onNavigate?.(page)
+    setIsMenuOpen(false)
+    setIsToolsOpen(false)
+    setIsCompanyOpen(false)
   }
 
   const navLinks = [
-    { label: 'YT Downloader', page: 'youtubevideodownload' },
+    { label: 'Playbook', page: 'playbook' },
     { label: 'ChatWizs Home', page: 'landing' },
     { label: 'Blog', page: 'blog' },
-    { label: 'Playbook', page: 'playbook' },
+    { label: 'Artists', page: 'artists' },
+    { label: 'Success Stories', page: 'success-stories' },
     { label: 'Contact', page: 'contact' }
   ]
 
@@ -71,12 +74,12 @@ export default function Navbar() {
   ]
 
   return (
-    <header className="fixed top-6 left-0 right-0 z-100 w-full px-4 pointer-events-none">
+    <header className="fixed top-6 left-0 right-0 z-50 w-full px-4 pointer-events-none">
       <div className="w-full max-w-7xl mx-auto pointer-events-auto">
         <motion.nav
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="relative bg-zinc-950/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl"
+          className="relative bg-slate-950/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl"
         >
           {/* Animated border glow */}
           <motion.div
@@ -113,7 +116,7 @@ export default function Navbar() {
                   onMouseLeave={() => setIsCompanyOpen(false)}
                 >
                   <button className="flex items-center gap-1.5 text-sm font-medium text-gray-400 hover:text-white transition-colors py-4">
-                    Company <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isCompanyOpen ? 'rotate-180' : ''}`} />
+                    Playbook <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isCompanyOpen ? 'rotate-180' : ''}`} />
                   </button>
                   <AnimatePresence>
                     {isCompanyOpen && (
@@ -121,9 +124,14 @@ export default function Navbar() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        className="absolute top-[80%] left-1/2 -translate-x-1/2 w-48 p-2 bg-zinc-950 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl"
+                        className="absolute top-[80%] left-1/2 -translate-x-1/2 w-48 p-2 bg-slate-950 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl"
                       >
-                        {companyList.map(comp => (
+                        {[
+                          { label: 'Admin Portal', page: 'playbook/admin' },
+                          { label: 'Login', page: 'playbook/login' },
+                          { label: 'About Us', page: 'about' },
+                          { label: 'Contact Us', page: 'contact' },
+                        ].map(comp => (
                           <button
                             key={comp.page}
                             onClick={() => handleNavClick(comp.page)}
@@ -152,7 +160,7 @@ export default function Navbar() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        className="absolute top-[80%] left-1/2 -translate-x-1/2 w-64 p-2 bg-zinc-950 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl"
+                        className="absolute top-[80%] left-1/2 -translate-x-1/2 w-64 p-2 bg-slate-950 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl"
                       >
                         {toolsList.map(tool => (
                           <button
@@ -160,7 +168,7 @@ export default function Navbar() {
                             onClick={() => handleNavClick(tool.page)}
                             className="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-white/5 transition-colors group text-left"
                           >
-                            <div className={`w-8 h-8 bg-zinc-900 rounded-lg flex items-center justify-center ${tool.color} group-hover:scale-110 transition-transform`}>
+                            <div className={`w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center ${tool.color} group-hover:scale-110 transition-transform`}>
                               <tool.icon className="w-4 h-4" />
                             </div>
                             <span className="text-sm font-bold text-white">{tool.label}</span>
@@ -173,15 +181,48 @@ export default function Navbar() {
               </div>
 
               <div className="hidden md:flex items-center space-x-4">
-                <button onClick={() => handleNavClick('auth')} className="text-gray-400 hover:text-white font-bold text-sm bg-transparent">
-                  Sign In
-                </button>
-                <button
-                  onClick={() => handleNavClick('auth')}
-                  className="bg-white text-black px-5 py-2 rounded-xl font-bold hover:bg-gray-100 transition-all text-sm shadow-xl active:scale-95"
-                >
-                  Get Started
-                </button>
+                {user ? (
+                  <div className="flex items-center gap-3">
+                    <Link 
+                      to="/admin" 
+                      className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-slate-400 hover:bg-white/5 rounded-xl transition-all flex items-center gap-2"
+                    >
+                      <Crown className="w-3.5 h-3.5 text-indigo-400" />
+                      Manage
+                    </Link>
+                    <div className="h-4 w-px bg-white/10 mx-1" />
+                    <div className="flex items-center gap-3 bg-white/5 p-1 pr-4 rounded-full border border-white/10">
+                      <div className="w-8 h-8 bg-black rounded-full border border-white/10 overflow-hidden shadow-sm">
+                        {user.photoURL ? (
+                          <img src={user.photoURL} alt="User" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center font-bold text-slate-400 text-xs">
+                            {user.email?.charAt(0).toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                      <button
+                        onClick={() => signOut(auth)}
+                        className="text-slate-400 hover:text-red-500 transition-colors p-1"
+                        title="Sign Out"
+                      >
+                        <LogOut className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <button onClick={() => handleNavClick('auth')} className="text-gray-400 hover:text-white font-bold text-sm bg-transparent">
+                      Sign In
+                    </button>
+                    <button
+                      onClick={() => handleNavClick('auth')}
+                      className="bg-white text-black px-5 py-2 rounded-xl font-bold hover:bg-gray-100 transition-all text-sm shadow-xl active:scale-95"
+                    >
+                      Get Started
+                    </button>
+                  </>
+                )}
               </div>
 
               {/* Mobile Controls */}

@@ -71,7 +71,7 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
 
   return (
     <footer className="relative bg-black border-t border-white/5 pt-16 pb-10 overflow-hidden">
-      <div className="absolute top-0 left-1/4 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
+      <div className="absolute top-0 left-1/4 w-1/2 h-px bg-linear-to-r from-transparent via-blue-500/50 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="grid grid-cols-2 lg:grid-cols-6 gap-12 mb-16">

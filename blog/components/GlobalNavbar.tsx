@@ -1,50 +1,50 @@
+"use client"
+
 import React, { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, Zap, ChevronDown, Link as LinkIcon, MessageSquare, FileText, Activity, TrendingUp, Terminal, Video, GraduationCap } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 
-const getDevPath = (path) => {
-  if (import.meta.env && import.meta.env.DEV) {
-    if (path.startsWith('/youtubevideodownload')) return `http://localhost:5173${path}`
-    if (path.startsWith('/tool')) return `http://localhost:5175${path}`
-    if (path.startsWith('/portal')) return `http://localhost:5176${path}`
-  }
-  return path
-}
-
-export default function Navbar() {
+export default function Navbar({ onNavigate }: { onNavigate?: (page: string) => void }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isToolsOpen, setIsToolsOpen] = useState(false)
   const [isCompanyOpen, setIsCompanyOpen] = useState(false)
 
-  const handleNavClick = (page) => {
+  const handleNavClick = (page: string) => {
     if (page === 'blog') {
       window.location.href = '/blog';
       return;
     }
     if (page === 'portal') {
-      window.location.href = getDevPath('/portal/');
+      window.location.href = '/portal/';
       return;
     }
     if (page === 'youtubevideodownload') {
-      window.location.href = getDevPath('/youtubevideodownload/');
+      window.location.href = '/youtubevideodownload';
       return;
     }
-    // All tool/ sub-pages route to the Tools app
+    if (page === 'playbook') {
+      window.location.href = '/playbook/';
+      return;
+    }
     const toolPages = [
       'prop-firm', 'sip-calculator', 'compound-interest',
       'whatsapp-link-generator', 'whatsapp-direct-message', 'whatsapp-form-generator'
     ];
     if (toolPages.includes(page)) {
-      window.location.href = getDevPath(`/tool/${page}`);
+      window.location.href = `/tool/${page}`;
       return;
     }
     window.location.href = `/${page === 'landing' ? '' : page}`;
+    setIsMenuOpen(false)
+    setIsToolsOpen(false)
+    setIsCompanyOpen(false)
   }
 
   const navLinks = [
-    { label: 'YT Downloader', page: 'youtubevideodownload' },
-    { label: 'ChatWizs Home', page: 'landing' },
     { label: 'Blog', page: 'blog' },
+    { label: 'Stories', page: 'stories' },
+    { label: 'Search', page: 'search' },
+    { label: 'ChatWizs', page: 'landing' },
     { label: 'Playbook', page: 'playbook' },
     { label: 'Contact', page: 'contact' }
   ]
@@ -71,12 +71,12 @@ export default function Navbar() {
   ]
 
   return (
-    <header className="fixed top-6 left-0 right-0 z-100 w-full px-4 pointer-events-none">
+    <header className="fixed top-6 left-0 right-0 z-50 w-full px-4 pointer-events-none">
       <div className="w-full max-w-7xl mx-auto pointer-events-auto">
         <motion.nav
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="relative bg-zinc-950/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl"
+          className="relative bg-slate-950/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl"
         >
           {/* Animated border glow */}
           <motion.div
@@ -113,7 +113,7 @@ export default function Navbar() {
                   onMouseLeave={() => setIsCompanyOpen(false)}
                 >
                   <button className="flex items-center gap-1.5 text-sm font-medium text-gray-400 hover:text-white transition-colors py-4">
-                    Company <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isCompanyOpen ? 'rotate-180' : ''}`} />
+                    Categories <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isCompanyOpen ? 'rotate-180' : ''}`} />
                   </button>
                   <AnimatePresence>
                     {isCompanyOpen && (
@@ -121,9 +121,18 @@ export default function Navbar() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        className="absolute top-[80%] left-1/2 -translate-x-1/2 w-48 p-2 bg-zinc-950 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl"
+                        className="absolute top-[80%] left-1/2 -translate-x-1/2 w-48 p-2 bg-slate-950 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl"
                       >
-                        {companyList.map(comp => (
+                        {[
+                          { label: 'General', page: 'category/general' },
+                          { label: 'Stock Market', page: 'category/stock-market' },
+                          { label: 'Cricket', page: 'category/cricket' },
+                          { label: 'Tech', page: 'category/tech' },
+                          { label: 'About Us', page: 'about' },
+                          { label: 'Contact Us', page: 'contact' },
+                          { label: 'Terms', page: 'terms' },
+                          { label: 'Privacy', page: 'privacy' },
+                        ].map(comp => (
                           <button
                             key={comp.page}
                             onClick={() => handleNavClick(comp.page)}
@@ -152,7 +161,7 @@ export default function Navbar() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        className="absolute top-[80%] left-1/2 -translate-x-1/2 w-64 p-2 bg-zinc-950 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl"
+                        className="absolute top-[80%] left-1/2 -translate-x-1/2 w-64 p-2 bg-slate-950 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl"
                       >
                         {toolsList.map(tool => (
                           <button
@@ -160,7 +169,7 @@ export default function Navbar() {
                             onClick={() => handleNavClick(tool.page)}
                             className="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-white/5 transition-colors group text-left"
                           >
-                            <div className={`w-8 h-8 bg-zinc-900 rounded-lg flex items-center justify-center ${tool.color} group-hover:scale-110 transition-transform`}>
+                            <div className={`w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center ${tool.color} group-hover:scale-110 transition-transform`}>
                               <tool.icon className="w-4 h-4" />
                             </div>
                             <span className="text-sm font-bold text-white">{tool.label}</span>

@@ -113,7 +113,7 @@ export default function Navbar() {
                   onMouseLeave={() => setIsCompanyOpen(false)}
                 >
                   <button className="flex items-center gap-1.5 text-sm font-medium text-gray-400 hover:text-white transition-colors py-4">
-                    Company <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isCompanyOpen ? 'rotate-180' : ''}`} />
+                    Exam Portal <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isCompanyOpen ? 'rotate-180' : ''}`} />
                   </button>
                   <AnimatePresence>
                     {isCompanyOpen && (
@@ -123,7 +123,12 @@ export default function Navbar() {
                         exit={{ opacity: 0, y: 10 }}
                         className="absolute top-[80%] left-1/2 -translate-x-1/2 w-48 p-2 bg-zinc-950 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl"
                       >
-                        {companyList.map(comp => (
+                        {[
+                          { label: 'About Us', page: 'portal/about-us' },
+                          { label: 'Contact Us', page: 'portal/contact-us' },
+                          { label: 'Admin Portal', page: 'portal/admin/login' },
+                          { label: 'Student Login', page: 'portal/student/login' }
+                        ].map(comp => (
                           <button
                             key={comp.page}
                             onClick={() => handleNavClick(comp.page)}

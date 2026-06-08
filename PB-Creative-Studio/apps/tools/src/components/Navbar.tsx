@@ -1,6 +1,6 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, Zap, ChevronDown, Link as LinkIcon, MessageSquare, MessageSquareText, FileText, Activity, TrendingUp, Terminal, Video, GraduationCap } from "lucide-react"
+import { Menu, X, Zap, ChevronDown, Link as LinkIcon, MessageSquareText, FileText, Activity, TrendingUp, Terminal, Video, GraduationCap } from "lucide-react"
 
 const getDevPath = (path: string) => {
   if (import.meta.env && import.meta.env.DEV) {
@@ -57,14 +57,15 @@ export default function Navbar() {
 
   const companyList = [
     { label: 'About Us', page: 'about' },
-    { label: 'Careers', page: 'careers' },
-    { label: 'Artists', page: 'artists' },
+    { label: 'Contact Us', page: 'contact' },
+    { label: 'Editorial Policy', page: 'editorial-policy' },
+    { label: 'Fact Checking', page: 'fact-checking-policy' },
     { label: 'Privacy Policy', page: 'privacy' },
     { label: 'Terms of Service', page: 'terms' }
   ]
 
   return (
-    <header className="fixed top-6 left-0 right-0 z-[100] w-full px-4 pointer-events-none">
+    <header className="fixed top-6 left-0 right-0 z-100 w-full px-4 pointer-events-none">
       <div className="w-full max-w-7xl mx-auto pointer-events-auto">
         <motion.nav
           initial={{ y: -20, opacity: 0 }}

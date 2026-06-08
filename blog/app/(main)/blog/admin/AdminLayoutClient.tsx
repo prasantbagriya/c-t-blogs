@@ -37,23 +37,24 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
 
   return (
     <div style={{ 
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      zIndex: 1000,
       display: 'flex', 
       background: '#f8fafc', 
       color: '#0f172a', 
-      fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      minHeight: 'calc(100vh - 400px)',
+      borderRadius: '12px',
+      overflow: 'hidden',
+      border: '1px solid #e2e8f0',
+      position: 'relative',
+      margin: '0 auto',
+      width: '100%'
     }}>
       {/* ✅ Mobile Overlay / Backdrop */}
       {isMobile && isSidebarOpen && (
         <div 
           onClick={() => setIsSidebarOpen(false)}
           style={{
-            position: 'fixed',
+            position: 'absolute',
             inset: 0,
             background: 'rgba(15, 23, 42, 0.4)',
             backdropFilter: 'blur(4px)',
@@ -70,7 +71,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
         borderRight: '1px solid #e2e8f0', 
         display: 'flex', 
         flexDirection: 'column', 
-        position: 'fixed', 
+        position: 'absolute', 
         top: 0, 
         bottom: 0, 
         left: 0,

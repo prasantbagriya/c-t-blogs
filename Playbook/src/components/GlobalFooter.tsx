@@ -1,18 +1,18 @@
 "use client"
 
 import React, { useState } from "react"
-import { usePathname } from "next/navigation"
-import { Zap } from "lucide-react"
-import { Instagram, Twitter, Linkedin, Youtube, Facebook } from "./BrandIcons"
+import { motion } from "motion/react"
+import {
+  Zap, Mail, Phone, MapPin, ArrowRight
+} from "lucide-react"
+const Twitter = ({ className }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>;
+const Facebook = ({ className }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>;
+const Instagram = ({ className }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>;
+const Linkedin = ({ className }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>;
+const Youtube = ({ className }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>;
 
-export default function BlogFooter() {
-  const pathname = usePathname();
-  const [email, setEmail] = useState("");
-
-  // Don't render the public footer in the admin panel
-  if (pathname?.startsWith('/blog/admin')) {
-    return null;
-  }
+export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: string) => void }) {
+  const [email, setEmail] = useState("")
 
   const handleNavClick = (page: string) => {
     if (page === 'blog') {
@@ -39,17 +39,21 @@ export default function BlogFooter() {
       window.location.href = `/tool/${page}`;
       return;
     }
-    window.location.href = `/${page === 'landing' ? '' : page}`;
+    if (onNavigate) {
+      onNavigate(page);
+    } else {
+      window.location.href = `/${page === 'landing' ? '' : page}`;
+    }
   }
 
   const footerSections = [
     {
       title: "Navigation",
       links: [
-        { label: "Home", page: "landing" },
-        { label: "Blog", page: "blog" },
-        { label: "Success Stories", page: "success-stories" },
         { label: "Playbook", page: "playbook" },
+        { label: "ChatWizs Home", page: "landing" },
+        { label: "Artists", page: "artists" },
+        { label: "Success Stories", page: "success-stories" },
         { label: "Careers", page: "careers" }
       ]
     },
@@ -69,8 +73,10 @@ export default function BlogFooter() {
     {
       title: "Support",
       links: [
-        { label: "Help Center", page: "help" },
-        { label: "Editorial Guidelines", page: "editorial-policy" },
+        { label: "About Us", page: "about" },
+        { label: "Contact Us", page: "contact" },
+        { label: "Editorial Policy", page: "editorial-policy" },
+        { label: "Fact Checking", page: "fact-checking-policy" },
         { label: "Privacy Policy", page: "privacy" },
         { label: "Terms of Service", page: "terms" }
       ]
@@ -78,10 +84,10 @@ export default function BlogFooter() {
   ]
 
   return (
-    <footer className="relative bg-black border-t border-white/5 pt-16 pb-10 overflow-hidden mt-12 w-full">
+    <footer className="relative bg-black border-t border-white/5 pt-16 pb-10 overflow-hidden">
       <div className="absolute top-0 left-1/4 w-1/2 h-px bg-linear-to-r from-transparent via-blue-500/50 to-transparent" />
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10 w-full">
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="grid grid-cols-2 lg:grid-cols-6 gap-12 mb-16">
 
           <div className="col-span-2 lg:col-span-2 space-y-8">
@@ -113,15 +119,15 @@ export default function BlogFooter() {
 
           {footerSections.map((section) => {
             return (
-              <div key={section.title} className="col-span-1 lg:col-span-1">
+              <div key={section.title} className="lg:col-span-1">
                 <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-6">{section.title}</h4>
-                <ul className="space-y-4 m-0 p-0" style={{ listStyle: 'none' }}>
+                <ul className="space-y-4">
                   {section.links.map((link) => {
                     return (
-                      <li key={link.label} className="m-0 p-0" style={{ display: 'flex' }}>
+                      <li key={link.label}>
                         <button
                           onClick={() => handleNavClick(link.page)}
-                          className="text-sm text-gray-400 hover:text-white hover:translate-x-1 transition-all text-left bg-transparent border-none p-0 cursor-pointer"
+                          className="text-sm text-gray-400 hover:text-white hover:translate-x-1 transition-all text-left"
                         >
                           {link.label}
                         </button>
@@ -133,14 +139,14 @@ export default function BlogFooter() {
             )
           })}
 
-          <div className="col-span-2 lg:col-span-1">
+          <div className="lg:col-span-1">
             <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-6">Stay Updated</h4>
             <div className="space-y-4">
-              <p className="text-xs text-gray-500 leading-relaxed m-0">
+              <p className="text-xs text-gray-500 leading-relaxed">
                 Get the latest AI tips and product updates delivered to your inbox.
               </p>
               <form
-                className="relative group m-0"
+                className="relative group"
                 onSubmit={async (e) => {
                   e.preventDefault();
                   if (!email) return;
@@ -170,7 +176,7 @@ export default function BlogFooter() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                <button className="absolute right-2 top-2 bottom-2 bg-white text-black px-4 rounded-lg font-bold text-[10px] uppercase hover:bg-gray-100 transition-colors border-none cursor-pointer" type="submit">
+                <button className="absolute right-2 top-2 bottom-2 bg-white text-black px-4 rounded-lg font-bold text-[10px] uppercase hover:bg-gray-100 transition-colors" type="submit">
                   Join
                 </button>
               </form>
@@ -179,7 +185,7 @@ export default function BlogFooter() {
         </div>
 
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-xs text-gray-500 font-medium m-0">
+          <p className="text-xs text-gray-500 font-medium">
             © {new Date().getFullYear()} ChatWizs. All rights reserved.
           </p>
           <div className="flex items-center gap-6">

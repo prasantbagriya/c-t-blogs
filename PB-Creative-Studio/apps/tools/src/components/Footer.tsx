@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { Zap } from "lucide-react"
 
 const Twitter = ({ className }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>;
@@ -66,8 +66,10 @@ export default function Footer() {
     {
       title: "Support",
       links: [
-        { label: "Help Center", page: "help" },
-        { label: "Tutorials", page: "tutorials" },
+        { label: "About Us", page: "about" },
+        { label: "Contact Us", page: "contact" },
+        { label: "Editorial Policy", page: "editorial-policy" },
+        { label: "Fact Checking", page: "fact-checking-policy" },
         { label: "Privacy Policy", page: "privacy" },
         { label: "Terms of Service", page: "terms" }
       ]
@@ -76,7 +78,7 @@ export default function Footer() {
 
   return (
     <footer className="relative bg-[#030303] border-t border-white/5 pt-16 pb-10 overflow-hidden">
-      <div className="absolute top-0 left-1/4 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
+      <div className="absolute top-0 left-1/4 w-1/2 h-px bg-linear-to-r from-transparent via-blue-500/50 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="grid grid-cols-2 lg:grid-cols-6 gap-12 mb-16">

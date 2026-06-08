@@ -37,6 +37,7 @@ const ignoreRules = [
 
 // Folders to include entirely (respecting ignores)
 archive.glob('dist/**', { ignore: ignoreRules });
+archive.glob('Playbook/dist/**', { ignore: ignoreRules });
 archive.glob('server/**', { ignore: ignoreRules });
 archive.glob('blog/.next/standalone/**', { ignore: ignoreRules });
 archive.glob('blog/public/**', { ignore: ignoreRules });
