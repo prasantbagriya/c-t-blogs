@@ -46,22 +46,42 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://chatwizs.com/careers</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://chatwizs.com/deletion</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://chatwizs.com/whatsapp-link-generator</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://chatwizs.com/sip-calculator</loc>
+    <loc>https://chatwizs.com/whatsapp-direct-message</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://chatwizs.com/compound-interest</loc>
+    <loc>https://chatwizs.com/whatsapp-form-generator</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://chatwizs.com/prop-firm</loc>
+    <loc>https://chatwizs.com/tool/sip-calculator</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://chatwizs.com/tool/compound-interest</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://chatwizs.com/tool/prop-firm</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -143,6 +163,12 @@
   <url>
     <loc>https://chatwizs.com/blog/chatwizs-review</loc>
     <lastmod>2026-06-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://chatwizs.com/blog/how-to-download-youtube-videos</loc>
+    <lastmod>2026-06-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

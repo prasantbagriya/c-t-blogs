@@ -25,6 +25,10 @@ export default function Navbar({ onNavigate }: { onNavigate?: (page: string) => 
       window.location.href = '/youtubevideodownload';
       return;
     }
+    if (page === 'playbook') {
+      window.location.href = '/playbook/';
+      return;
+    }
     if (['prop-firm', 'sip-calculator', 'compound-interest'].includes(page)) {
       window.location.href = `/tool/${page}`;
       return;
@@ -51,7 +55,8 @@ export default function Navbar({ onNavigate }: { onNavigate?: (page: string) => 
     { label: 'Compound Growth', page: 'compound-interest', icon: TrendingUp, color: 'text-emerald-400' },
     { label: 'Prop Firm Calc', page: 'prop-firm', icon: Terminal, color: 'text-indigo-400' },
     { label: 'YouTube Downloader', page: 'youtubevideodownload', icon: Video, color: 'text-red-400' },
-    { label: 'Exam Portal', page: 'portal', icon: GraduationCap, color: 'text-indigo-400' }
+    { label: 'Exam Portal', page: 'portal', icon: GraduationCap, color: 'text-indigo-400' },
+    { label: 'Playbook', page: 'playbook', icon: FileText, color: 'text-amber-400' }
   ]
 
   const companyList = [

@@ -23,6 +23,10 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
       window.location.href = '/youtubevideodownload';
       return;
     }
+    if (page === 'playbook') {
+      window.location.href = '/playbook/';
+      return;
+    }
     if (['prop-firm', 'sip-calculator', 'compound-interest'].includes(page)) {
       window.location.href = `/tool/${page}`;
       return;
@@ -37,6 +41,7 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
         { label: "Home", page: "landing" },
         { label: "Artists", page: "artists" },
         { label: "Success Stories", page: "success-stories" },
+        { label: "Playbook", page: "playbook" },
         { label: "Careers", page: "careers" }
       ]
     },
