@@ -47,7 +47,11 @@ export const revalidate = 60;
 export async function generateStaticParams() {
   const posts = await getPosts();
   const categories = Array.from(
-    new Set(posts.map(p => (p.category || 'general').toLowerCase().replace(/ /g, '-')))
+    new Set(
+      posts
+        .filter(p => p && p.category)
+        .map(p => p.category.toLowerCase().replace(/ /g, '-'))
+    )
   );
   return categories.map(slug => ({ slug }));
 }
@@ -58,8 +62,8 @@ export default async function CategoryPage({ params }: Props) {
 
   const allPosts = await getPosts();
   const posts = allPosts
-    .filter(p => p.published && (p.category || '').toLowerCase().replace(/ /g, '-') === slug.toLowerCase())
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    .filter(p => p && p.published && p.category && p.category.toLowerCase().replace(/ /g, '-') === slug.toLowerCase())
+    .sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime());
 
   const categoryName = slug
     .split('-')

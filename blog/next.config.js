@@ -36,7 +36,7 @@ const nextConfig = {
     // (was hardcoded to 1 which is very slow on multi-core machines)
     cpus: Math.max(1, (require('os').cpus().length || 1) - 1),
     workerThreads: true,
-    optimizePackageImports: ['lucide-react', 'framer-motion', 'date-fns', '@radix-ui/react-icons'],
+    optimizePackageImports: ['date-fns', '@radix-ui/react-icons'],
     serverActions: {
       bodySizeLimit: '10mb',
       allowedOrigins: ['chatwizs.com', 'www.chatwizs.com', 'localhost:3001', 'localhost:4000', '127.0.0.1:4000', 'localhost:4289', '127.0.0.1:4289']

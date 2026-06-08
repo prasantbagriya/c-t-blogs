@@ -68,7 +68,7 @@ export default function Navbar() {
   ]
 
   return (
-    <header className="fixed top-6 left-0 right-0 z-100 w-full px-4 pointer-events-none">
+    <header className="fixed top-6 left-0 right-0 z-[100] w-full px-4 pointer-events-none">
       <div className="w-full max-w-7xl mx-auto pointer-events-auto">
         <motion.nav
           initial={{ y: -20, opacity: 0 }}

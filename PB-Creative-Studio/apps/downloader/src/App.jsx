@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { 
-  Download, CloudDownload, Cpu, X, Link2, 
+  Download, Cpu, X, Link2, 
   History, Activity, Shield, Zap
 } from "lucide-react"
 import axios from "axios"
@@ -125,7 +125,7 @@ function App() {
                 <div className="mt-6 flex flex-wrap justify-center items-center gap-6 text-sm font-medium text-zinc-400">
                   <span className="flex items-center gap-2"><Shield size={16} className="text-emerald-400" /> 100% Safe & Secure</span>
                   <span className="flex items-center gap-2"><Zap size={16} className="text-amber-400" /> Lightning Fast</span>
-                  <span className="flex items-center gap-2"><CloudDownload size={16} className="text-blue-400" /> Free Forever</span>
+                  <span className="flex items-center gap-2"><Download size={16} className="text-blue-400" /> Free Forever</span>
                 </div>
               </motion.div>
 
@@ -180,7 +180,7 @@ function App() {
                                   <span className="text-[9px] font-semibold text-zinc-500 uppercase">{fmt.ext} · {fmt.filesize ? `${(fmt.filesize/1024/1024).toFixed(1)}MB` : 'AUTO'}</span>
                                 </div>
                                 <div className="w-8 h-8 rounded bg-zinc-800/80 group-hover:bg-white group-hover:text-black flex items-center justify-center transition-colors">
-                                  <CloudDownload size={14} className="text-zinc-400 group-hover:text-black" />
+                                  <Download size={14} className="text-zinc-400 group-hover:text-black" />
                                 </div>
                               </button>
                             ))}

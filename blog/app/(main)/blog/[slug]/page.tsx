@@ -636,7 +636,7 @@ export default async function BlogPostPage({ params }: Props) {
 
       </div>
 
-      <footer style={{ marginTop: '4rem', borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
+      <section style={{ marginTop: '4rem', borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
           {(post.tags || []).map(tag => (
             <span key={tag} style={{ background: 'var(--muted)', padding: '0.25rem 0.75rem', borderRadius: '9999px', fontSize: '0.875rem' }}>#{tag}</span>
@@ -735,7 +735,7 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
         </div>
 
-      </footer>
+      </section>
     </article>
   );
 }
