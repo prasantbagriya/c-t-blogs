@@ -29,7 +29,12 @@ export default function Navbar() {
       window.location.href = getDevPath('/youtubevideodownload/');
       return;
     }
-    if (['prop-firm', 'sip-calculator', 'compound-interest'].includes(page)) {
+    // All tool/ sub-pages route to the Tools app
+    const toolPages = [
+      'prop-firm', 'sip-calculator', 'compound-interest',
+      'whatsapp-link-generator', 'whatsapp-direct-message', 'whatsapp-form-generator'
+    ];
+    if (toolPages.includes(page)) {
       window.location.href = getDevPath(`/tool/${page}`);
       return;
     }
