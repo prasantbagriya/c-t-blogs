@@ -2,7 +2,6 @@
 
 import React, { useState } from "react"
 import { usePathname } from "next/navigation"
-import { motion } from "framer-motion"
 import { Zap } from "lucide-react"
 import { Instagram, Twitter, Linkedin, Youtube, Facebook } from "./BrandIcons"
 
@@ -28,7 +27,15 @@ export default function BlogFooter() {
       window.location.href = '/youtubevideodownload';
       return;
     }
-    if (['prop-firm', 'sip-calculator', 'compound-interest'].includes(page)) {
+    if (page === 'playbook') {
+      window.location.href = '/playbook/';
+      return;
+    }
+    const toolPages = [
+      'prop-firm', 'sip-calculator', 'compound-interest',
+      'whatsapp-link-generator', 'whatsapp-direct-message', 'whatsapp-form-generator'
+    ];
+    if (toolPages.includes(page)) {
       window.location.href = `/tool/${page}`;
       return;
     }
@@ -42,6 +49,7 @@ export default function BlogFooter() {
         { label: "Home", page: "landing" },
         { label: "Blog", page: "blog" },
         { label: "Success Stories", page: "success-stories" },
+        { label: "Playbook", page: "playbook" },
         { label: "Careers", page: "careers" }
       ]
     },

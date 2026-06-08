@@ -255,14 +255,14 @@ export default function RootLayout({
           
           body { margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; background: var(--background); color: var(--foreground); -webkit-font-smoothing: antialiased; text-rendering: optimizeSpeed; }
           .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 1.25rem; }
-          body > header { position: sticky; top: 0; z-index: 100; height: var(--header-height); background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
-          body > header.glass-panel { border-radius: 0; border-left: 0; border-right: 0; border-top: 0; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04); }
+          body > header { position: sticky; top: 0; z-index: 100; height: var(--header-height); background: rgba(2,6,23,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); }
+          body > header.glass-panel { border-radius: 0; border-left: 0; border-right: 0; border-top: 0; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
           body > header > nav { display: flex; justify-content: space-between; align-items: center; height: var(--header-height); }
-          body > header a[aria-label="ChatWizs Home"] { display: inline-flex; align-items: center; color: var(--foreground); font-size: 1.5rem; line-height: 1; font-weight: 800; letter-spacing: -0.03em; text-decoration: none; }
-          body > header a[aria-label="ChatWizs Home"] span { color: var(--primary); }
-          body > header .desktop-nav a { color: var(--foreground); font-weight: 600; text-decoration: none; white-space: nowrap; }
-          body > header .desktop-nav a:hover { color: var(--primary); }
-          body > header .desktop-nav a[href="/contact"] { color: #ffffff; background: var(--primary); padding: 0.5rem 1.25rem; border-radius: 0.375rem; font-size: 0.875rem; font-weight: 700; }
+          body > header a[aria-label="ChatWizs Home"] { display: inline-flex; align-items: center; color: #ffffff; font-size: 1.5rem; line-height: 1; font-weight: 800; letter-spacing: -0.03em; text-decoration: none; }
+          body > header .desktop-nav a { color: rgba(255,255,255,0.7); font-weight: 600; text-decoration: none; white-space: nowrap; transition: color 0.2s; }
+          body > header .desktop-nav a:hover { color: #ffffff; }
+          body > header .desktop-nav a.nav-cta { color: #000000; background: #ffffff; padding: 0.5rem 1.25rem; border-radius: 0.75rem; font-size: 0.875rem; font-weight: 700; }
+          body > header .desktop-nav a.nav-cta:hover { background: #e2e8f0; }
           .hero-skeleton { text-align: center; padding: 3rem 0; min-height: 200px; contain: layout paint; }
           @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
           .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
@@ -341,18 +341,19 @@ export default function RootLayout({
         </a>
         <header className="glass-panel sticky top-0 z-[100] m-0">
           <nav className="container flex justify-between items-center h-[var(--header-height)]" aria-label="Main Navigation">
-            <a href="/" className="text-2xl font-extrabold tracking-tight text-[var(--foreground)] no-underline" aria-label="ChatWizs Home">
-              Chat<span className="text-[var(--primary)]">Wizs</span>
+            <a href="/" className="text-2xl font-extrabold tracking-tight text-white no-underline" aria-label="ChatWizs Home">
+              Chat<span style={{color:'#60a5fa'}}>Wizs</span>
             </a>
-            {/* ✅ Admin link REMOVED from public header — security + no user value */}
             {/* Desktop Nav */}
             <ul className="desktop-nav" role="list">
-              <li><a href="/" className="font-semibold text-[var(--foreground)] no-underline">Home</a></li>
-              <li><Link href="/blog" className="font-semibold text-[var(--foreground)] no-underline">Blog</Link></li>
-              <li><Link href="/stories" className="font-semibold text-[var(--foreground)] no-underline">Stories</Link></li>
-              <li><a href="/about" className="font-semibold text-[var(--foreground)] no-underline">About</a></li>
-              <li><Link href="/search" className="font-semibold text-[var(--foreground)] no-underline flex items-center gap-1" aria-label="Search articles">🔍 Search</Link></li>
-              <li><a href="/contact" className="text-sm text-white bg-[var(--primary)] py-2 px-5 rounded-md font-bold no-underline">Contact</a></li>
+              <li><a href="/" className="font-semibold no-underline">Home</a></li>
+              <li><Link href="/blog" className="font-semibold no-underline">Blog</Link></li>
+              <li><Link href="/stories" className="font-semibold no-underline">Stories</Link></li>
+              <li><a href="/youtubevideodownload" className="font-semibold no-underline">YT Downloader</a></li>
+              <li><a href="/playbook/" className="font-semibold no-underline">Playbook</a></li>
+              <li><a href="/about" className="font-semibold no-underline">About</a></li>
+              <li><Link href="/search" className="font-semibold no-underline flex items-center gap-1" aria-label="Search articles">🔍 Search</Link></li>
+              <li><a href="/contact" className="nav-cta text-sm font-bold no-underline">Contact</a></li>
             </ul>
             {/* Mobile Nav — hamburger */}
             <div className="mobile-nav-btn">

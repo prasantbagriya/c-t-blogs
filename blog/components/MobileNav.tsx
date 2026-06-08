@@ -6,6 +6,8 @@ const NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/blog', label: 'Blog' },
   { href: '/stories', label: 'Web Stories' },
+  { href: '/youtubevideodownload', label: 'YT Downloader' },
+  { href: '/playbook/', label: 'Playbook' },
   { href: '/about', label: 'About' },
   { href: '/search', label: '🔍 Search' },
   { href: '/contact', label: 'Contact' },
