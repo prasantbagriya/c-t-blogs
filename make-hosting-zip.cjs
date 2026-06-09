@@ -151,4 +151,12 @@ if (fs.existsSync('leads-manager')) {
 }
 
 // ─────────────────────────────────────────────
+// 7. Restart Trigger (Hostinger/Passenger)
+// ─────────────────────────────────────────────
+if (fs.existsSync('tmp')) {
+  archive.directory('tmp/', 'tmp');
+  console.log('✓ tmp/ added (server restart trigger)');
+}
+
+// ─────────────────────────────────────────────
 archive.finalize();
