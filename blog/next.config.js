@@ -12,12 +12,13 @@ const nextConfig = {
   },
   
   images: {
-    // ✅ FIX: Image optimization ENABLED (was incorrectly disabled — major LCP/performance loss)
+    // FIX: Set unoptimized: true to prevent 500 Internal Server Errors on Hostinger.
+    // Sharp binaries built on Windows don't work on Linux, and image optimization uses too much RAM.
+    unoptimized: true,
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    // FIX: Increased from 24h to 7 days — better LCP caching on repeat visits
-    minimumCacheTTL: 604800, // 7 days
+    minimumCacheTTL: 604800,
     dangerouslyAllowSVG: false,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
