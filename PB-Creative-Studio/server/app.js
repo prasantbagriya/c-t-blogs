@@ -151,14 +151,22 @@ const infoHandler = async (req, res) => {
     if (!url) return res.status(400).json({ error: 'URL is required' });
 
     try {
-        const ytDlpBin = await ensureYtDlp();
-        const ytDlp = spawn(ytDlpBin, [
+        const args = [
             '--dump-json',
             '--no-playlist',
             '--no-warnings',
             '--no-check-certificates',
-            url
-        ], {
+            '--extractor-args', 'youtube:player_client=android,web'
+        ];
+
+        const cookiesPath = path.join(__dirname, 'cookies.txt');
+        if (fs.existsSync(cookiesPath)) {
+            args.push('--cookies', cookiesPath);
+        }
+
+        args.push(url);
+
+        const ytDlp = spawn(ytDlpBin, args, {
             env: { ...process.env, TMPDIR: uploadsDir }
         });
 
@@ -231,7 +239,13 @@ const downloadHandler = async (req, res) => {
 
     const isVideoOnly = req.query.video_only === 'true' || (req.body && req.body.video_only === true);
 
-    const args = ['-o', '-', '--no-warnings', url];
+    const args = ['-o', '-', '--no-warnings', '--extractor-args', 'youtube:player_client=android,web'];
+    
+    const cookiesPath = path.join(__dirname, 'cookies.txt');
+    if (fs.existsSync(cookiesPath)) {
+        args.push('--cookies', cookiesPath);
+    }
+    
     if (format_id) {
         if (isVideoOnly) {
             args.push('-f', `${format_id}+bestaudio[ext=m4a]/bestaudio/best`);
@@ -240,6 +254,7 @@ const downloadHandler = async (req, res) => {
             args.push('-f', format_id);
         }
     }
+    args.push(url);
 
     try {
         const ytDlpBin = await ensureYtDlp();
