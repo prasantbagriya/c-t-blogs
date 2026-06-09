@@ -20,6 +20,13 @@ db.exec(`
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 
+  CREATE TABLE IF NOT EXISTS studio_admins (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
   CREATE TABLE IF NOT EXISTS classes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -116,6 +123,18 @@ db.exec(`
     FOREIGN KEY (exam_id) REFERENCES exams(id) ON DELETE CASCADE,
     FOREIGN KEY (admin_id) REFERENCES admins(id) ON DELETE CASCADE
   );
+
+  CREATE TABLE IF NOT EXISTS studio_leads (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT,
+    mobile TEXT,
+    message TEXT,
+    type TEXT DEFAULT 'Inquiry',
+    source TEXT NOT NULL,
+    is_read INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
 `);
 
 // Seed default admin
@@ -124,6 +143,13 @@ if (!adminExists) {
   const hash = bcrypt.hashSync('admin123', 10);
   db.prepare('INSERT INTO admins (username, password_hash) VALUES (?, ?)').run('admin', hash);
   console.log('✅ Default admin created: admin / admin123');
+}
+
+const hubAdminExists = db.prepare('SELECT id FROM studio_admins WHERE username = ?').get('studio_admin');
+if (!hubAdminExists) {
+  const hash = bcrypt.hashSync('hub123', 10);
+  db.prepare('INSERT INTO studio_admins (username, password_hash) VALUES (?, ?)').run('studio_admin', hash);
+  console.log('✅ Default Hub admin created: studio_admin / hub123');
 }
 
 module.exports = db;

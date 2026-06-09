@@ -83,7 +83,7 @@ const PropFirm = () => {
                 {/* Controls */}
                 <div className="md:col-span-8 space-y-6">
                     {/* Settings */}
-                    <div className="bg-[#0a0a0a] border border-[#222] p-6 rounded-2xl grid grid-cols-2 gap-6">
+                    <div className="bg-[#0a0a0a] border border-[#222] p-6 rounded-2xl grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
                             <label className="text-sm font-medium text-gray-400 mb-2 block">Profit Target ($)</label>
                             <input
@@ -112,7 +112,7 @@ const PropFirm = () => {
                     {/* Add Day */}
                     <div className="bg-[#0a0a0a] border border-[#222] p-6 rounded-2xl">
                         <label className="text-sm font-medium text-gray-400 mb-2 block">Add Daily Profit</label>
-                        <div className="flex gap-4">
+                        <div className="flex flex-col sm:flex-row gap-4">
                             <input
                                 type="number"
                                 className="flex-1 bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:outline-none focus:border-indigo-500 transition-colors"
@@ -123,7 +123,7 @@ const PropFirm = () => {
                             />
                             <button
                                 onClick={addDay}
-                                className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center"
+                                className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center justify-center"
                             >
                                 <Plus className="w-5 h-5 mr-1" /> Add
                             </button>

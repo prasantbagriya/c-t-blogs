@@ -346,12 +346,12 @@ export default function PlaybookPage() {
           {/* Asset Grid Layout */}
           <main className="flex-1">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-              <h2 className="text-xl font-display font-bold text-slate-800 flex items-center gap-2">
+              <h2 className="text-xl font-display font-bold text-slate-800 flex items-center gap-2 shrink-0">
                 <FileText className="w-5 h-5 text-indigo-500" />
                 {activeCategory}
                 <span className="text-sm font-medium text-slate-400 ml-1">({filteredItems.length})</span>
               </h2>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 <div className="flex bg-white border border-slate-200 p-1 rounded-xl shadow-sm">
                   {[
                     { id: 'all', label: 'All' },

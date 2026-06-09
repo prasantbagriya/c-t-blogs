@@ -236,13 +236,14 @@ export default function Navbar({ onNavigate, user }: { onNavigate?: (page: strin
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                className="md:hidden border-t border-white/5 bg-black/95 backdrop-blur-md overflow-hidden p-6 space-y-6"
+                className="md:hidden border-t border-white/5 bg-black/95 backdrop-blur-md overflow-hidden"
               >
-                <div className="grid grid-cols-2 gap-4">
-                  {[...navLinks, ...companyList].map(link => (
-                    <button key={link.page} onClick={() => handleNavClick(link.page)} className="text-left text-gray-400 hover:text-white font-bold text-sm py-2">{link.label}</button>
-                  ))}
-                </div>
+                <div className="p-6 space-y-6 max-h-[calc(100vh-6rem)] overflow-y-auto">
+                  <div className="grid grid-cols-2 gap-4">
+                    {[...navLinks, ...companyList].map(link => (
+                      <button key={link.page} onClick={() => handleNavClick(link.page)} className="text-left text-gray-400 hover:text-white font-bold text-sm py-2">{link.label}</button>
+                    ))}
+                  </div>
 
                 <div className="space-y-3">
                   <p className="text-[10px] font-black text-gray-600 uppercase tracking-[0.2em]">Free Tools</p>
@@ -258,6 +259,7 @@ export default function Navbar({ onNavigate, user }: { onNavigate?: (page: strin
                 <div className="pt-4 border-t border-white/5 flex flex-col gap-3">
                   <button onClick={() => handleNavClick('auth')} className="w-full bg-white/5 text-white py-3 rounded-xl font-bold text-sm">Sign In</button>
                   <button onClick={() => handleNavClick('auth')} className="w-full bg-white text-black py-3 rounded-xl font-bold text-sm">Get Started</button>
+                </div>
                 </div>
               </motion.div>
             )}

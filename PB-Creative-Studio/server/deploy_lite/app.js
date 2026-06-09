@@ -4,20 +4,42 @@ const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const https = require('https');
+const compression = require('compression');
 const examRoutes = require('./exam_routes');
 
 console.log("--- SYSTEM BOOT ---");
 console.log("Starting Node.js Application...");
 
 const app = express();
+app.use(compression());
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
 
-// 1. Static Asset Serving (Root Public handles all sub-paths automatically)
+// 1. Static Asset Serving
 const homePublicPath = path.resolve(__dirname, 'public');
-app.use('/', express.static(homePublicPath));
+
+const staticCacheOptions = {
+    maxAge: '0',
+    setHeaders: (res, filepath) => {
+        if (filepath.includes(path.sep + 'assets' + path.sep)) {
+            res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        } else if (filepath.endsWith('.html')) {
+            res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+        } else {
+            res.setHeader('Cache-Control', 'public, max-age=2592000');
+        }
+    }
+};
+
+// Root static serving
+app.use('/', express.static(homePublicPath, staticCacheOptions));
+// Explicit sub-app static serving (prevents catch-all overlap for assets)
+app.use('/portal', express.static(path.join(homePublicPath, 'portal'), staticCacheOptions));
+app.use('/hub', express.static(path.join(homePublicPath, 'hub'), staticCacheOptions));
+app.use('/tool', express.static(path.join(homePublicPath, 'tool'), staticCacheOptions));
+app.use('/youtubevideodownload', express.static(path.join(homePublicPath, 'youtubevideodownload'), staticCacheOptions));
 
 // Unified Admin Redirect
 app.get(['/admin', '/admin/*'], (req, res) => {
@@ -26,7 +48,7 @@ app.get(['/admin', '/admin/*'], (req, res) => {
 });
 
 // Uploads for Exam Pro
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), { maxAge: '30d' }));
 const uploadsDir = path.join(__dirname, 'uploads/tmp');
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 
@@ -129,17 +151,22 @@ const infoHandler = async (req, res) => {
     if (!url) return res.status(400).json({ error: 'URL is required' });
 
     try {
-        const ytDlpBin = await ensureYtDlp();
-        const ytDlp = spawn(ytDlpBin, [
+        const args = [
             '--dump-json',
             '--no-playlist',
             '--no-warnings',
-            '--no-call-home',
             '--no-check-certificates',
-            '--extractor-args',
-            'youtube:player_client=android',
-            url
-        ], {
+            '--extractor-args', 'youtube:player_client=android,web'
+        ];
+
+        const cookiesPath = path.join(__dirname, 'cookies.txt');
+        if (fs.existsSync(cookiesPath)) {
+            args.push('--cookies', cookiesPath);
+        }
+
+        args.push(url);
+
+        const ytDlp = spawn(ytDlpBin, args, {
             env: { ...process.env, TMPDIR: uploadsDir }
         });
 
@@ -210,10 +237,24 @@ const downloadHandler = async (req, res) => {
     const ext = req.method === 'POST' ? req.body.ext : req.query.ext;
     if (!url) return res.status(400).send('URL is required');
 
-    console.log(`Processing Download Request: ${url} (Format: ${format_id || 'default'}, Extension: ${ext || 'mp4'})`);
+    const isVideoOnly = req.query.video_only === 'true' || (req.body && req.body.video_only === true);
 
-    const args = ['-o', '-', '--no-warnings', '--extractor-args', 'youtube:player_client=android', url];
-    if (format_id) args.push('-f', format_id);
+    const args = ['-o', '-', '--no-warnings', '--extractor-args', 'youtube:player_client=android,web'];
+    
+    const cookiesPath = path.join(__dirname, 'cookies.txt');
+    if (fs.existsSync(cookiesPath)) {
+        args.push('--cookies', cookiesPath);
+    }
+    
+    if (format_id) {
+        if (isVideoOnly) {
+            args.push('-f', `${format_id}+bestaudio[ext=m4a]/bestaudio/best`);
+            args.push('--merge-output-format', 'mkv');
+        } else {
+            args.push('-f', format_id);
+        }
+    }
+    args.push(url);
 
     try {
         const ytDlpBin = await ensureYtDlp();
@@ -228,14 +269,15 @@ const downloadHandler = async (req, res) => {
 
         // Determine if this is an audio format download
         const targetExt = ext || 'mp4';
-        const isAudio = ['mp3', 'm4a', 'webm', 'wav', 'aac'].includes(targetExt);
+        const isAudioFormat = ['mp3', 'm4a', 'webm', 'wav', 'aac'].includes(targetExt);
         
-        if (isAudio) {
+        if (isAudioFormat && !isVideoOnly) {
             res.setHeader('Content-Disposition', `attachment; filename="audio.${targetExt}"`);
             res.setHeader('Content-Type', `audio/${targetExt === 'm4a' ? 'mp4' : targetExt}`);
         } else {
-            res.setHeader('Content-Disposition', `attachment; filename="video.mp4"`);
-            res.setHeader('Content-Type', 'video/mp4');
+            const finalExt = isVideoOnly ? 'mkv' : 'mp4';
+            res.setHeader('Content-Disposition', `attachment; filename="video.${finalExt}"`);
+            res.setHeader('Content-Type', `video/${finalExt === 'mkv' ? 'x-matroska' : 'mp4'}`);
         }
 
         ytDlp.stdout.pipe(res);
@@ -260,18 +302,27 @@ app.use('/api', examRoutes);
 
 // SPA Internal Catch-Alls
 app.get(['/tool', '/tool/*'], (req, res) => {
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     res.sendFile(path.resolve(__dirname, 'public', 'tool', 'index.html'));
 });
 
 app.get(['/youtubevideodownload', '/youtubevideodownload/*'], (req, res) => {
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     res.sendFile(path.resolve(__dirname, 'public', 'youtubevideodownload', 'index.html'));
 });
 
 app.get(['/portal', '/portal/*'], (req, res) => {
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     res.sendFile(path.resolve(__dirname, 'public', 'portal', 'index.html'));
 });
 
+app.get(['/hub', '/hub/*'], (req, res) => {
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    res.sendFile(path.resolve(__dirname, 'public', 'hub', 'index.html'));
+});
+
 app.get(/.*/, (req, res) => {
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
 

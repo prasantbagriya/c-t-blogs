@@ -7,7 +7,11 @@ const fs = require('fs');
 const db = require('./db');
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'eduexam_secret_key_2024';
+const crypto = require('crypto');
+const JWT_SECRET = process.env.JWT_SECRET || (process.env.NODE_ENV === 'production' 
+  ? (() => { throw new Error("FATAL: JWT_SECRET environment variable is required in production!"); })()
+  : crypto.randomBytes(32).toString('hex')
+);
 
 // Multer config for CSV uploads
 const upload = multer({ dest: path.join(__dirname, 'uploads/tmp/') });
@@ -35,6 +39,17 @@ const studentAuth = (req, res, next) => {
   } catch { res.status(401).json({ error: 'Invalid token' }); }
 };
 
+const hubAuth = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    if (payload.role !== 'hub_admin') throw new Error();
+    req.hub = payload;
+    next();
+  } catch { res.status(401).json({ error: 'Invalid token' }); }
+};
+
 // ADMIN AUTH
 router.post('/admin/signup', (req, res) => {
   const { username, password, email, mobile, org_name } = req.body;
@@ -58,6 +73,15 @@ router.post('/admin/login', (req, res) => {
   if (!admin || !bcrypt.compareSync(password, admin.password_hash))
     return res.status(401).json({ error: 'Invalid credentials' });
   const token = jwt.sign({ id: admin.id, username: admin.username, role: 'admin' }, JWT_SECRET, { expiresIn: '8h' });
+  res.json({ token, username: admin.username });
+});
+
+router.post('/hub/login', (req, res) => {
+  const { username, password } = req.body;
+  const admin = db.prepare('SELECT * FROM studio_admins WHERE username = ?').get(username);
+  if (!admin || !bcrypt.compareSync(password, admin.password_hash))
+    return res.status(401).json({ error: 'Invalid credentials' });
+  const token = jwt.sign({ id: admin.id, username: admin.username, role: 'hub_admin' }, JWT_SECRET, { expiresIn: '12h' });
   res.json({ token, username: admin.username });
 });
 
@@ -491,34 +515,48 @@ router.get('/student/exam/:id', studentAuth, (req, res) => {
 });
 
 router.post('/student/exam/:id/submit', studentAuth, (req, res) => {
-  const { answers, time_taken } = req.body;
-  const student = db.prepare('SELECT admin_id FROM students WHERE id = ?').get(req.student.id);
-  const exam = db.prepare('SELECT * FROM exams WHERE id = ?').get(req.params.id);
-  if (!exam) return res.status(404).json({ error: 'Exam not found' });
-  const existing = db.prepare('SELECT id FROM results WHERE student_id = ? AND exam_id = ?').get(req.student.id, exam.id);
-  if (existing) return res.json({ success: true, result_id: existing.id });
-  const qIds = Object.keys(answers);
-  const questionsList = db.prepare(`SELECT * FROM questions WHERE id IN (${qIds.map(() => '?').join(',')})`).all(...qIds.map(Number));
-  let score = 0, attempted = 0, wrong = 0, blank = 0;
-  const stats = {};
-  questionsList.forEach(q => {
-    const studentAns = answers[String(q.id)];
-    if (!stats[q.subject || 'General']) stats[q.subject || 'General'] = { correct: 0, wrong: 0, total: 0 };
-    stats[q.subject || 'General'].total++;
-    if (!studentAns) { blank++; return; }
-    attempted++;
-    if (studentAns === q.correct_option) {
-      score++; stats[q.subject || 'General'].correct++;
-    } else {
-      wrong++; stats[q.subject || 'General'].wrong++;
+  try {
+    const { answers, time_taken } = req.body;
+    const student = db.prepare('SELECT admin_id FROM students WHERE id = ?').get(req.student.id);
+    const exam = db.prepare('SELECT * FROM exams WHERE id = ?').get(req.params.id);
+    if (!exam) return res.status(404).json({ error: 'Exam not found' });
+    const existing = db.prepare('SELECT id FROM results WHERE student_id = ? AND exam_id = ?').get(req.student.id, exam.id);
+    if (existing) return res.json({ success: true, result_id: existing.id });
+    
+    const qIds = Object.keys(answers || {});
+    if (qIds.length === 0) {
+      const r = db.prepare(`
+        INSERT INTO results (student_id, exam_id, admin_id, score, total_questions, attempted_count, wrong_count, blank_count, time_taken, answers_json, subject_stats_json)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?)
+      `).run(req.student.id, exam.id, student.admin_id, 0, 0, 0, 0, 0, time_taken || '', '{}', '{}');
+      return res.json({ success: true, result_id: r.lastInsertRowid });
     }
-  });
-  const r = db.prepare(`
-    INSERT INTO results (student_id, exam_id, admin_id, score, total_questions, attempted_count, wrong_count, blank_count, time_taken, answers_json, subject_stats_json)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?)
-  `).run(req.student.id, exam.id, student.admin_id, score, questionsList.length, attempted, wrong, blank,
-    time_taken || '', JSON.stringify(answers), JSON.stringify(stats));
-  res.json({ success: true, result_id: r.lastInsertRowid });
+    
+    const questionsList = db.prepare(`SELECT * FROM questions WHERE id IN (${qIds.map(() => '?').join(',')})`).all(...qIds.map(Number));
+    let score = 0, attempted = 0, wrong = 0, blank = 0;
+    const stats = {};
+    questionsList.forEach(q => {
+      const studentAns = answers[String(q.id)];
+      if (!stats[q.subject || 'General']) stats[q.subject || 'General'] = { correct: 0, wrong: 0, total: 0 };
+      stats[q.subject || 'General'].total++;
+      if (!studentAns) { blank++; return; }
+      attempted++;
+      if (studentAns === q.correct_option) {
+        score++; stats[q.subject || 'General'].correct++;
+      } else {
+        wrong++; stats[q.subject || 'General'].wrong++;
+      }
+    });
+    const r = db.prepare(`
+      INSERT INTO results (student_id, exam_id, admin_id, score, total_questions, attempted_count, wrong_count, blank_count, time_taken, answers_json, subject_stats_json)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?)
+    `).run(req.student.id, exam.id, student.admin_id, score, questionsList.length, attempted, wrong, blank,
+      time_taken || '', JSON.stringify(answers), JSON.stringify(stats));
+    res.json({ success: true, result_id: r.lastInsertRowid });
+  } catch (error) {
+    console.error('[Exam Submit Error]', error);
+    res.status(500).json({ error: 'Failed to submit exam: ' + error.message });
+  }
 });
 
 router.get('/student/result/:id', studentAuth, (req, res) => {
@@ -530,6 +568,42 @@ router.get('/student/result/:id', studentAuth, (req, res) => {
   if (!result) return res.status(404).json({ error: 'Not found' });
   result.subject_stats = result.subject_stats_json ? JSON.parse(result.subject_stats_json) : {};
   res.json(result);
+});
+
+// STUDIO HUB - LEADS & INQUIRIES
+router.post('/leads/submit', (req, res) => {
+  const { name, email, mobile, message, type, source } = req.body;
+  if (!name || !source) return res.status(400).json({ error: 'Name and Source are required' });
+  
+  try {
+    const r = db.prepare(`
+      INSERT INTO studio_leads (name, email, mobile, message, type, source)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run(name, email || null, mobile || null, message || null, type || 'Inquiry', source);
+    res.json({ success: true, id: r.lastInsertRowid });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to submit inquiry' });
+  }
+});
+
+router.get('/hub/leads', hubAuth, (req, res) => {
+  const leads = db.prepare('SELECT * FROM studio_leads ORDER BY created_at DESC').all();
+  res.json(leads);
+});
+
+router.get('/hub/leads/unread-count', hubAuth, (req, res) => {
+  const { count } = db.prepare('SELECT COUNT(*) as count FROM studio_leads WHERE is_read = 0').get();
+  res.json({ count });
+});
+
+router.patch('/hub/leads/:id/read', hubAuth, (req, res) => {
+  db.prepare('UPDATE studio_leads SET is_read = 1 WHERE id = ?').run(req.params.id);
+  res.json({ success: true });
+});
+
+router.delete('/hub/leads/:id', hubAuth, (req, res) => {
+  db.prepare('DELETE FROM studio_leads WHERE id = ?').run(req.params.id);
+  res.json({ success: true });
 });
 
 module.exports = router;
