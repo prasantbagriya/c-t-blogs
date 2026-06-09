@@ -28,6 +28,8 @@ export default defineConfig(({ mode }) => ({
   ],
 
   build: {
+    outDir: '../../../../server/public/portal',
+    emptyOutDir: true,
     chunkSizeWarningLimit: 600,
     assetsInlineLimit: 8192,
     cssCodeSplit: true,

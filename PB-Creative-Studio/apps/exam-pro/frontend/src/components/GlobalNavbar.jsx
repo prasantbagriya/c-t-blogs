@@ -82,7 +82,7 @@ export default function Navbar() {
   ]
 
   return (
-    <header className="fixed top-6 left-0 right-0 z-[100] w-full px-4 pointer-events-none">
+    <header className="fixed top-6 left-0 right-0 z-50 w-full px-4 pointer-events-none">
       <div className="w-full max-w-full mx-auto pointer-events-auto">
         <motion.nav
           initial={{ y: -20, opacity: 0 }}
@@ -107,7 +107,7 @@ export default function Navbar() {
               </a>
 
               {/* Desktop Nav */}
-              <div className="!hidden md:!flex flex-1 justify-center items-center space-x-8">
+              <div className="hidden md:flex flex-1 justify-center items-center space-x-8">
                 {navLinks.map(link => (
                   <a
                     key={link.page}
@@ -186,7 +186,7 @@ export default function Navbar() {
                 </div>
               </div>
 
-              <div className="!hidden md:!flex items-center space-x-4">
+              <div className="hidden md:flex items-center space-x-4">
                 <button onClick={() => handleNavClick(null, 'auth')} className="text-gray-400 hover:text-white font-bold text-sm">
                   Sign In
                 </button>
@@ -199,7 +199,7 @@ export default function Navbar() {
               </div>
 
               {/* Mobile Controls */}
-              <div className="md:!hidden flex items-center gap-2">
+              <div className="md:hidden flex items-center gap-2">
                 <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-400 p-2">
                   {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                 </button>
@@ -214,7 +214,7 @@ export default function Navbar() {
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                className="md:!hidden border-t border-white/5 bg-slate-950/95 backdrop-blur-md overflow-hidden p-6 space-y-6"
+                className="md:hidden border-t border-white/5 bg-slate-950/95 backdrop-blur-md overflow-hidden p-6 space-y-6"
               >
                 <div className="grid grid-cols-2 gap-4">
                   {[...navLinks, ...companyList].map(link => (

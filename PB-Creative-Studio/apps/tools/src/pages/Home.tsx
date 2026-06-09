@@ -47,7 +47,7 @@ const Home = () => {
         <div className="container mx-auto px-6 max-w-7xl">
             {/* Hero */}
             <section className="text-center py-12 md:py-20 relative">
-                <h1 className="text-4xl md:text-7xl font-extrabold tracking-tight mb-4 md:mb-6 bg-gradient-to-b from-white to-gray-400 bg-clip-text text-transparent">
+                <h1 className="text-4xl md:text-7xl font-extrabold tracking-tight mb-4 md:mb-6 bg-clip-text text-transparent" style={{ backgroundImage: 'linear-gradient(to bottom, #ffffff, #9ca3af)' }}>
                     Precision tools for<br className="hidden md:block" />the modern era.
                 </h1>
                 <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-8 md:mb-10 px-4">
@@ -79,7 +79,7 @@ const Home = () => {
                                     <Icon className="w-6 h-6" />
                                 </div>
                                 <h3 className="text-xl font-semibold mb-3">{tool.title}</h3>
-                                <p className="text-gray-400 text-sm leading-relaxed flex-grow">
+                                <p className="text-gray-400 text-sm leading-relaxed grow">
                                     {tool.desc}
                                 </p>
                             </Link>
