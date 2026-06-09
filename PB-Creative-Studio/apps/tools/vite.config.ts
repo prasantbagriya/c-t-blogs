@@ -28,6 +28,8 @@ export default defineConfig(({ mode }) => ({
   ],
 
   build: {
+    outDir: '../../server/public/tool',
+    emptyOutDir: true,
     chunkSizeWarningLimit: 500,
     assetsInlineLimit: 8192,
     cssCodeSplit: true,

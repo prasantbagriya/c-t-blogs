@@ -9,6 +9,8 @@ export default defineConfig(({ mode }) => ({
   plugins: [react()],
 
   build: {
+    outDir: '../../server/public',
+    emptyOutDir: false,
     // Warn when chunks > 600KB
     chunkSizeWarningLimit: 600,
 
