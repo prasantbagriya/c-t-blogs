@@ -73,15 +73,9 @@ export default function Navbar() {
   ]
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-50 w-full px-4 py-4 pointer-events-none">
-      <div className="w-full max-w-7xl mx-auto pointer-events-auto">
-        <motion.nav
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="relative bg-transparent"
-        >
-          {/* Removed animated border glow to keep it completely clean */}
-
+    <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-xl border-b border-slate-200 shadow-sm pointer-events-auto transition-all">
+      <div className="w-full max-w-7xl mx-auto px-4">
+        <nav className="relative">
           <div className="px-4">
             <div className="flex items-center justify-between h-16">
               {/* Logo */}
@@ -226,7 +220,7 @@ export default function Navbar() {
               </motion.div>
             )}
           </AnimatePresence>
-        </motion.nav>
+        </nav>
       </div>
     </header>
   )
