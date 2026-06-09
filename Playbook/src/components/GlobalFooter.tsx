@@ -98,7 +98,7 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
               <span className="text-2xl font-black text-white tracking-tighter">ChatWizs</span>
             </div>
 
-            <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
+            <p className="text-gray-400 text-sm leading-relaxed max-w-xs text-left">
               Revolutionizing customer engagement with smart AI-driven WhatsApp automation. Join 10,000+ businesses scaling faster with ChatWizs.
             </p>
 
@@ -120,7 +120,7 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
           {footerSections.map((section) => {
             return (
               <div key={section.title} className="lg:col-span-1">
-                <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-6">{section.title}</h4>
+                <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-6 text-left">{section.title}</h4>
                 <ul className="space-y-4">
                   {section.links.map((link) => {
                     return (
@@ -140,9 +140,9 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
           })}
 
           <div className="lg:col-span-1">
-            <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-6">Stay Updated</h4>
+            <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-6 text-left">Stay Updated</h4>
             <div className="space-y-4">
-              <p className="text-xs text-gray-500 leading-relaxed">
+              <p className="text-xs text-gray-500 leading-relaxed text-left">
                 Get the latest AI tips and product updates delivered to your inbox.
               </p>
               <form
@@ -185,7 +185,7 @@ export default function AnimatedFooter({ onNavigate }: { onNavigate?: (page: str
         </div>
 
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-xs text-gray-500 font-medium">
+          <p className="text-xs text-gray-500 font-medium text-left">
             © {new Date().getFullYear()} ChatWizs. All rights reserved.
           </p>
           <div className="flex items-center gap-6">

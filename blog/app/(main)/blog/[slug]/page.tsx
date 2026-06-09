@@ -373,7 +373,7 @@ export default async function BlogPostPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       
-      <nav aria-label="Breadcrumb" className="breadcrumb-nav" style={{ marginBottom: '1.5rem', width: '100%' }}>
+      <nav aria-label="Breadcrumb" className="breadcrumb-nav" style={{ marginTop: '3rem', marginBottom: '1.5rem', width: '100%' }}>
         <ol className="breadcrumb-list" style={{ display: 'flex', listStyle: 'none', padding: 0, margin: 0, gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center', color: 'var(--muted-foreground)', fontSize: '0.875rem' }}>
           <li><a href="/" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500 }}>Home</a></li>
           <li style={{ opacity: 0.5 }}>/</li>

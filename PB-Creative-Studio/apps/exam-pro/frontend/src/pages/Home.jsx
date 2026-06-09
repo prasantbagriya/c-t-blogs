@@ -193,6 +193,19 @@ export default function Home() {
         }))
       })}} />
 
+      {/* Schema Markup — VideoObject for SEO (Google Console) */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "VideoObject",
+        "name": "What is EduExam Pro? - Complete Online Exam System",
+        "description": "Discover EduExam Pro: an enterprise-grade online examination management system and CBT software for schools and colleges.",
+        "thumbnailUrl": [
+          "https://chatwizs.com/eduexam_pro_og.png"
+        ],
+        "uploadDate": "2024-01-01T08:00:00+08:00",
+        "embedUrl": "https://www.youtube.com/embed/wlRsepe_Vz0"
+      })}} />
+
       {/* Mesh Background */}
       <div style={{
         position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0,
@@ -207,7 +220,7 @@ export default function Home() {
 
       {/* ── HERO ──────────────────────────────────────────── */}
       <section style={{
-        padding: 'clamp(100px, 14vh, 140px) clamp(16px, 5vw, 40px) 80px',
+        padding: 'clamp(100px, 14vh, 140px) 0 80px',
         textAlign: 'center', position: 'relative', overflow: 'hidden'
       }}>
         <div style={{
@@ -217,7 +230,7 @@ export default function Home() {
           pointerEvents: 'none'
         }} />
 
-        <div style={{ position: 'relative', maxWidth: 860, margin: '0 auto' }}>
+        <div style={{ position: 'relative', maxWidth: '100%', margin: '0 auto' }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
             background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.2)',
@@ -237,7 +250,7 @@ export default function Home() {
             Online Exam System for<br />Schools &amp; Institutes
           </h1>
 
-          <p style={{ fontSize: 'clamp(16px, 3vw, 19px)', color: '#94a3b8', lineHeight: 1.8, marginBottom: 16, maxWidth: 660, margin: '0 auto 16px' }}>
+          <p style={{ fontSize: 'clamp(16px, 3vw, 19px)', color: '#94a3b8', lineHeight: 1.8, marginBottom: 16, maxWidth: '100%', margin: '0 auto 16px' }}>
             <strong style={{ color: '#c7d2fe' }}>EduExam Pro by ChatWizs</strong> — a powerful, cloud-based online exam system and CBT software designed for schools, colleges, coaching institutes, and universities. Conduct secure online exams, auto-grade results, and track student performance — all for free.
           </p>
 
@@ -270,9 +283,9 @@ export default function Home() {
       </section>
 
       {/* ── STATS ──────────────────────────────────────────── */}
-      <section style={{ padding: '0 clamp(16px, 5vw, 40px) 80px' }}>
+      <section style={{ padding: '0 0 80px' }}>
         <div style={{
-          maxWidth: 900, margin: '0 auto',
+          maxWidth: '100%', margin: '0 auto',
           display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
           gap: 1, background: 'rgba(99,102,241,0.15)',
           borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(99,102,241,0.15)'
@@ -290,32 +303,51 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── INTRODUCTION CONTENT (SEO Body) ──────────────── */}
-      <section style={{ padding: '20px clamp(16px, 5vw, 40px) 80px', position: 'relative', zIndex: 1 }}>
-        <div style={{ maxWidth: 860, margin: '0 auto', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 24, padding: 'clamp(28px,4vw,48px)' }}>
-          <h2 style={{ fontSize: 'clamp(22px,4vw,30px)', fontWeight: 800, marginBottom: 20, color: '#c7d2fe' }}>
-            What is EduExam Pro?
-          </h2>
-          <p style={{ fontSize: 16, color: '#94a3b8', lineHeight: 1.9, marginBottom: 20 }}>
-            EduExam Pro is an enterprise-grade <strong style={{ color: '#f1f5f9' }}>online examination management system</strong> built by ChatWizs Studio. It provides educational institutions with a complete digital ecosystem for managing the entire exam lifecycle — from question creation and student enrollment to secure exam delivery, automatic grading, result publishing, and performance analytics.
-          </p>
-          <p style={{ fontSize: 16, color: '#94a3b8', lineHeight: 1.9, marginBottom: 20 }}>
-            Unlike basic quiz tools, EduExam Pro is built for the real-world demands of schools and institutes: handling large numbers of simultaneous test-takers, maintaining exam integrity, generating detailed performance reports, and providing a smooth, professional exam experience for students on any device.
-          </p>
-          <p style={{ fontSize: 16, color: '#94a3b8', lineHeight: 1.9 }}>
-            Our <strong style={{ color: '#f1f5f9' }}>computer-based testing (CBT) software</strong> empowers teachers and administrators to create exams in minutes, manage hundreds of students effortlessly, deliver secure assessments, and receive instant auto-graded results with detailed analytics. Say goodbye to paper-based exams forever.
-          </p>
+      {/* ── INTRODUCTION CONTENT (SEO Body & Video) ──────────────── */}
+      <section style={{ padding: '20px 0 80px', position: 'relative', zIndex: 1 }}>
+        <div style={{ 
+          maxWidth: '100%', margin: '0 auto', background: 'rgba(255,255,255,0.02)', 
+          border: '1px solid rgba(255,255,255,0.06)', borderRadius: 24, padding: 'clamp(28px,4vw,48px)',
+          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(clamp(300px, 40vw, 500px), 1fr))', gap: 40, alignItems: 'center'
+        }}>
+          <div>
+            <h2 style={{ fontSize: 'clamp(22px,4vw,30px)', fontWeight: 800, marginBottom: 20, color: '#c7d2fe' }}>
+              What is EduExam Pro?
+            </h2>
+            <p style={{ fontSize: 16, color: '#94a3b8', lineHeight: 1.9, marginBottom: 20 }}>
+              EduExam Pro is an enterprise-grade <strong style={{ color: '#f1f5f9' }}>online examination management system</strong> built by ChatWizs Studio. It provides educational institutions with a complete digital ecosystem for managing the entire exam lifecycle — from question creation and student enrollment to secure exam delivery, automatic grading, result publishing, and performance analytics.
+            </p>
+            <p style={{ fontSize: 16, color: '#94a3b8', lineHeight: 1.9, marginBottom: 20 }}>
+              Unlike basic quiz tools, EduExam Pro is built for the real-world demands of schools and institutes: handling large numbers of simultaneous test-takers, maintaining exam integrity, generating detailed performance reports, and providing a smooth, professional exam experience for students on any device.
+            </p>
+            <p style={{ fontSize: 16, color: '#94a3b8', lineHeight: 1.9 }}>
+              Our <strong style={{ color: '#f1f5f9' }}>computer-based testing (CBT) software</strong> empowers teachers and administrators to create exams in minutes, manage hundreds of students effortlessly, deliver secure assessments, and receive instant auto-graded results with detailed analytics. Say goodbye to paper-based exams forever.
+            </p>
+          </div>
+          
+          <div style={{ position: 'relative', width: '100%', borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(99,102,241,0.3)', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', background: '#000' }}>
+            <div style={{ paddingTop: '56.25%' }}> {/* 16:9 Aspect Ratio */}
+              <iframe
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                src="https://www.youtube.com/embed/wlRsepe_Vz0"
+                title="What is EduExam Pro?"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ── FEATURES ──────────────────────────────────────── */}
-      <section style={{ padding: '40px clamp(16px, 5vw, 40px) 80px', position: 'relative', zIndex: 1 }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+      <section style={{ padding: '40px 0 80px', position: 'relative', zIndex: 1 }}>
+        <div style={{ maxWidth: '100%', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 'clamp(40px,8vw,60px)' }}>
             <h2 style={{ fontSize: 'clamp(28px,5vw,40px)', fontWeight: 800, marginBottom: 16 }}>
               Key Features of EduExam Pro Online Exam System
             </h2>
-            <p style={{ fontSize: 16, color: '#94a3b8', maxWidth: 540, margin: '0 auto' }}>
+            <p style={{ fontSize: 16, color: '#94a3b8', maxWidth: '100%', margin: '0 auto' }}>
               A fully-featured <strong style={{ color: '#f1f5f9' }}>CBT software for schools</strong> covering the entire exam lifecycle.
             </p>
           </div>
@@ -349,8 +381,8 @@ export default function Home() {
       </section>
 
       {/* ── WHO USES ────────────────────────────────────────── */}
-      <section style={{ padding: '80px clamp(16px, 5vw, 40px)', background: 'rgba(99,102,241,0.02)' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+      <section style={{ padding: '80px 0', background: 'rgba(99,102,241,0.02)' }}>
+        <div style={{ maxWidth: '100%', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <h2 style={{ fontSize: 'clamp(28px,5vw,38px)', fontWeight: 800, marginBottom: 16 }}>
               Who Uses EduExam Pro?
@@ -381,8 +413,8 @@ export default function Home() {
       </section>
 
       {/* ── HOW TO GET STARTED ───────────────────────────────── */}
-      <section style={{ padding: '80px clamp(16px, 5vw, 40px)' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+      <section style={{ padding: '80px 0' }}>
+        <div style={{ maxWidth: '100%', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <h2 style={{ fontSize: 'clamp(28px,5vw,38px)', fontWeight: 800, marginBottom: 16 }}>
               How to Get Started with EduExam Pro — 4 Simple Steps
@@ -413,8 +445,8 @@ export default function Home() {
       </section>
 
       {/* ── TWO PORTALS CTA ─────────────────────────────────── */}
-      <section style={{ padding: '80px clamp(16px,5vw,40px)' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+      <section style={{ padding: '80px 0' }}>
+        <div style={{ maxWidth: '100%', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 60 }}>
             <h2 style={{ fontSize: 'clamp(28px,5vw,38px)', fontWeight: 800, marginBottom: 16 }}>Choose Your Portal</h2>
             <p style={{ color: '#94a3b8' }}>Select the interface that matches your role in the ecosystem.</p>
@@ -447,8 +479,8 @@ export default function Home() {
       </section>
 
       {/* ── COMPARISON TABLE ─────────────────────────────────── */}
-      <section style={{ padding: '80px clamp(16px,5vw,40px)', background: 'rgba(10,11,26,0.5)' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+      <section style={{ padding: '80px 0', background: 'rgba(10,11,26,0.5)' }}>
+        <div style={{ maxWidth: '100%', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <h2 style={{ fontSize: 'clamp(28px,5vw,36px)', fontWeight: 800, marginBottom: 16 }}>
               EduExam Pro vs Other Online Exam Software
@@ -485,22 +517,100 @@ export default function Home() {
       </section>
 
       {/* ── SEO CONTENT — Why EduExam ────────────────────────── */}
-      <section style={{ padding: '80px clamp(16px,5vw,40px)' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto' }}>
-          <h2 style={{ fontSize: 'clamp(26px,4vw,34px)', fontWeight: 800, marginBottom: 40, color: '#e2e8f0' }}>
-            Why Schools Choose EduExam Pro as Their Online Exam Platform
-          </h2>
-          <div style={{ display: 'grid', gap: 32 }}>
+      <section style={{ padding: '100px 0', position: 'relative' }}>
+        <div style={{
+          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+          width: '80%', height: '80%', background: 'radial-gradient(ellipse, rgba(99,102,241,0.05) 0%, transparent 60%)',
+          pointerEvents: 'none', zIndex: 0
+        }} />
+        
+        <div style={{ maxWidth: '100%', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+          <div style={{ textAlign: 'center', marginBottom: 60 }}>
+            <h2 style={{ fontSize: 'clamp(28px,5vw,40px)', fontWeight: 800, marginBottom: 16, color: '#f1f5f9' }}>
+              Why Schools Choose EduExam Pro as Their <span style={{ color: '#818cf8' }}>Online Exam Platform</span>
+            </h2>
+            <p style={{ color: '#94a3b8', fontSize: 16, maxWidth: 600, margin: '0 auto' }}>
+              The most secure, scalable, and easy-to-use examination system built specifically for the needs of modern educational institutions.
+            </p>
+          </div>
+
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+            gap: 28 
+          }}>
             {[
-              { title: 'Free Online Exam Software — No Hidden Costs', body: 'EduExam Pro offers a generous free plan with unlimited exam creation, up to 100 students, auto-grading, and basic analytics. No credit card, no trial period, no hidden fees — the core platform is genuinely free for schools and institutes.' },
-              { title: 'Secure Online Exam Platform with Anti-Cheating', body: 'Our proctored online exam software includes browser lockdown, question randomization, answer shuffling, tab-switch detection, and unique login tokens. These enterprise-grade security features are available even on the free plan — not locked behind a premium paywall.' },
-              { title: 'MCQ Exam Software Supporting All Question Types', body: 'Beyond MCQ, EduExam Pro supports True/False, Fill in the Blank, Short Answer, and Descriptive questions — with a rich text editor that accepts images, LaTeX equations, and formatted tables. Build the perfect question for any subject.' },
-              { title: 'Real-Time Exam Analytics for Better Outcomes', body: 'Our real-time exam analytics dashboard gives teachers, administrators, and institute management a complete view of student performance. Identify learning gaps, compare class performance across attempts, and generate exportable PDF & Excel reports for parent-teacher meetings.' },
-              { title: 'School Exam Management System — All-In-One', body: 'Beyond just exams, EduExam Pro is a complete school exam management system and institute management software. Manage students, teachers, classes, subjects, exam schedules, and results from one centralized dashboard — replacing expensive enterprise software with a free, powerful alternative.' },
+              { 
+                title: 'Free Online Exam Software — No Hidden Costs', 
+                body: 'EduExam Pro offers a generous free plan with unlimited exam creation, up to 100 students, auto-grading, and basic analytics. No credit card, no trial period, no hidden fees — the core platform is genuinely free for schools and institutes.',
+                icon: Zap, color: '#f59e0b', bg: 'rgba(245,158,11,0.1)', border: 'rgba(245,158,11,0.2)'
+              },
+              { 
+                title: 'Secure Online Exam Platform with Anti-Cheating', 
+                body: 'Our proctored online exam software includes browser lockdown, question randomization, answer shuffling, tab-switch detection, and unique login tokens. These enterprise-grade security features are available even on the free plan.',
+                icon: Shield, color: '#10b981', bg: 'rgba(16,185,129,0.1)', border: 'rgba(16,185,129,0.2)'
+              },
+              { 
+                title: 'MCQ Exam Software Supporting All Question Types', 
+                body: 'Beyond MCQ, EduExam Pro supports True/False, Fill in the Blank, Short Answer, and Descriptive questions — with a rich text editor that accepts images, LaTeX equations, and formatted tables. Build the perfect question for any subject.',
+                icon: FileText, color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)', border: 'rgba(139,92,246,0.2)'
+              },
+              { 
+                title: 'Real-Time Exam Analytics for Better Outcomes', 
+                body: 'Our real-time exam analytics dashboard gives teachers, administrators, and institute management a complete view of student performance. Identify learning gaps, compare class performance across attempts, and generate exportable reports.',
+                icon: BarChart3, color: '#06b6d4', bg: 'rgba(6,182,212,0.1)', border: 'rgba(6,182,212,0.2)'
+              },
+              { 
+                title: 'School Exam Management System — All-In-One', 
+                body: 'Beyond just exams, EduExam Pro is a complete school exam management system. Manage students, teachers, classes, subjects, exam schedules, and results from one centralized dashboard — replacing expensive enterprise software.',
+                icon: Settings, color: '#f43f5e', bg: 'rgba(244,63,94,0.1)', border: 'rgba(244,63,94,0.2)'
+              },
             ].map((item, i) => (
-              <div key={i} style={{ padding: '28px 32px', borderRadius: 16, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 12, color: '#c7d2fe' }}>{item.title}</h3>
-                <p style={{ fontSize: 15, color: '#94a3b8', lineHeight: 1.8 }}>{item.body}</p>
+              <div key={i} className="group" style={{ 
+                padding: '32px', 
+                borderRadius: 24, 
+                background: 'linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', 
+                border: '1px solid rgba(255,255,255,0.05)',
+                position: 'relative',
+                overflow: 'hidden',
+                transition: 'all 0.3s ease',
+                cursor: 'default'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-5px)';
+                e.currentTarget.style.borderColor = item.border;
+                e.currentTarget.style.boxShadow = `0 10px 30px -10px ${item.bg}`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}>
+                <div style={{
+                  position: 'absolute', top: 0, right: 0, 
+                  width: 150, height: 150, 
+                  background: item.bg, 
+                  filter: 'blur(50px)', 
+                  opacity: 0.5,
+                  pointerEvents: 'none'
+                }} />
+                
+                <div style={{ 
+                  width: 48, height: 48, borderRadius: 14, 
+                  background: item.bg, color: item.color,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  marginBottom: 24,
+                  border: `1px solid ${item.border}`
+                }}>
+                  <item.icon size={24} />
+                </div>
+                
+                <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, color: '#f1f5f9', lineHeight: 1.4 }}>
+                  {item.title}
+                </h3>
+                <p style={{ fontSize: 15, color: '#94a3b8', lineHeight: 1.7 }}>
+                  {item.body}
+                </p>
               </div>
             ))}
           </div>
@@ -513,23 +623,68 @@ export default function Home() {
           <h2 style={{ fontSize: 26, fontWeight: 800 }}>Trusted by Educators Worldwide</h2>
           <p style={{ color: '#64748b', marginTop: 8 }}>Join hundreds of educational institutions that trust EduExam Pro</p>
         </div>
-        <div style={{ display: 'flex', gap: 24, padding: '0 clamp(16px,5vw,40px)', overflow: 'auto', paddingBottom: 12 }}>
-          {testimonials.map((t, i) => (
-            <div key={i} style={{ minWidth: 340, padding: 28, borderRadius: 20, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', flexShrink: 0 }}>
-              <div style={{ display: 'flex', gap: 4, marginBottom: 16 }}>
-                {[1,2,3,4,5].map(s => <Star key={s} size={14} fill="#f59e0b" style={{ color: '#f59e0b' }} />)}
+        
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes scrollMarquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .marquee-wrapper {
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+            padding-bottom: 12px;
+          }
+          .marquee-wrapper::before,
+          .marquee-wrapper::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 100px;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+          }
+          .marquee-wrapper::before {
+            left: 0;
+            background: linear-gradient(to right, #0a0b1a, transparent);
+          }
+          .marquee-wrapper::after {
+            right: 0;
+            background: linear-gradient(to left, #0a0b1a, transparent);
+          }
+          .marquee-track {
+            display: flex;
+            gap: 24px;
+            padding-right: 24px;
+            width: max-content;
+            animation: scrollMarquee 35s linear infinite;
+          }
+          .marquee-track:hover {
+            animation-play-state: paused;
+          }
+        `}} />
+
+        <div className="marquee-wrapper">
+          <div className="marquee-track">
+            {[...testimonials, ...testimonials, ...testimonials].map((t, i) => (
+              <div key={i} style={{ width: 340, padding: 28, borderRadius: 20, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', flexShrink: 0 }}>
+                <div style={{ display: 'flex', gap: 4, marginBottom: 16 }}>
+                  {[1,2,3,4,5].map(s => <Star key={s} size={14} fill="#f59e0b" style={{ color: '#f59e0b' }} />)}
+                </div>
+                <p style={{ fontStyle: 'italic', color: '#f1f5f9', marginBottom: 20, lineHeight: 1.7 }}>"{t.text}"</p>
+                <div style={{ fontWeight: 800, color: '#818cf8' }}>{t.name}</div>
+                <div style={{ fontSize: 12, color: '#64748b' }}>{t.role}</div>
               </div>
-              <p style={{ fontStyle: 'italic', color: '#f1f5f9', marginBottom: 20, lineHeight: 1.7 }}>"{t.text}"</p>
-              <div style={{ fontWeight: 800, color: '#818cf8' }}>{t.name}</div>
-              <div style={{ fontSize: 12, color: '#64748b' }}>{t.role}</div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────────── */}
-      <section style={{ padding: '80px clamp(16px,5vw,40px)' }}>
-        <div style={{ maxWidth: 860, margin: '0 auto' }}>
+      <section style={{ padding: '80px 0' }}>
+        <div style={{ maxWidth: '100%', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <h2 style={{ fontSize: 'clamp(26px,4vw,36px)', fontWeight: 800, marginBottom: 16 }}>
               Frequently Asked Questions — EduExam Pro
@@ -543,8 +698,8 @@ export default function Home() {
       </section>
 
       {/* ── INTERNAL LINK — YouTube Downloader ───────────────── */}
-      <section style={{ padding: '0 clamp(16px,5vw,40px) 80px' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto', padding: '32px 40px', borderRadius: 20, background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.15)', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
+      <section style={{ padding: '0 0 80px' }}>
+        <div style={{ maxWidth: '100%', margin: '0 auto', padding: '32px 40px', borderRadius: 20, background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.15)', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
           <div>
             <div style={{ fontSize: 13, color: '#818cf8', fontWeight: 700, marginBottom: 6 }}>Explore More ChatWizs Tools</div>
             <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 6 }}>Free YouTube Video Downloader</h3>
@@ -557,9 +712,9 @@ export default function Home() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────── */}
-      <section style={{ padding: '80px clamp(16px,5vw,40px) 100px' }}>
+      <section style={{ padding: '80px 0 100px' }}>
         <div style={{
-          maxWidth: 860, margin: '0 auto', textAlign: 'center',
+          maxWidth: '100%', margin: '0 auto', textAlign: 'center',
           padding: 'clamp(48px,6vw,72px)', borderRadius: 32,
           background: 'linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.1))',
           border: '1px solid rgba(99,102,241,0.3)',
@@ -573,7 +728,7 @@ export default function Home() {
             <h2 style={{ fontSize: 'clamp(26px,4vw,38px)', fontWeight: 900, marginBottom: 16 }}>
               Start Your Free Online Exam System Today
             </h2>
-            <p style={{ fontSize: 16, color: '#94a3b8', lineHeight: 1.8, marginBottom: 12, maxWidth: 560, margin: '0 auto 12px' }}>
+            <p style={{ fontSize: 16, color: '#94a3b8', lineHeight: 1.8, marginBottom: 12, maxWidth: '100%', margin: '0 auto 12px' }}>
               Join hundreds of schools, colleges, and coaching institutes that have already transformed their examination process with EduExam Pro.
             </p>
             <p style={{ fontSize: 14, color: '#64748b', marginBottom: 36 }}>

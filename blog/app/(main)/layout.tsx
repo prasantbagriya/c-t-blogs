@@ -328,7 +328,7 @@ export default function RootLayout({
           Skip to content
         </a>
         <GlobalNavbar />
-        <main id="main-content" className="container pt-32">
+        <main id="main-content" className="container pt-32 relative z-0">
           {children}
         </main>
         <GlobalFooter />

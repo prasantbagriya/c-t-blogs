@@ -114,7 +114,7 @@ export default async function BlogIndexPage({ searchParams }: Props) {
       </nav>
 
       <section style={{ marginBottom: '4rem' }}>
-        <h1 style={{ fontSize: '3.5rem', fontWeight: 900, marginBottom: '1rem', letterSpacing: '-0.05em', lineHeight: 1.1 }}>
+        <h1 style={{ paddingTop: '3rem', fontSize: '3.5rem', fontWeight: 900, marginBottom: '1rem', letterSpacing: '-0.05em', lineHeight: 1.1 }}>
           Explore <span style={{ color: 'var(--primary)', background: 'linear-gradient(135deg, #2563eb, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Sovereign Intelligence</span>
         </h1>
         <p style={{ color: 'var(--muted-foreground)', fontSize: '1.25rem', maxWidth: '700px', lineHeight: 1.6 }}>

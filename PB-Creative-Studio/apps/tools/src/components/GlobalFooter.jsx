@@ -7,7 +7,6 @@ const Instagram = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" wid
 const Linkedin = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>;
 const Youtube = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>;
 
-
 const getDevPath = (path) => {
   if (import.meta.env && import.meta.env.DEV) {
     if (path.startsWith('/youtubevideodownload')) return `http://localhost:5173${path}`
@@ -31,6 +30,10 @@ export default function Footer() {
     }
     if (page === 'youtubevideodownload') {
       window.location.href = getDevPath('/youtubevideodownload/');
+      return;
+    }
+    if (page === 'playbook') {
+      window.location.href = '/playbook/';
       return;
     }
     if (['prop-firm', 'sip-calculator', 'compound-interest'].includes(page)) {
@@ -88,11 +91,11 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="relative bg-[#030303] border-t border-white/5 pt-16 pb-10 overflow-hidden">
+    <footer className="relative bg-black border-t border-white/5 pt-16 pb-10 overflow-hidden">
       <div className="absolute top-0 left-1/4 w-1/2 h-px bg-linear-to-r from-transparent via-blue-500/50 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-2 lg:grid-cols-6 gap-12 mb-16">
+        <div className="grid grid-cols-2 lg:grid-cols-7 gap-12 mb-16">
 
           <div className="col-span-2 lg:col-span-2 space-y-8">
             <div className="flex items-center space-x-2 group cursor-pointer" onClick={() => handleNavClick('landing')}>
@@ -123,7 +126,7 @@ export default function Footer() {
 
           {footerSections.map((section) => {
             return (
-              <div key={section.title} className="col-span-1">
+              <div key={section.title} className="lg:col-span-1">
                 <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-6 text-left">{section.title}</h4>
                 <ul className="space-y-4">
                   {section.links.map((link) => {

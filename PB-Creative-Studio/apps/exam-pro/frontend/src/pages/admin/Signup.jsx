@@ -51,132 +51,176 @@ export default function Signup() {
   };
 
   return (
-    <div className="auth-page" style={{ background: '#0a0b1a', fontFamily: "'Inter', sans-serif" }}>
-      <div className="auth-bg" />
+    <div style={{ 
+      minHeight: '100vh', 
+      background: '#0a0b1a', 
+      fontFamily: "'Inter', sans-serif",
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '40px 20px',
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      {/* Background Gradients */}
+      <div style={{
+        position: 'absolute', top: '10%', left: '20%', width: '500px', height: '500px',
+        background: 'radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)',
+        borderRadius: '50%', pointerEvents: 'none'
+      }} />
+      <div style={{
+        position: 'absolute', bottom: '10%', right: '10%', width: '400px', height: '400px',
+        background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)',
+        borderRadius: '50%', pointerEvents: 'none'
+      }} />
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="auth-card"
-        style={{ maxWidth: '520px' }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4 }}
+        style={{ 
+          width: '100%', 
+          maxWidth: '560px', 
+          background: 'rgba(255, 255, 255, 0.02)', 
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          borderRadius: '24px',
+          padding: 'clamp(32px, 5vw, 48px)',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(20px)',
+          position: 'relative',
+          zIndex: 1
+        }}
       >
-        <div className="text-center mb-10">
-          <div className="inline-flex w-16 h-16 bg-indigo-600 rounded-2xl items-center justify-center mb-4 shadow-xl shadow-indigo-600/30">
-            <GraduationCap className="text-white" size={32} />
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <div style={{ 
+            width: '64px', height: '64px', margin: '0 auto 20px',
+            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+            borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 10px 25px -5px rgba(99,102,241,0.4)'
+          }}>
+            <GraduationCap size={32} color="#ffffff" />
           </div>
-          <h1 className="text-3xl mb-2 font-bold text-white tracking-tight">Create Admin Account</h1>
-          <p className="text-white/50 text-[13px] font-medium leading-relaxed mb-3 mb-8">
-            Initialize your institute infrastructure
+          <h1 style={{ fontSize: '28px', fontWeight: 800, color: '#f1f5f9', marginBottom: '8px' }}>
+            Register Institute
+          </h1>
+          <p style={{ color: '#94a3b8', fontSize: '15px' }}>
+            Set up your administrator account to get started
           </p>
         </div>
 
         {success ? (
-          <div className="text-center py-10">
+          <div style={{ textAlign: 'center', padding: '40px 0' }}>
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6 text-emerald-500"
+              style={{ width: '80px', height: '80px', background: 'rgba(16,185,129,0.15)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: '#10b981' }}
             >
               <CheckCircle size={40} />
             </motion.div>
-            <h3 className="text-2xl font-bold text-white mb-2">Registration Successful</h3>
-            <p className="text-zinc-400 text-sm">Redirecting you to login portal...</p>
+            <h3 style={{ fontSize: '24px', fontWeight: 700, color: '#f1f5f9', marginBottom: '8px' }}>Registration Successful</h3>
+            <p style={{ color: '#94a3b8', fontSize: '15px' }}>Redirecting to login portal...</p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {error && (
-              <div className="bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-3 rounded-xl text-xs font-semibold">
+              <div style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', color: '#fca5a5', padding: '12px 16px', borderRadius: '12px', fontSize: '14px', fontWeight: 500, textAlign: 'center' }}>
                 {error}
               </div>
             )}
 
-            <div className="form-group">
-              <label className="form-label">Institute Name</label>
-              <div className="input-icon-wrap">
-                <Building className="icon" />
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#cbd5e1', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Institute Name</label>
+              <div style={{ position: 'relative' }}>
+                <Building size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
                 <input
-                  type="text"
-                  required
-                  className="form-control"
-                  placeholder="e.g. Institute Name"
+                  type="text" required
+                  style={{ width: '100%', padding: '14px 16px 14px 44px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: '#f1f5f9', fontSize: '15px', outline: 'none', transition: 'border-color 0.2s' }}
+                  placeholder="e.g. ChatWizs Academy"
                   value={formData.org_name}
                   onChange={(e) => setFormData({ ...formData, org_name: e.target.value })}
+                  onFocus={(e) => e.target.style.borderColor = '#6366f1'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="form-group">
-                <label className="form-label">Email Address</label>
-                <div className="input-icon-wrap">
-                  <Mail className="icon" />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#cbd5e1', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email</label>
+                <div style={{ position: 'relative' }}>
+                  <Mail size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
                   <input
-                    type="email"
-                    required
-                    className="form-control"
-                    placeholder="admin@example.com"
+                    type="email" required
+                    style={{ width: '100%', padding: '14px 16px 14px 44px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: '#f1f5f9', fontSize: '15px', outline: 'none', transition: 'border-color 0.2s' }}
+                    placeholder="admin@school.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onFocus={(e) => e.target.style.borderColor = '#6366f1'}
+                    onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
                   />
                 </div>
               </div>
-              <div className="form-group">
-                <label className="form-label">Mobile Number</label>
-                <div className="input-icon-wrap">
-                  <Phone className="icon" />
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#cbd5e1', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Mobile</label>
+                <div style={{ position: 'relative' }}>
+                  <Phone size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
                   <input
-                    type="tel"
-                    required
-                    className="form-control"
+                    type="tel" required
+                    style={{ width: '100%', padding: '14px 16px 14px 44px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: '#f1f5f9', fontSize: '15px', outline: 'none', transition: 'border-color 0.2s' }}
                     placeholder="9876543210"
                     value={formData.mobile}
                     onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
+                    onFocus={(e) => e.target.style.borderColor = '#6366f1'}
+                    onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
                   />
                 </div>
               </div>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Username</label>
-              <div className="input-icon-wrap">
-                <User className="icon" />
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#cbd5e1', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Username</label>
+              <div style={{ position: 'relative' }}>
+                <User size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
                 <input
-                  type="text"
-                  required
-                  className="form-control"
+                  type="text" required
+                  style={{ width: '100%', padding: '14px 16px 14px 44px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: '#f1f5f9', fontSize: '15px', outline: 'none', transition: 'border-color 0.2s' }}
                   placeholder="admin_username"
                   value={formData.username}
                   onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                  onFocus={(e) => e.target.style.borderColor = '#6366f1'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="form-group">
-                <label className="form-label">Password</label>
-                <div className="input-icon-wrap">
-                  <Lock className="icon" />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#cbd5e1', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Password</label>
+                <div style={{ position: 'relative' }}>
+                  <Lock size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
                   <input
-                    type="password"
-                    required
-                    className="form-control"
+                    type="password" required
+                    style={{ width: '100%', padding: '14px 16px 14px 44px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: '#f1f5f9', fontSize: '15px', outline: 'none', transition: 'border-color 0.2s' }}
                     placeholder="••••••••"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    onFocus={(e) => e.target.style.borderColor = '#6366f1'}
+                    onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
                   />
                 </div>
               </div>
-              <div className="form-group">
-                <label className="form-label">Confirm</label>
-                <div className="input-icon-wrap">
-                  <Shield className="icon" />
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#cbd5e1', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Confirm</label>
+                <div style={{ position: 'relative' }}>
+                  <Shield size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
                   <input
-                    type="password"
-                    required
-                    className="form-control"
+                    type="password" required
+                    style={{ width: '100%', padding: '14px 16px 14px 44px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: '#f1f5f9', fontSize: '15px', outline: 'none', transition: 'border-color 0.2s' }}
                     placeholder="••••••••"
                     value={formData.confirmPassword}
                     onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                    onFocus={(e) => e.target.style.borderColor = '#6366f1'}
+                    onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
                   />
                 </div>
               </div>
@@ -185,13 +229,35 @@ export default function Signup() {
             <button
               type="submit"
               disabled={loading}
-              className="btn btn-primary btn-full py-4 mt-6 font-black uppercase tracking-[0.3em] text-[11px] rounded-xl shadow-[0_10px_40px_-10px_rgba(99,102,241,0.6)] border border-white/10 hover:scale-[1.02] active:scale-[0.98] transition-all"
+              style={{
+                background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                color: '#fff',
+                fontWeight: 800,
+                fontSize: '15px',
+                padding: '16px',
+                borderRadius: '12px',
+                border: 'none',
+                marginTop: '12px',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.7 : 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                boxShadow: '0 10px 25px -5px rgba(99,102,241,0.4)',
+                transition: 'transform 0.2s'
+              }}
+              onMouseEnter={(e) => { if(!loading) e.currentTarget.style.transform = 'translateY(-2px)' }}
+              onMouseLeave={(e) => { if(!loading) e.currentTarget.style.transform = 'translateY(0)' }}
             >
-              {loading ? 'Processing System...' : 'Create Admin Access'} <ArrowRight size={14} className="ml-2" />
+              {loading ? 'Creating Account...' : 'Register Institute'} <ArrowRight size={18} />
             </button>
 
-            <p className="text-center text-white/40 text-[11px] font-bold uppercase tracking-widest mt-2">
-              Already have an account? <Link to="/admin/login" className="text-indigo-400 hover:text-white transition-colors ml-2 font-black">LOGIN</Link>
+            <p style={{ textAlign: 'center', fontSize: '14px', color: '#94a3b8', marginTop: '8px' }}>
+              Already have an account? 
+              <Link to="/admin/login" style={{ color: '#818cf8', fontWeight: 700, marginLeft: '6px', textDecoration: 'none' }}>
+                Sign In
+              </Link>
             </p>
           </form>
         )}
@@ -199,3 +265,4 @@ export default function Signup() {
     </div>
   );
 }
+

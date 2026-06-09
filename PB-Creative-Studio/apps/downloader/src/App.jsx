@@ -7,8 +7,6 @@ import {
 import axios from "axios"
 import GlobalNavbar from "./components/GlobalNavbar"
 import GlobalFooter from "./components/GlobalFooter"
-import AboutSection from "./components/AboutSection"
-import ContactSection from "./components/ContactSection"
 import SeoContent from "./components/SeoContent"
 import { cn } from "./lib/utils"
 
@@ -249,7 +247,6 @@ function App() {
         </section>
 
         <SeoContent />
-        <ContactSection />
       </main>
 
       <GlobalFooter />

@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { Zap } from "lucide-react"
 
 const Twitter = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>;
@@ -12,7 +13,7 @@ const getDevPath = (path) => {
   if (import.meta.env && import.meta.env.DEV) {
     if (path.startsWith('/youtubevideodownload')) return `http://localhost:5173${path}`
     if (path.startsWith('/tool')) return `http://localhost:5175${path}`
-    if (path.startsWith('/portal')) return `http://localhost:5176${path}`
+    if (path.startsWith('/portal')) return `http://localhost:5174${path}`
   }
   return path
 }
@@ -20,24 +21,34 @@ const getDevPath = (path) => {
 export default function Footer() {
   const [email, setEmail] = useState("")
 
-  const handleNavClick = (page) => {
-    if (page === 'blog') {
-      window.location.href = '/blog';
-      return;
+  const getHref = (page) => {
+    if (page === 'blog') return '/blog';
+    if (page === 'portal' || page.startsWith('portal/')) {
+      const path = page === 'portal' ? '/portal/' : `/${page}`;
+      return getDevPath(path);
     }
-    if (page === 'portal') {
-      window.location.href = getDevPath('/portal/');
-      return;
-    }
-    if (page === 'youtubevideodownload') {
-      window.location.href = getDevPath('/youtubevideodownload/');
-      return;
-    }
+    if (page === 'youtubevideodownload') return getDevPath('/youtubevideodownload/');
     if (['prop-firm', 'sip-calculator', 'compound-interest'].includes(page)) {
-      window.location.href = getDevPath(`/tool/${page}`);
+      return getDevPath(`/tool/${page}`);
+    }
+    return `/${page === 'landing' ? '' : page}`;
+  }
+
+  const navigate = useNavigate();
+
+  const handleNavClick = (e, page) => {
+    const targetPage = typeof e === 'string' ? e : page;
+    const event = typeof e === 'object' ? e : null;
+    
+    if (targetPage === 'portal' || targetPage.startsWith('portal/')) {
+      if (event) event.preventDefault();
+      const path = targetPage === 'portal' ? '/' : `/${targetPage.replace('portal/', '')}`;
+      navigate(path);
       return;
     }
-    window.location.href = `/${page === 'landing' ? '' : page}`;
+    
+    if (event) event.preventDefault();
+    window.location.href = getHref(targetPage);
   }
 
   const footerSections = [
@@ -69,9 +80,12 @@ export default function Footer() {
       links: [
         { label: "Student Login", page: "portal/student/login" },
         { label: "Admin Login", page: "portal/admin/login" },
+        { label: "About Us", page: "portal/about-us" },
+        { label: "Contact Us", page: "portal/contact-us" },
+        { label: "Privacy Policy", page: "portal/privacy-policy" },
+        { label: "Terms & Conditions", page: "portal/terms-and-conditions" },
         { label: "Refund Policy", page: "portal/refund-policy" },
-        { label: "Cookies Policy", page: "portal/cookies-policy" },
-        { label: "Terms & Conditions", page: "portal/terms-and-conditions" }
+        { label: "Cookies Policy", page: "portal/cookies-policy" }
       ]
     },
     {
@@ -88,19 +102,19 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="relative bg-[#030303] border-t border-white/5 pt-16 pb-10 overflow-hidden">
+    <footer className="relative bg-black border-t border-white/5 pt-16 pb-10 overflow-hidden">
       <div className="absolute top-0 left-1/4 w-1/2 h-px bg-linear-to-r from-transparent via-blue-500/50 to-transparent" />
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-2 lg:grid-cols-6 gap-12 mb-16">
+      <div className="max-w-full mx-auto px-4 relative z-10">
+        <div className="grid grid-cols-2 lg:grid-cols-7 gap-12 mb-16">
 
           <div className="col-span-2 lg:col-span-2 space-y-8">
-            <div className="flex items-center space-x-2 group cursor-pointer" onClick={() => handleNavClick('landing')}>
+            <a href={getHref('landing')} onClick={(e) => handleNavClick(e, 'landing')} className="flex items-center space-x-2 group cursor-pointer decoration-transparent">
               <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                 <Zap className="text-black w-5 h-5 fill-black" />
               </div>
               <span className="text-2xl font-black text-white tracking-tighter">ChatWizs</span>
-            </div>
+            </a>
 
             <p className="text-gray-400 text-sm leading-relaxed max-w-xs text-left">
               Revolutionizing customer engagement with smart AI-driven WhatsApp automation. Join 10,000+ businesses scaling faster with ChatWizs.
@@ -129,12 +143,13 @@ export default function Footer() {
                   {section.links.map((link) => {
                     return (
                       <li key={link.label}>
-                        <button
-                          onClick={() => handleNavClick(link.page)}
-                          className="text-sm text-gray-400 hover:text-white hover:translate-x-1 transition-all text-left"
+                        <a
+                          href={getHref(link.page)}
+                          onClick={(e) => handleNavClick(e, link.page)}
+                          className="text-sm text-gray-400 hover:text-white hover:translate-x-1 transition-all text-left block decoration-transparent"
                         >
                           {link.label}
-                        </button>
+                        </a>
                       </li>
                     )
                   })}

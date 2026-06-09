@@ -1,188 +1,343 @@
-// @ts-nocheck
-"use client"
-import React, { useState } from "react"
-import { Zap } from "lucide-react"
+'use client';
 
-const Twitter = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>;
-const Facebook = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>;
-const Instagram = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>;
-const Linkedin = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>;
-const Youtube = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>;
+import React, { useState } from 'react';
+import Link from 'next/link';
 
-
-const getDevPath = (path) => {
-  if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV === 'development') {
-    if (path.startsWith('/youtubevideodownload')) return `http://localhost:5173${path}`
-    if (path.startsWith('/tool')) return `http://localhost:5175${path}`
-    if (path.startsWith('/portal')) return `http://localhost:5176${path}`
-  }
-  return path
-}
-
-export default function Footer() {
-  const [email, setEmail] = useState("")
-
-  const handleNavClick = (page) => {
-    if (page === 'blog') {
-      window.location.href = '/blog';
-      return;
-    }
-    if (page === 'portal') {
-      window.location.href = getDevPath('/portal/');
-      return;
-    }
-    if (page === 'youtubevideodownload') {
-      window.location.href = getDevPath('/youtubevideodownload/');
-      return;
-    }
-    if (['prop-firm', 'sip-calculator', 'compound-interest'].includes(page)) {
-      window.location.href = getDevPath(`/tool/${page}`);
-      return;
-    }
-    window.location.href = `/${page === 'landing' ? '' : page}`;
-  }
+export default function GlobalFooter() {
+  const [email, setEmail] = useState('');
 
   const footerSections = [
     {
-      title: "Navigation",
+      title: 'Navigation',
       links: [
-        { label: "YT Downloader", page: "youtubevideodownload" },
-        { label: "ChatWizs Home", page: "landing" },
-        { label: "Blog", page: "blog" },
-        { label: "Playbook", page: "playbook" },
-        { label: "Careers", page: "careers" }
-      ]
+        { label: 'YT Downloader', href: '/youtubevideodownload' },
+        { label: 'ChatWizs Home', href: '/' },
+        { label: 'Blog', href: '/blog' },
+        { label: 'Playbook', href: '/playbook/' },
+        { label: 'Careers', href: '/#careers' },
+      ],
     },
     {
-      title: "Free Tools",
+      title: 'Free Tools',
       links: [
-        { label: "Link Generator", page: "whatsapp-link-generator" },
-        { label: "Direct Message", page: "whatsapp-direct-message" },
-        { label: "Form Generator", page: "whatsapp-form-generator" },
-        { label: "SIP Calculator", page: "sip-calculator" },
-        { label: "Compound Growth", page: "compound-interest" },
-        { label: "Prop Firm Calc", page: "prop-firm" },
-        { label: "YouTube Downloader", page: "youtubevideodownload" },
-        { label: "Exam Portal", page: "portal" }
-      ]
+        { label: 'Link Generator', href: '/tool/whatsapp-link-generator' },
+        { label: 'Direct Message', href: '/tool/whatsapp-direct-message' },
+        { label: 'Form Generator', href: '/tool/whatsapp-form-generator' },
+        { label: 'SIP Calculator', href: '/tool/sip-calculator' },
+        { label: 'Compound Growth', href: '/tool/compound-interest' },
+        { label: 'Prop Firm Calc', href: '/tool/prop-firm' },
+        { label: 'YouTube Downloader', href: '/youtubevideodownload' },
+        { label: 'Exam Portal', href: '/portal/' },
+      ],
     },
     {
-      title: "Portal Links",
+      title: 'Portal Links',
       links: [
-        { label: "Student Login", page: "portal/student/login" },
-        { label: "Admin Login", page: "portal/admin/login" },
-        { label: "Refund Policy", page: "portal/refund-policy" },
-        { label: "Cookies Policy", page: "portal/cookies-policy" },
-        { label: "Terms & Conditions", page: "portal/terms-and-conditions" }
-      ]
+        { label: 'Student Login', href: '/portal/' },
+        { label: 'Admin Login', href: '/portal/' },
+        { label: 'Refund Policy', href: '/portal/' },
+        { label: 'Cookies Policy', href: '/privacy' },
+        { label: 'Terms & Conditions', href: '/terms' },
+      ],
     },
     {
-      title: "Support",
+      title: 'Support',
       links: [
-        { label: "About Us", page: "about" },
-        { label: "Contact Us", page: "contact" },
-        { label: "Editorial Policy", page: "editorial-policy" },
-        { label: "Fact Checking", page: "fact-checking-policy" },
-        { label: "Privacy Policy", page: "privacy" },
-        { label: "Terms of Service", page: "terms" }
-      ]
+        { label: 'About Us', href: '/about' },
+        { label: 'Contact Us', href: '/contact' },
+        { label: 'Editorial Policy', href: '/editorial-policy' },
+        { label: 'Fact Checking', href: '/fact-checking-policy' },
+        { label: 'Privacy Policy', href: '/privacy' },
+        { label: 'Terms of Service', href: '/terms' },
+      ],
+    },
+  ];
+
+  const socialLinks = [
+    {
+      label: 'Twitter/X',
+      href: 'https://x.com/prasantbagriya',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+        </svg>
+      ),
+    },
+    {
+      label: 'Facebook',
+      href: 'https://www.facebook.com/chatwizs/',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+        </svg>
+      ),
+    },
+    {
+      label: 'Instagram',
+      href: 'https://www.instagram.com/prasantbagriya/',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+        </svg>
+      ),
+    },
+    {
+      label: 'LinkedIn',
+      href: 'https://www.linkedin.com/company/chatwizs/',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+          <rect x="2" y="9" width="4" height="12" />
+          <circle cx="4" cy="4" r="2" />
+        </svg>
+      ),
+    },
+    {
+      label: 'YouTube',
+      href: 'https://www.youtube.com/@ChatWizsOffical',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
+          <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
+        </svg>
+      ),
+    },
+  ];
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    try {
+      const res = await fetch('/api/inquiries/collect', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, source: 'footer_newsletter', type: 'newsletter' }),
+      });
+      if (res.ok) {
+        alert('Successfully joined our newsletter!');
+        setEmail('');
+      }
+    } catch (err) {
+      console.error(err);
     }
-  ]
+  };
 
   return (
-    <footer className="relative bg-[#030303] border-t border-white/5 pt-16 pb-10 overflow-hidden">
-      <div className="absolute top-0 left-1/4 w-1/2 h-px bg-linear-to-r from-transparent via-blue-500/50 to-transparent" />
+    <footer
+      style={{
+        position: 'relative',
+        backgroundColor: '#000000',
+        borderTop: '1px solid rgba(255,255,255,0.05)',
+        paddingTop: '4rem',
+        paddingBottom: '2.5rem',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Glowing top line */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: '25%',
+          width: '50%',
+          height: '1px',
+          background: 'linear-gradient(to right, transparent, rgba(59,130,246,0.5), transparent)',
+        }}
+      />
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-2 lg:grid-cols-6 gap-12 mb-16">
-
-          <div className="col-span-2 lg:col-span-2 space-y-8">
-            <div className="flex items-center space-x-2 group cursor-pointer" onClick={() => handleNavClick('landing')}>
-              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                <Zap className="text-black w-5 h-5 fill-black" />
+      <div
+        style={{
+          maxWidth: '80rem',
+          margin: '0 auto',
+          padding: '0 1rem',
+          position: 'relative',
+          zIndex: 10,
+        }}
+      >
+        {/* Main Grid */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '3rem',
+            marginBottom: '4rem',
+          }}
+          className="footer-grid"
+        >
+          {/* Brand Column */}
+          <div style={{ gridColumn: 'span 2', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            {/* Logo */}
+            <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
+              <div
+                style={{
+                  width: '2.5rem',
+                  height: '2.5rem',
+                  backgroundColor: '#ffffff',
+                  borderRadius: '0.75rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+                }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="black" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
+                </svg>
               </div>
-              <span className="text-2xl font-black text-white tracking-tighter">ChatWizs</span>
-            </div>
+              <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.05em' }}>
+                ChatWizs
+              </span>
+            </Link>
 
-            <p className="text-gray-400 text-sm leading-relaxed max-w-xs text-left">
+            {/* Description */}
+            <p style={{ color: '#9ca3af', fontSize: '0.875rem', lineHeight: '1.625', maxWidth: '20rem', textAlign: 'left', margin: 0 }}>
               Revolutionizing customer engagement with smart AI-driven WhatsApp automation. Join 10,000+ businesses scaling faster with ChatWizs.
             </p>
 
-            <div className="flex gap-4">
-              {[
-                { Icon: Twitter, url: 'https://x.com/prasantbagriya' },
-                { Icon: Facebook, url: 'https://www.facebook.com/chatwizs/' },
-                { Icon: Instagram, url: 'https://www.instagram.com/prasantbagriya/' },
-                { Icon: Linkedin, url: 'https://www.linkedin.com/company/chatwizs/' },
-                { Icon: Youtube, url: 'https://www.youtube.com/@ChatWizsOffical' }
-              ].map(({ Icon, url }, i) => (
-                <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all group">
-                  <Icon className="w-5 h-5 group-hover:scale-110 transition-transform" />
+            {/* Social Links */}
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  style={{
+                    width: '2.5rem',
+                    height: '2.5rem',
+                    borderRadius: '0.75rem',
+                    backgroundColor: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#9ca3af',
+                    textDecoration: 'none',
+                    transition: 'all 0.2s',
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff';
+                    (e.currentTarget as HTMLAnchorElement).style.backgroundColor = 'rgba(255,255,255,0.1)';
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(255,255,255,0.2)';
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.color = '#9ca3af';
+                    (e.currentTarget as HTMLAnchorElement).style.backgroundColor = 'rgba(255,255,255,0.05)';
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(255,255,255,0.1)';
+                  }}
+                >
+                  {social.icon}
                 </a>
               ))}
             </div>
           </div>
 
-          {footerSections.map((section) => {
-            return (
-              <div key={section.title} className="col-span-1">
-                <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-6 text-left">{section.title}</h4>
-                <ul className="space-y-4">
-                  {section.links.map((link) => {
-                    return (
-                      <li key={link.label}>
-                        <button
-                          onClick={() => handleNavClick(link.page)}
-                          className="text-sm text-gray-400 hover:text-white hover:translate-x-1 transition-all text-left"
-                        >
-                          {link.label}
-                        </button>
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
-            )
-          })}
-
-          <div className="col-span-2 lg:col-span-1">
-            <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-6 text-left">Stay Updated</h4>
-            <div className="space-y-4">
-              <p className="text-xs text-gray-500 leading-relaxed text-left">
-                Get the latest AI tips and product updates delivered to your inbox.
-              </p>
-              <form
-                className="relative group"
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  if (!email) return;
-                  try {
-                    const res = await fetch("/api/inquiries/collect", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({
-                        email,
-                        source: "footer_newsletter",
-                        type: "newsletter"
-                      })
-                    });
-                    if (res.ok) {
-                      alert("Successfully joined our newsletter!");
-                      setEmail("");
-                    }
-                  } catch (err) {
-                    console.error(err);
-                  }
+          {/* Link Sections */}
+          {footerSections.map((section) => (
+            <div key={section.title}>
+              <h4
+                style={{
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  color: '#ffffff',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  marginBottom: '1.5rem',
+                  textAlign: 'left',
+                  margin: '0 0 1.5rem 0',
                 }}
               >
+                {section.title}
+              </h4>
+              <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {section.links.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      style={{
+                        fontSize: '0.875rem',
+                        color: '#9ca3af',
+                        textDecoration: 'none',
+                        display: 'inline-block',
+                        transition: 'all 0.2s',
+                        textAlign: 'left',
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff';
+                        (e.currentTarget as HTMLAnchorElement).style.transform = 'translateX(4px)';
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLAnchorElement).style.color = '#9ca3af';
+                        (e.currentTarget as HTMLAnchorElement).style.transform = 'translateX(0)';
+                      }}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
+          {/* Stay Updated */}
+          <div>
+            <h4
+              style={{
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                color: '#ffffff',
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+                margin: '0 0 1.5rem 0',
+                textAlign: 'left',
+              }}
+            >
+              Stay Updated
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <p style={{ fontSize: '0.75rem', color: '#6b7280', lineHeight: '1.625', margin: 0, textAlign: 'left' }}>
+                Get the latest AI tips and product updates delivered to your inbox.
+              </p>
+              <form onSubmit={handleNewsletterSubmit} style={{ position: 'relative' }}>
                 <input
                   type="email"
                   placeholder="Email address"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500/50 transition-colors"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  style={{
+                    width: '100%',
+                    backgroundColor: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '0.75rem',
+                    padding: '0.75rem 5rem 0.75rem 1rem',
+                    fontSize: '0.875rem',
+                    color: '#ffffff',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                  }}
                 />
-                <button className="absolute right-2 top-2 bottom-2 bg-white text-black px-4 rounded-lg font-bold text-[10px] uppercase hover:bg-gray-100 transition-colors" type="submit">
+                <button
+                  type="submit"
+                  style={{
+                    position: 'absolute',
+                    right: '0.5rem',
+                    top: '0.5rem',
+                    bottom: '0.5rem',
+                    backgroundColor: '#ffffff',
+                    color: '#000000',
+                    border: 'none',
+                    borderRadius: '0.5rem',
+                    padding: '0 1rem',
+                    fontWeight: 700,
+                    fontSize: '0.625rem',
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    letterSpacing: '0.05em',
+                  }}
+                >
                   Join
                 </button>
               </form>
@@ -190,18 +345,53 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-xs text-gray-500 font-medium text-left">
+        {/* Bottom bar */}
+        <div
+          style={{
+            paddingTop: '2rem',
+            borderTop: '1px solid rgba(255,255,255,0.05)',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: '1.5rem',
+            flexWrap: 'wrap',
+          }}
+        >
+          <p style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: 500, margin: 0, textAlign: 'left' }}>
             © {new Date().getFullYear()} ChatWizs. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 text-xs text-gray-500">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', color: '#6b7280' }}>
+              <div
+                style={{
+                  width: '0.375rem',
+                  height: '0.375rem',
+                  borderRadius: '9999px',
+                  backgroundColor: '#10b981',
+                  animation: 'pulse 2s cubic-bezier(0.4,0,0.6,1) infinite',
+                }}
+              />
               Service Status: Operational
             </div>
           </div>
         </div>
       </div>
+
+      <style>{`
+        @media (min-width: 1024px) {
+          .footer-grid {
+            grid-template-columns: repeat(7, 1fr) !important;
+          }
+          .footer-grid > div:first-child {
+            grid-column: span 2 !important;
+          }
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+      `}</style>
     </footer>
-  )
+  );
 }

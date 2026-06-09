@@ -103,7 +103,7 @@ export default async function AuthorsIndexPage() {
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'var(--accent)', border: '1px solid var(--border)', padding: '0.375rem 1rem', borderRadius: '20px', fontSize: '0.8125rem', fontWeight: 800, color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1.25rem' }}>
           E-E-A-T Certified Team
         </div>
-        <h1 style={{ fontSize: '3.5rem', fontWeight: 900, marginBottom: '1rem', letterSpacing: '-0.05em', lineHeight: 1.1 }}>
+        <h1 style={{ paddingTop: '3rem', fontSize: '3.5rem', fontWeight: 900, marginBottom: '1rem', letterSpacing: '-0.05em', lineHeight: 1.1 }}>
           Meet Our <span style={{ color: 'var(--primary)', background: 'linear-gradient(135deg, #2563eb, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Expert Contributors</span>
         </h1>
         <p style={{ color: 'var(--muted-foreground)', fontSize: '1.25rem', maxWidth: '700px', margin: '0 auto', lineHeight: 1.7 }}>

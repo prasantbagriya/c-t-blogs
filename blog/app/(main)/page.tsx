@@ -50,7 +50,8 @@ export default async function Home() {
         textAlign: 'center', 
         padding: '2.5rem 1rem 1.5rem 1rem', 
         background: 'radial-gradient(circle at center, rgba(37, 99, 235, 0.05) 0%, transparent 70%)',
-        marginBottom: '1.5rem'
+        marginBottom: '1.5rem',
+        marginTop: '4rem'
       }}>
         <h1 className="hero-h1" style={{ fontSize: 'clamp(2.25rem, 8vw, 4rem)', letterSpacing: '-0.04em', lineHeight: 1.05 }}>
           Insights for the <br />

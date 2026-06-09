@@ -77,12 +77,10 @@ export async function POST(request: Request) {
       } else {
         // Native form submission: redirect with a relative URL so we don't leak the internal Next.js port
         // when proxied through Vite or Hostinger.
-        return new Response(null, {
+        // Native form submission: redirect with a relative URL
+        const redirectUrl = new URL('/blog/admin', request.url);
+        return NextResponse.redirect(redirectUrl, {
           status: 302,
-          headers: {
-            'Location': '/blog/admin',
-            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
-          }
         });
       }
     }
@@ -101,11 +99,9 @@ export async function POST(request: Request) {
       }, { status: 401 });
     } else {
       // Native form redirect back with error using relative URL
-      return new Response(null, {
+      const errorUrl = new URL('/blog/auth/login?error=Invalid+password', request.url);
+      return NextResponse.redirect(errorUrl, {
         status: 302,
-        headers: {
-          'Location': `/blog/auth/login?error=Invalid+password`
-        }
       });
     }
 

@@ -89,7 +89,7 @@ h1, h2, h3, h4, h5, h6 {
   outline: none;
 }
 
-button, .btn {
+.btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -115,7 +115,7 @@ button, .btn {
 .btn-primary:hover {
   background: var(--primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
 }
 
 /* ✅ Glassmorphism — single canonical definition */
