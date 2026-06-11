@@ -41,6 +41,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/playbook" replace />} />
             <Route path="/playbook" element={<PlaybookPage />} />
+            <Route path="/playbook/:slug" element={<PlaybookPage />} />
             <Route path="/login" element={<LoginPage user={user} />} />
             <Route
               path="/admin"

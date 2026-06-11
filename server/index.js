@@ -488,6 +488,7 @@ app.use('/api/inquiries', inquiryRoutes);
 app.use('/api/payments', lazyRouter(() => import('./routes/payments.js')));
 app.use('/api/google-sheets', lazyRouter(() => import('./routes/googleSheets.js')));
 app.use('/api/downloader', lazyRouter(() => import('./routes/downloader.js')));
+app.use('/api/playbook', lazyRouter(() => import('./routes/playbook.js')));
 // 404 handler for API routes
 app.use('/api', (req, res) => {
   res.status(404).json({
@@ -548,11 +549,51 @@ app.use('/playbook', express.static(path.join(__dirname, '../Playbook/dist'), {
   }
 }));
 
-app.get('/playbook/*', (req, res) => {
+app.get('/playbook/*', async (req, res) => {
   const playbookIndexPath = path.join(__dirname, '../Playbook/dist/index.html');
   if (fs.existsSync(playbookIndexPath)) {
-    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
-    res.sendFile(playbookIndexPath);
+    try {
+      let html = await fs.promises.readFile(playbookIndexPath, 'utf-8');
+      
+      // Attempt to inject OG tags if a slug is present
+      const slugMatch = req.path.match(/\/playbook\/([^\/]+)/);
+      if (slugMatch) {
+        const slug = slugMatch[1];
+        const playbooksPath = path.join(__dirname, 'data', 'playbooks.json');
+        if (fs.existsSync(playbooksPath)) {
+          const playbooks = JSON.parse(await fs.promises.readFile(playbooksPath, 'utf8'));
+          const playbook = playbooks.find(p => p.slug === slug || p.id === slug);
+          if (playbook) {
+            const title = playbook.seoTitle || playbook.title;
+            const description = playbook.seoDescription || playbook.description.replace(/<[^>]*>?/gm, '').substring(0, 160);
+            const imageUrl = playbook.imageUrl?.startsWith('http') ? playbook.imageUrl : `https://chatwizs.com${playbook.imageUrl}`;
+            const siteUrl = `https://chatwizs.com${req.path}`;
+            
+            const ogTags = `
+              <title>${title} | Chatwizs Digital Playbook Store</title>
+              <meta name="description" content="${description}" />
+              <meta property="og:title" content="${title}" />
+              <meta property="og:description" content="${description}" />
+              <meta property="og:image" content="${imageUrl}" />
+              <meta property="og:url" content="${siteUrl}" />
+              <meta property="og:type" content="article" />
+              <meta name="twitter:card" content="summary_large_image" />
+              <meta name="twitter:title" content="${title}" />
+              <meta name="twitter:description" content="${description}" />
+              <meta name="twitter:image" content="${imageUrl}" />
+            `;
+            html = html.replace('</head>', `${ogTags}</head>`);
+          }
+        }
+      }
+
+      res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+      res.send(html);
+    } catch (err) {
+      console.error('Error serving Playbook HTML:', err);
+      res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+      res.sendFile(playbookIndexPath);
+    }
   } else {
     res.status(404).send('Playbook not built yet.');
   }

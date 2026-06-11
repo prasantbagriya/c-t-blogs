@@ -4,16 +4,15 @@
  */
 
 import { useEffect, useState, useMemo } from "react";
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
-import { db } from "../lib/firebase";
+import { useParams, useNavigate } from "react-router-dom";
 import { PlaybookItem, Lead } from "../types";
 import { FileText, Search, SlidersHorizontal, Download, ExternalLink, ShieldCheck, Database, TrendingUp, Clock, Tag, Box, Star, Calendar, DollarSign, Globe, Share2, Copy } from "lucide-react";
 import { motion } from "motion/react";
-import { handleFirestoreError, OperationType } from "../lib/firestoreUtils";
-import { doc, updateDoc, increment } from "firebase/firestore";
 import LeadModal from "../components/LeadModal";
 
 export default function PlaybookPage() {
+  const { slug } = useParams();
+  const navigate = useNavigate();
   const [items, setItems] = useState<PlaybookItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,37 +32,44 @@ export default function PlaybookPage() {
     if (!selectedItem) return;
 
     try {
-      // 1. Save lead to Firestore
-      const leadPayload: Lead = {
+      // 1. Save lead to server
+      const leadPayload = {
         ...leadData,
         playbookId: selectedItem.id,
         playbookTitle: selectedItem.title,
-        createdAt: Date.now()
       };
       
       try {
-        await addDoc(collection(db, "leads"), leadPayload);
+        await fetch('/api/playbook/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(leadPayload)
+        });
       } catch (error) {
         console.error("Error saving lead:", error);
-        // We continue even if lead saving fails to not block user experience, 
-        // but ideally rules should allow this.
       }
 
       // 2. Track download count
-      const docRef = doc(db, "playbooks", selectedItem.id);
-      await updateDoc(docRef, {
-        downloadCount: increment(1)
-      });
+      try {
+        await fetch(`/api/playbook/items/${selectedItem.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ downloadCount: (selectedItem.downloadCount || 0) + 1 })
+        });
+      } catch (error) {
+        console.error("Error tracking download:", error);
+      }
 
       // 3. Trigger download
       window.open(selectedItem.fileUrl, "_blank");
     } catch (error) {
-      handleFirestoreError(error, OperationType.WRITE, "leads");
+      console.error("Failed to process lead submit:", error);
     }
   };
 
   const handleShare = (item: PlaybookItem) => {
-    const shareUrl = `${window.location.origin}/playbook?id=${item.id}`;
+    const path = item.slug ? `/playbook/${item.slug}` : `/playbook?id=${item.id}`;
+    const shareUrl = `${window.location.origin}${path}`;
     navigator.clipboard.writeText(shareUrl);
     alert("Resource link copied to clipboard!");
   };
@@ -71,6 +77,9 @@ export default function PlaybookPage() {
   const categories = useMemo(() => ["All Assets", ...Array.from(new Set(items.map(item => item.category)))], [items]);
 
   const filteredItems = useMemo(() => {
+    if (slug && items.length > 0) {
+      return items.filter(item => item.slug === slug || item.id === slug);
+    }
     return items
       .filter(item => {
         const searchLower = searchTerm.toLowerCase();
@@ -96,7 +105,15 @@ export default function PlaybookPage() {
   useEffect(() => {
     // Dynamic SEO Updates based on current view
     const siteTitle = "Chatwizs Digital Playbook Store";
-    if (searchTerm) {
+    let currentItem = null;
+    
+    if (slug && items.length > 0) {
+      currentItem = items.find(i => i.slug === slug || i.id === slug);
+    }
+
+    if (currentItem) {
+      document.title = `${currentItem.seoTitle || currentItem.title} | ${siteTitle}`;
+    } else if (searchTerm) {
       document.title = `Search: ${searchTerm} | ${siteTitle}`;
     } else if (activeCategory !== "All Assets") {
       document.title = `${activeCategory} Assets | ${siteTitle}`;
@@ -111,7 +128,12 @@ export default function PlaybookPage() {
       metaDesc.setAttribute('name', 'description');
       document.head.append(metaDesc);
     }
-    metaDesc.setAttribute('content', `Browse our collection of ${activeCategory} digital products. Scale your workflow with premium strategies.`);
+    
+    if (currentItem) {
+      metaDesc.setAttribute('content', currentItem.seoDescription || currentItem.description.replace(/<[^>]*>?/gm, '').substring(0, 160));
+    } else {
+      metaDesc.setAttribute('content', `Browse our collection of ${activeCategory} digital products. Scale your workflow with premium strategies.`);
+    }
 
     // Social & Deep SEO Tags
     const updateMeta = (name: string, content: string, isProperty = false) => {
@@ -165,16 +187,14 @@ export default function PlaybookPage() {
   useEffect(() => {
     async function loadPlaybookData() {
       try {
-        const q = query(
-          collection(db, "playbooks"),
-          where("isActive", "==", true)
-        );
-        const snapshot = await getDocs(q);
-        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as PlaybookItem));
+        const response = await fetch('/api/playbook/items');
+        if (!response.ok) throw new Error('Failed to fetch');
+        let data: PlaybookItem[] = await response.json();
+        data = data.filter(item => item.isActive);
         data.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
         setItems(data);
       } catch (error) {
-        handleFirestoreError(error, OperationType.LIST, "playbooks");
+        console.error("Error loading playbooks:", error);
       } finally {
         setLoading(false);
       }
@@ -347,9 +367,17 @@ export default function PlaybookPage() {
           <main className="flex-1">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
               <h2 className="text-xl font-display font-bold text-slate-800 flex items-center gap-2 shrink-0">
-                <FileText className="w-5 h-5 text-indigo-500" />
-                {activeCategory}
-                <span className="text-sm font-medium text-slate-400 ml-1">({filteredItems.length})</span>
+                {slug ? (
+                  <button onClick={() => navigate('/playbook')} className="hover:text-indigo-600 transition-colors mr-2">
+                    &larr; View All Assets
+                  </button>
+                ) : (
+                  <>
+                    <FileText className="w-5 h-5 text-indigo-500" />
+                    {activeCategory}
+                    <span className="text-sm font-medium text-slate-400 ml-1">({filteredItems.length})</span>
+                  </>
+                )}
               </h2>
               <div className="flex flex-wrap items-center gap-3">
                 <div className="flex bg-white border border-slate-200 p-1 rounded-xl shadow-sm">

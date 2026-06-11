@@ -60,6 +60,22 @@ async function generateSitemap() {
     }
   }
 
+  // Add playbook routes
+  const playbooksPath = path.join(process.cwd(), 'server', 'data', 'playbooks.json');
+  if (fs.existsSync(playbooksPath)) {
+    const playbooksData = fs.readFileSync(playbooksPath, 'utf8');
+    const playbooks = JSON.parse(playbooksData);
+    
+    for (const playbook of playbooks) {
+      if (playbook.isActive && playbook.slug) {
+        // Use the updated timestamp for lastmod
+        const dateObj = new Date(playbook.updatedAt || playbook.createdAt);
+        const lastmod = isNaN(dateObj.getTime()) ? new Date().toISOString() : dateObj.toISOString();
+        sitemap += `  <url>\n    <loc>${SITE_URL}/playbook/${playbook.slug}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+      }
+    }
+  }
+
   sitemap += `</urlset>`;
 
   // Write to public directory for Vite

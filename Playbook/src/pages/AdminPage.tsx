@@ -7,18 +7,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { User } from "firebase/auth";
 import RichTextEditor from "../components/RichTextEditor";
-import { 
-  collection, 
-  addDoc, 
-  getDocs, 
-  updateDoc, 
-  deleteDoc, 
-  doc, 
-  query, 
-  orderBy
-} from "firebase/firestore";
-import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
-import { db, storage } from "../lib/firebase";
+// Firebase removed for data and files, Auth remains in App/Login
 import { PlaybookItem, Lead } from "../types";
 import { 
   Plus, 
@@ -44,7 +33,7 @@ import {
   Edit2,
   Image as ImageIcon
 } from "lucide-react";
-import { handleFirestoreError, OperationType } from "../lib/firestoreUtils";
+
 
 interface AdminPageProps {
   user: User;
@@ -92,51 +81,32 @@ export default function AdminPage({ user }: AdminPageProps) {
   }, []);
 
   const repairMissingFields = async () => {
-    try {
-      const q = query(collection(db, "playbooks"));
-      const snapshot = await getDocs(q);
-      const batch: Promise<any>[] = [];
-      
-      snapshot.docs.forEach(d => {
-        const data = d.data();
-        if (data.isActive === undefined || data.downloadCount === undefined) {
-          batch.push(updateDoc(doc(db, "playbooks", d.id), {
-            isActive: data.isActive === undefined ? true : data.isActive,
-            downloadCount: data.downloadCount === undefined ? 0 : data.downloadCount,
-            updatedAt: data.updatedAt || Date.now()
-          }));
-        }
-      });
-      
-      if (batch.length > 0) {
-        await Promise.all(batch);
-        console.log(`Repaired ${batch.length} items`);
-        loadRegistryItems();
-      }
-    } catch (err) {
-      console.error("Repair failed:", err);
-    }
+    // Handled by backend now
   };
 
   const loadLeads = async () => {
     try {
-      const q = query(collection(db, "leads"), orderBy("createdAt", "desc"));
-      const snapshot = await getDocs(q);
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Lead));
-      setLeads(data);
+      const response = await fetch('/api/playbook/leads');
+      if (response.ok) {
+        const data = await response.json();
+        data.sort((a: any, b: any) => b.createdAt - a.createdAt);
+        setLeads(data);
+      }
     } catch (err) {
-      handleFirestoreError(err, OperationType.LIST, "leads");
+      console.error("Error loading leads:", err);
     }
   };
 
   const loadRegistryItems = async () => {
     try {
-      const q = query(collection(db, "playbooks"), orderBy("createdAt", "desc"));
-      const snapshot = await getDocs(q);
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as PlaybookItem));
-      setItems(data);
+      const response = await fetch('/api/playbook/items');
+      if (response.ok) {
+        const data = await response.json();
+        data.sort((a: any, b: any) => b.createdAt - a.createdAt);
+        setItems(data);
+      }
     } catch (err) {
-      handleFirestoreError(err, OperationType.LIST, "playbooks");
+      console.error("Error loading playbooks:", err);
     } finally {
       setLoading(false);
     }
@@ -145,34 +115,20 @@ export default function AdminPage({ user }: AdminPageProps) {
   const handleFileUpload = async (file: File) => {
     setUploading(true);
     setUploadStatus(null);
-    
     try {
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-      const fileName = `${uniqueSuffix}-${file.name}`;
-      const storageRef = ref(storage, `playbooks/${fileName}`);
-      
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          // Progress can be handled here if needed
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setUploadStatus({ type: 'success', message: `Uploading: ${Math.round(progress)}%` });
-        },
-        (error) => {
-          setUploadStatus({ type: 'error', message: error.message });
-          setUploading(false);
-        },
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          setFormData(prev => ({ ...prev, fileUrl: downloadURL }));
-          setUploadStatus({ type: 'success', message: `Manifest synced: ${file.name}` });
-          setUploading(false);
-        }
-      );
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api/playbook/upload', {
+        method: 'POST',
+        body: formData
+      });
+      if (!res.ok) throw new Error("Upload failed");
+      const data = await res.json();
+      setFormData(prev => ({ ...prev, fileUrl: data.url }));
+      setUploadStatus({ type: 'success', message: `Manifest synced: ${file.name}` });
     } catch (err: any) {
       setUploadStatus({ type: 'error', message: err.message });
+    } finally {
       setUploading(false);
     }
   };
@@ -180,33 +136,20 @@ export default function AdminPage({ user }: AdminPageProps) {
   const handleImageUpload = async (file: File) => {
     setImageUploading(true);
     setImageUploadStatus(null);
-    
     try {
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-      const fileName = `${uniqueSuffix}-${file.name}`;
-      const storageRef = ref(storage, `playbooks/covers/${fileName}`);
-      
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setImageUploadStatus({ type: 'success', message: `Uploading: ${Math.round(progress)}%` });
-        },
-        (error) => {
-          setImageUploadStatus({ type: 'error', message: error.message });
-          setImageUploading(false);
-        },
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          setFormData(prev => ({ ...prev, imageUrl: downloadURL }));
-          setImageUploadStatus({ type: 'success', message: `Cover synced: ${file.name}` });
-          setImageUploading(false);
-        }
-      );
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api/playbook/upload', {
+        method: 'POST',
+        body: formData
+      });
+      if (!res.ok) throw new Error("Upload failed");
+      const data = await res.json();
+      setFormData(prev => ({ ...prev, imageUrl: data.url }));
+      setImageUploadStatus({ type: 'success', message: `Cover synced: ${file.name}` });
     } catch (err: any) {
       setImageUploadStatus({ type: 'error', message: err.message });
+    } finally {
       setImageUploading(false);
     }
   };
@@ -239,15 +182,23 @@ export default function AdminPage({ user }: AdminPageProps) {
       };
 
       if (editingId) {
-        await updateDoc(doc(db, "playbooks", editingId), payload);
+        await fetch(`/api/playbook/items/${editingId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
       } else {
-        await addDoc(collection(db, "playbooks"), {
-          ...payload,
-          createdAt: Date.now(),
-          authorId: user.uid,
-          authorName: user.displayName || user.email?.split("@")[0] || "Admin",
-          isActive: true,
-          downloadCount: 0,
+        await fetch('/api/playbook/items', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...payload,
+            createdAt: Date.now(),
+            authorId: user.uid,
+            authorName: user.displayName || user.email?.split("@")[0] || "Admin",
+            isActive: true,
+            downloadCount: 0,
+          })
         });
       }
       
@@ -304,9 +255,12 @@ export default function AdminPage({ user }: AdminPageProps) {
 
   const toggleStatus = async (item: PlaybookItem) => {
     try {
-      await updateDoc(doc(db, "playbooks", item.id), {
-        isActive: !item.isActive,
-        updatedAt: Date.now(),
+      await fetch(`/api/playbook/items/${item.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          isActive: !item.isActive,
+        })
       });
       loadRegistryItems();
     } catch (err) {
@@ -317,18 +271,9 @@ export default function AdminPage({ user }: AdminPageProps) {
   const handleDelete = async (item: PlaybookItem) => {
     if (!confirm(`Confirm permanent deletion of "${item.title}" from server registry?`)) return;
     try {
-      // Delete from Storage if it's a firebase storage URL
-      if (item.fileUrl && item.fileUrl.includes("firebasestorage")) {
-        try {
-          const fileRef = ref(storage, item.fileUrl);
-          await deleteObject(fileRef);
-          console.log("Deleted file from storage");
-        } catch (storageErr) {
-          console.error("Storage deletion failed, file might not exist:", storageErr);
-        }
-      }
-
-      await deleteDoc(doc(db, "playbooks", item.id));
+      await fetch(`/api/playbook/items/${item.id}`, {
+        method: 'DELETE'
+      });
       loadRegistryItems();
     } catch (err) {
       console.error("Error deleting item:", err);
