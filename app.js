@@ -145,7 +145,7 @@ const launchBlogStandalone = async () => {
   const blogProcess = spawn(process.execPath, [blogStandaloneServer], {
     cwd: blogStandaloneDir,
     shell: false,
-    stdio: 'inherit',
+    stdio: ['ignore', 'pipe', 'pipe'],
     env: {
       ...process.env,
       PORT: String(BLOG_PORT),
@@ -156,6 +156,14 @@ const launchBlogStandalone = async () => {
       BLOG_UPLOADS_DIR: blogUploadsDir,
       ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || 'admin123',
     },
+  });
+
+  blogProcess.stdout.on('data', (data) => {
+    console.log(`[Blog STDOUT] ${data.toString().trim()}`);
+  });
+
+  blogProcess.stderr.on('data', (data) => {
+    console.error(`[Blog STDERR] ${data.toString().trim()}`);
   });
 
   blogProcess.on('spawn', async () => {
@@ -252,13 +260,21 @@ const launchStudioServer = async () => {
   const studioProcess = spawn(process.execPath, [studioAppPath], {
     cwd: path.dirname(studioAppPath),
     shell: false,
-    stdio: 'inherit',
+    stdio: ['ignore', 'pipe', 'pipe'],
     env: {
       ...process.env,
       PORT: String(STUDIO_PORT),
       NODE_ENV: 'production',
       JWT_SECRET: process.env.JWT_SECRET || 'pb_studio_secret_2026',
     },
+  });
+
+  studioProcess.stdout.on('data', (data) => {
+    console.log(`[Studio STDOUT] ${data.toString().trim()}`);
+  });
+
+  studioProcess.stderr.on('data', (data) => {
+    console.error(`[Studio STDERR] ${data.toString().trim()}`);
   });
 
   studioProcess.on('spawn', async () => {

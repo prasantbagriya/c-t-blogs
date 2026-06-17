@@ -5,17 +5,18 @@
   "type": "module",
   "main": "server.cjs",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "scripts": {
     "start": "node server.cjs",
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "dev:client": "vite --port=5173",
     "dev:server": "cross-env PORT=3001 NODE_ENV=development nodemon --config server/nodemon.json server/index.js",
-    "build": "node generate-sitemap.js && vite build",
+    "build": "echo \"Skip server build\"",
+    "build:local": "node generate-sitemap.js && vite build",
     "sitemap": "node generate-sitemap.js",
     "lint": "tsc --noEmit",
-    "mobile:sync": "npm run build && npx cap sync",
+    "mobile:sync": "npm run build:local && npx cap sync",
     "mobile:open:android": "npx cap open android",
     "mobile:open:ios": "npx cap open ios"
   },

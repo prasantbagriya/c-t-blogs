@@ -36,7 +36,7 @@ if (!(Test-Path (Join-Path $blogPath "package.json"))) {
 
 Set-Location $rootPath
 Write-Host "Step 1: Building frontend..."
-npm run build
+npm run build:local
 Assert-Success "Frontend build"
 
 Write-Host "Step 2: Building embedded blog..."

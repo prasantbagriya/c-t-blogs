@@ -151,7 +151,7 @@ export default function App() {
   // Initialize state based on URL path
   const [currentPage, setCurrentPage] = useState<Page>(() => {
     const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '') || 'landing';
-    const publicRoutes = ['services', 'service-detail', 'contact', 'about', 'success-stories', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'auth', 'dashboard', 'reset-password', 'threads-callback', 'instagram-callback', 'artists', 'youtubevideodownload'];
+    const publicRoutes = ['services', 'service-detail', 'contact', 'about', 'success-stories', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'auth', 'dashboard', 'reset-password', 'threads-callback', 'instagram-callback', 'artists', 'youtubevideodownload', 'whatsapp-direct-message', 'whatsapp-form-generator'];
     
     if (path.startsWith('services/')) return 'service-detail';
     if (path === 'get-started') return 'auth';
@@ -296,7 +296,7 @@ export default function App() {
       const path = window.location.pathname.replace(/^\//, '') || 'landing';
       const hash = window.location.hash.replace(/^#/, '');
 
-      const validPages = ['landing', 'dashboard', 'auth', 'reset-password', 'services', 'service-detail', 'about', 'success-stories', 'contact', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'artists', 'youtubevideodownload'];
+      const validPages = ['landing', 'dashboard', 'auth', 'reset-password', 'services', 'service-detail', 'about', 'success-stories', 'contact', 'privacy', 'terms', 'deletion', 'careers', 'pricing', 'whatsapp-link-generator', 'artists', 'youtubevideodownload', 'whatsapp-direct-message', 'whatsapp-form-generator'];
       if (path.startsWith('services/')) {
         setSelectedServiceId(path.split('/').pop() || null);
         setCurrentPage('service-detail');
@@ -348,6 +348,8 @@ export default function App() {
       else if (route === '/tool/sip-calculator' || route === '/sip-calculator') setCurrentPage('sip-calculator');
       else if (route === '/tool/compound-interest' || route === '/compound-interest') setCurrentPage('compound-interest');
       else if (route === '/tool/prop-firm' || route === '/prop-firm') setCurrentPage('prop-firm');
+      else if (route === '/whatsapp-direct-message') setCurrentPage('whatsapp-direct-message');
+      else if (route === '/whatsapp-form-generator') setCurrentPage('whatsapp-form-generator');
       else if (route === '/youtubevideodownload') setCurrentPage('youtubevideodownload');
     };
     window.addEventListener('popstate', handlePopState);
