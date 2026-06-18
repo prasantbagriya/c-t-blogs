@@ -21,16 +21,15 @@ export default function Navbar({ onNavigate }: { onNavigate?: (page: string) => 
       window.location.href = '/portal/';
       return;
     }
-    if (page === 'youtubevideodownload') {
-      window.location.href = '/youtubevideodownload';
+    if (['youtubevideodownload', 'prop-firm', 'sip-calculator', 'compound-interest'].includes(page)) {
+      onNavigate?.(page);
+      setIsMenuOpen(false);
+      setIsToolsOpen(false);
+      setIsCompanyOpen(false);
       return;
     }
     if (page === 'playbook') {
       window.location.href = '/playbook/';
-      return;
-    }
-    if (['prop-firm', 'sip-calculator', 'compound-interest'].includes(page)) {
-      window.location.href = `/tool/${page}`;
       return;
     }
     onNavigate?.(page)

@@ -964,7 +964,7 @@ export default function App() {
   }
 
   const MarketingShell = ({ children }: { children: React.ReactNode }) => (
-    <div className="relative min-h-screen bg-black">
+    <div className="relative min-h-screen bg-black text-white">
       <Suspense fallback={null}><BackgroundPaths /></Suspense>
       <Suspense fallback={null}><AnimatedBackground /></Suspense>
       <Suspense fallback={null}><BackgroundStripes /></Suspense>

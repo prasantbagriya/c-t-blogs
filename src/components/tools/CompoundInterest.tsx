@@ -6,15 +6,15 @@ import { ArrowLeft } from 'lucide-react';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const CompoundInterest = () => {
-    const [principal, setPrincipal] = useState(100000);
-    const [rate, setRate] = useState(10);
-    const [years, setYears] = useState(10);
+    const [principal, setPrincipal] = useState<number>(100000);
+    const [rate, setRate] = useState<number>(10);
+    const [years, setYears] = useState<number>(5);
     const [result, setResult] = useState({ invested: 0, interest: 0, total: 0 });
 
     useEffect(() => {
-        const p = parseFloat(principal.toString());
-        const r = parseFloat(rate.toString()) / 100;
-        const t = parseFloat(years.toString());
+        const p = principal;
+        const r = rate / 100;
+        const t = years;
         const n = 1; // Annually
 
         const amount = p * Math.pow((1 + (r / n)), (n * t));
@@ -50,8 +50,8 @@ const CompoundInterest = () => {
         <div className="container mx-auto px-6 py-10 max-w-5xl">
             <button 
                 onClick={() => {
-                    window.history.pushState({}, '', '/#tools');
-                    window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/dashboard' }));
+                    window.history.pushState({}, '', '/');
+                    window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/' }));
                 }}
                 className="inline-flex items-center text-sm text-gray-400 hover:text-white mb-8 bg-transparent border-none cursor-pointer"
             >

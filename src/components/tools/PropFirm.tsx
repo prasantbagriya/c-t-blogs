@@ -4,6 +4,10 @@ import { ArrowLeft, Plus, X, AlertTriangle, CheckCircle } from 'lucide-react';
 const PropFirm = () => {
     const [profitTarget, setProfitTarget] = useState<number>(0);
     const [threshold, setThreshold] = useState<number>(50);
+    const [accountSize, setAccountSize] = useState<number>(100000);
+    const [targetPercent, setTargetPercent] = useState<number>(10);
+    const [winRate, setWinRate] = useState<number>(50);
+    const [rrRatio, setRrRatio] = useState<number>(2);
     const [dailyProfitInput, setDailyProfitInput] = useState<string>('');
     const [dailyProfits, setDailyProfits] = useState<number[]>([]);
 
@@ -61,8 +65,8 @@ const PropFirm = () => {
         <div className="container mx-auto px-6 py-10 max-w-5xl">
             <button 
                 onClick={() => {
-                    window.history.pushState({}, '', '/#tools');
-                    window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/dashboard' }));
+                    window.history.pushState({}, '', '/');
+                    window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/' }));
                 }}
                 className="inline-flex items-center text-sm text-gray-400 hover:text-white mb-8 bg-transparent border-none cursor-pointer"
             >

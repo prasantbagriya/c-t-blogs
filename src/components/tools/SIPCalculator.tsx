@@ -6,15 +6,15 @@ import { ArrowLeft } from 'lucide-react';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const SIPCalculator = () => {
-    const [monthlyInvestment, setMonthlyInvestment] = useState(5000);
-    const [rate, setRate] = useState(12);
-    const [years, setYears] = useState(10);
+    const [monthlyInvestment, setMonthlyInvestment] = useState<number>(5000);
+    const [rate, setRate] = useState<number>(12);
+    const [years, setYears] = useState<number>(10);
     const [result, setResult] = useState({ invested: 0, returns: 0, total: 0 });
 
     useEffect(() => {
-        const p = parseFloat(monthlyInvestment.toString());
-        const i = parseFloat(rate.toString()) / 12 / 100;
-        const n = parseFloat(years.toString()) * 12;
+        const p = monthlyInvestment;
+        const i = rate / 12 / 100;
+        const n = years * 12;
 
         const m = p * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
         const totalInvested = p * n;
@@ -49,8 +49,8 @@ const SIPCalculator = () => {
         <div className="container mx-auto px-6 py-10 max-w-5xl">
             <button 
                 onClick={() => {
-                    window.history.pushState({}, '', '/#tools');
-                    window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/dashboard' }));
+                    window.history.pushState({}, '', '/');
+                    window.dispatchEvent(new CustomEvent('app-navigate', { detail: '/' }));
                 }}
                 className="inline-flex items-center text-sm text-gray-400 hover:text-white mb-8 bg-transparent border-none cursor-pointer"
             >
