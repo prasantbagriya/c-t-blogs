@@ -9,9 +9,11 @@
   },
   "scripts": {
     "start": "node server.cjs",
-    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\" \"npm run dev:blog\" \"npm run dev:studio\"",
     "dev:client": "vite --port=5173",
     "dev:server": "cross-env PORT=3001 NODE_ENV=development nodemon --config server/nodemon.json server/index.js",
+    "dev:blog": "cd blog && npm run dev -- -p 4289",
+    "dev:studio": "cd PB-Creative-Studio && npm run dev",
     "build": "echo \"Skip server build\"",
     "build:local": "node generate-sitemap.js && vite build",
     "sitemap": "node generate-sitemap.js",

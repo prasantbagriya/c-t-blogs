@@ -10,3 +10,6 @@ coverage/
 temp_build/
 .codex-runtime/
 PB-Creative-Studio/server/bin/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
