@@ -84,10 +84,8 @@ app.use(cors({
 
 // ✅ PB-Creative-Studio Proxy Setup
 const STUDIO_PATHS = [
-  '/tool', '/youtubevideodownload', '/portal', '/hub',
-  '/info', '/download',
-  '/api/info', '/api/download',
-  '/api/admin', '/api/student', '/api/hub', '/api/leads'
+  '/portal', '/hub',
+  '/api/student', '/api/hub', '/api/leads'
 ];
 
 let _studioProxy = null;

@@ -13,13 +13,13 @@ const downloadFile = (url, dest) => {
             // handle redirects
             if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
                 file.close();
-                fs.unlink(dest, () => {});
+                try { fs.unlinkSync(dest); } catch(e) {}
                 downloadFile(response.headers.location, dest).then(resolve).catch(reject);
                 return;
             }
             if (response.statusCode !== 200) {
                 file.close();
-                fs.unlink(dest, () => {});
+                try { fs.unlinkSync(dest); } catch(e) {}
                 reject(new Error(`Failed to download: status ${response.statusCode}`));
                 return;
             }
@@ -44,14 +44,20 @@ const ensureYtDlp = async () => {
     const binPath = path.join(binDir, binName);
 
     if (fs.existsSync(binPath)) {
-        if (!isWin) {
-            try {
-                fs.chmodSync(binPath, 0o755);
-            } catch (e) {
-                console.error(`[Downloader] Chmod failed: ${e.message}`);
+        const stats = fs.statSync(binPath);
+        if (stats.size > 0) {
+            if (!isWin) {
+                try {
+                    fs.chmodSync(binPath, 0o755);
+                } catch (e) {
+                    console.error(`[Downloader] Chmod failed: ${e.message}`);
+                }
             }
+            return binPath;
+        } else {
+            console.log(`[Downloader] yt-dlp binary is 0 bytes. Re-downloading...`);
+            fs.unlinkSync(binPath);
         }
-        return binPath;
     }
 
     console.log(`[Downloader] yt-dlp binary not found. Initiating dynamic download...`);
