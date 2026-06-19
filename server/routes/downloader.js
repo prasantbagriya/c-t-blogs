@@ -39,7 +39,7 @@ const downloadFile = (url, dest) => {
 
 const ensureYtDlp = async () => {
     const isWin = process.platform === 'win32';
-    const binName = isWin ? 'yt-dlp.exe' : 'yt-dlp';
+    const binName = isWin ? 'yt-dlp.exe' : 'yt-dlp_linux';
     const binDir = path.join(process.cwd(), 'server', 'bin');
     const binPath = path.join(binDir, binName);
 
@@ -67,7 +67,7 @@ const ensureYtDlp = async () => {
 
     const url = isWin 
         ? 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe'
-        : 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp';
+        : 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux';
 
     try {
         await downloadFile(url, binPath);
