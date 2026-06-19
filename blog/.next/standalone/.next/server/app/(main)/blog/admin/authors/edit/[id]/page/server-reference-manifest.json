@@ -1,0 +1,17 @@
+{
+  "node": {
+    "408c9b3327b5afa2dad04e3d67a83e0f8748999624": {
+      "workers": {
+        "app/(main)/blog/admin/authors/edit/[id]/page": {
+          "moduleId": 38614,
+          "async": false,
+          "exportedName": "handleUpload",
+          "filename": "lib/actions.ts"
+        }
+      },
+      "exportedName": "handleUpload",
+      "filename": "lib/actions.ts"
+    }
+  },
+  "edge": {}
+}

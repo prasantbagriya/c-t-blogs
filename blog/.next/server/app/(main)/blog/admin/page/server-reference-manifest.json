@@ -1,0 +1,29 @@
+{
+  "node": {
+    "4059076cdc5349d8b7aaaefbe1770600a61c7c41a8": {
+      "workers": {
+        "app/(main)/blog/admin/page": {
+          "moduleId": 74657,
+          "async": false,
+          "exportedName": "handleDeletePost",
+          "filename": "lib/actions.ts"
+        }
+      },
+      "exportedName": "handleDeletePost",
+      "filename": "lib/actions.ts"
+    },
+    "40f86cbfd46c614b0f010d2c84ea48654ad691b75d": {
+      "workers": {
+        "app/(main)/blog/admin/page": {
+          "moduleId": 74657,
+          "async": false,
+          "exportedName": "handleDeleteStory",
+          "filename": "lib/actions.ts"
+        }
+      },
+      "exportedName": "handleDeleteStory",
+      "filename": "lib/actions.ts"
+    }
+  },
+  "edge": {}
+}

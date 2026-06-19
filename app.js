@@ -148,7 +148,7 @@ const launchBlogStandalone = async () => {
     stdio: ['ignore', 'pipe', 'pipe'],
     env: {
       ...process.env,
-      PORT: String(BLOG_PORT),
+      PORT: blogState.port.toString(),
       HOSTNAME: '127.0.0.1',
       NODE_ENV: 'production',
       // Override data/uploads paths to use blog root (not standalone copy)

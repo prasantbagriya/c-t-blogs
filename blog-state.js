@@ -8,5 +8,5 @@ const isDev = process.env.NODE_ENV === 'development';
 
 export const blogState = {
   ready: isDev ? true : false,
-  port: parseInt(process.env.BLOG_PORT || (isDev ? '4289' : '4000'), 10),
+  port: parseInt(process.env.BLOG_PORT || '4289', 10),
 };

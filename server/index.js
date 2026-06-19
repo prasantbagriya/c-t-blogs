@@ -650,5 +650,26 @@ if (!process.env.IS_WRAPPER) {
   console.log(`-----------------------------------------`);
 }
 
+app.get('/api/debug-blog-logs', (req, res) => {
+  try {
+    const cwd = process.cwd();
+    const files = fs.readdirSync(cwd);
+    let out = `CWD: ${cwd}\nFiles:\n${files.join('\n')}\n\n`;
+    
+    ['stderr.log', 'stdout.log', 'server_error.log', 'error.log', '.litespeed_restart.txt'].forEach(f => {
+      try {
+        const p = require('path').join(cwd, f);
+        if (require('fs').existsSync(p)) {
+          out += `\n--- ${f} ---\n${require('fs').readFileSync(p, 'utf8').slice(-10000)}\n`;
+        }
+      } catch(e) {}
+    });
+    
+    res.send(`<pre>${out}</pre>`);
+  } catch(err) {
+    res.send(err.message);
+  }
+});
+
 export { app };
 
