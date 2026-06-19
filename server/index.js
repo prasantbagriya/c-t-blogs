@@ -544,7 +544,32 @@ app.use('/uploads', express.static(path.join(__dirname, '../dist/uploads'), { ma
 app.use('/uploads', express.static(path.join(__dirname, '../blog/public/uploads'), { maxAge: '30d' }));
 app.use('/uploads', express.static(path.join(__dirname, '../blog/.next/standalone/public/uploads'), { maxAge: '30d' }));
 
-// Playbook App Routing
+// Portal App Static Serving
+app.use('/portal', express.static(path.join(__dirname, 'public/portal'), {
+  maxAge: '0',
+  setHeaders: (res, filepath) => {
+    if (filepath.includes(path.sep + 'assets' + path.sep)) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    } else if (filepath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=2592000');
+    }
+  }
+}));
+
+// Portal SPA fallback — all /portal/* routes return index.html
+app.get('/portal/*', (req, res) => {
+  const portalIndexPath = path.join(__dirname, 'public/portal/index.html');
+  if (fs.existsSync(portalIndexPath)) {
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    res.sendFile(portalIndexPath);
+  } else {
+    res.status(404).send('Portal not found.');
+  }
+});
+
+
 app.use('/playbook', express.static(path.join(__dirname, '../Playbook/dist'), {
   maxAge: '0',
   setHeaders: (res, filepath) => {
