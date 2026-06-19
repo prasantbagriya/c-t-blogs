@@ -96,6 +96,9 @@ import { ExternalApiNode } from './flow/nodes/ExternalApiNode';
 import { TimeRoutingNode } from './flow/nodes/TimeRoutingNode';
 import { AskLocationNode } from './flow/nodes/AskLocationNode';
 import { CRMUpdateNode } from './flow/nodes/CRMUpdateNode';
+import { GoogleCalendarNode } from './flow/nodes/GoogleCalendarNode';
+import { GoogleDriveNode } from './flow/nodes/GoogleDriveNode';
+import { YouTubeNode } from './flow/nodes/YouTubeNode';
 import { DeleteButtonEdge } from './flow/edges/DeleteButtonEdge';
 
 const cn = (...classes: any[]) => classes.filter(Boolean).join(' ');
@@ -133,7 +136,10 @@ const nodeTypes = {
   external_api: ExternalApiNode,
   time_routing: TimeRoutingNode,
   ask_location: AskLocationNode,
-  crm_update: CRMUpdateNode
+  crm_update: CRMUpdateNode,
+  google_calendar: GoogleCalendarNode,
+  google_drive: GoogleDriveNode,
+  youtube: YouTubeNode
 };
 
 const edgeTypes = {
@@ -1401,6 +1407,9 @@ const FlowBuilderContent = ({ user, platform: propPlatform = 'whatsapp', selecte
               <div className="grid grid-cols-1 gap-2 w-full">
                 {[
                   { id: 'google_sheets', label: 'Google Sheets', sub: 'Append Row to Sheet', icon: <FileText />, color: 'bg-emerald-50 text-emerald-600' },
+                  { id: 'google_calendar', label: 'Google Calendar', sub: 'Create/Find Events', icon: <CalendarClock />, color: 'bg-blue-50 text-blue-600' },
+                  { id: 'google_drive', label: 'Google Drive', sub: 'Upload Files', icon: <Database />, color: 'bg-indigo-50 text-indigo-600' },
+                  { id: 'youtube', label: 'YouTube API', sub: 'Upload Videos', icon: <Video />, color: 'bg-red-50 text-red-600' },
                   { id: 'external_api', label: 'External API', sub: 'Notify Their Platform', icon: <Globe />, color: 'bg-cyan-50 text-cyan-600' }
                 ].map(node => (
                   <button

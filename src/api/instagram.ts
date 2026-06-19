@@ -8,37 +8,18 @@ export function getInstagramAuthUrl() {
   return `https://www.facebook.com/v22.0/dialog/oauth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}&state=instagram_connect`;
 }
 
+import { loadFacebookSdk } from './auth';
+
 /**
  * Helper to ensure FB SDK is loaded before calling login
  */
 async function ensureFBSDK(): Promise<any> {
-  return new Promise((resolve, reject) => {
-    if ((window as any).FB) return resolve((window as any).FB);
-    
-    console.log('[FacebookSDK] SDK not found, waiting for FBReady event...');
-    
-    // Wait for our custom event from index.html
-    const onFBReady = () => {
-      window.removeEventListener('FBReady', onFBReady);
-      resolve((window as any).FB);
-    };
-    window.addEventListener('FBReady', onFBReady);
-    
-    // Fallback: Check every 500ms for 5 seconds
-    let attempts = 0;
-    const interval = setInterval(() => {
-      attempts++;
-      if ((window as any).FB) {
-        clearInterval(interval);
-        window.removeEventListener('FBReady', onFBReady);
-        resolve((window as any).FB);
-      } else if (attempts > 10) {
-        clearInterval(interval);
-        window.removeEventListener('FBReady', onFBReady);
-        reject(new Error('Facebook SDK failed to load. Please check your internet or disable adblockers.'));
-      }
-    }, 500);
-  });
+  try {
+    await loadFacebookSdk();
+    return (window as any).FB;
+  } catch (err) {
+    throw new Error('Facebook SDK failed to load. Please check your internet or disable adblockers.');
+  }
 }
 
 export async function connectInstagramWithFacebook(uid: string) {

@@ -103,7 +103,7 @@ export default defineConfig(({ mode }) => {
       } : {}),
     },
     server: {
-      host: '127.0.0.1',
+      host: '0.0.0.0',
       watch: {
         ignored: ['**/server/**', '**/node_modules/**', '**/dist/**'],
       },
@@ -112,7 +112,6 @@ export default defineConfig(({ mode }) => {
       },
       proxy: {
         '/api/admin': blogProxy,
-        '/api/auth/login': blogProxy,
         '/api/og': blogProxy,
         '/api': {
           target: 'http://127.0.0.1:3001',
@@ -135,8 +134,8 @@ export default defineConfig(({ mode }) => {
           secure: false,
         },
         '/blog': blogProxy,
-        '/admin': blogProxy,
-        '/auth': blogProxy,
+        '/blog/admin': blogProxy,
+        '/blog/auth': blogProxy,
         '/category': blogProxy,
         '/author': blogProxy,
         '/stories': blogProxy,

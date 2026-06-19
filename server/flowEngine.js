@@ -784,6 +784,178 @@ async function executeFlowFromNode(nodeId, nodes, edges, recipient, source, cont
         }
       }
     }
+    // --- GOOGLE WORKSPACE & YOUTUBE NODES ---
+    else if (node.type === 'google_calendar') {
+      const { action, eventTitle, startTime, duration, generateMeet, attendeeEmail } = node.data || {};
+      const uid = context.uid;
+      
+      try {
+        const accounts = await getCollection('google_workspace_accounts');
+        const account = accounts.find(a => a.uid === uid);
+        
+        if (account && account.accessToken) {
+          const { google } = await import('googleapis');
+          const oauth2Client = new google.auth.OAuth2(
+            process.env.GOOGLE_CLIENT_ID,
+            process.env.GOOGLE_CLIENT_SECRET
+          );
+          oauth2Client.setCredentials({
+            access_token: account.accessToken,
+            refresh_token: account.refreshToken,
+            expiry_date: account.expiryDate
+          });
+          
+          const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
+          
+          if (action === 'create_event') {
+            const profile = (context.profiles || []).find(p => p.visitorId === recipient || p.phone === recipient) || {};
+            const resolveVars = (text) => text ? text.replace(/\{\{(.*?)\}\}/g, (match, key) => profile[key.trim()] || context[key.trim()] || match) : text;
+            
+            const title = resolveVars(eventTitle) || 'New Event';
+            // Simple parsing for start time
+            let startDateTime = new Date();
+            if (startTime) {
+               const parsed = Date.parse(resolveVars(startTime));
+               if (!isNaN(parsed)) {
+                 startDateTime = new Date(parsed);
+               } else {
+                 startDateTime.setHours(startDateTime.getHours() + 1);
+               }
+            } else {
+               startDateTime.setHours(startDateTime.getHours() + 1);
+            }
+            
+            const endDateTime = new Date(startDateTime.getTime() + parseInt(duration || '30') * 60000);
+            
+            const event = {
+              summary: title,
+              start: { dateTime: startDateTime.toISOString(), timeZone: 'UTC' },
+              end: { dateTime: endDateTime.toISOString(), timeZone: 'UTC' },
+            };
+            
+            if (attendeeEmail) {
+              const email = resolveVars(attendeeEmail);
+              if (email) {
+                event.attendees = [{ email }];
+              }
+            }
+
+            if (generateMeet) {
+              event.conferenceData = {
+                createRequest: {
+                  requestId: `meet_${Date.now()}`,
+                  conferenceSolutionKey: { type: 'hangoutsMeet' }
+                }
+              };
+            }
+            
+            const response = await calendar.events.insert({
+              calendarId: 'primary',
+              resource: event,
+              conferenceDataVersion: generateMeet ? 1 : 0,
+              sendUpdates: attendeeEmail ? 'all' : 'none'
+            });
+            console.log(`[FlowEngine] 📅 Google Calendar: Created event "${title}"`);
+            
+            if (generateMeet && response.data.hangoutLink) {
+              console.log(`[FlowEngine] 🎥 Google Meet link generated: ${response.data.hangoutLink}`);
+              context.meetLink = response.data.hangoutLink;
+              
+              // Persist to profile so it's available in next messages
+              if (profile && profile.id) {
+                await updateDoc('customer_profiles', profile.id, { meetLink: response.data.hangoutLink });
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error('[FlowEngine] ❌ Google Calendar Error:', error.message);
+      }
+    }
+    else if (node.type === 'google_drive') {
+      const { action, itemName, fileUrl } = node.data || {};
+      const uid = context.uid;
+      
+      try {
+        const accounts = await getCollection('google_workspace_accounts');
+        const account = accounts.find(a => a.uid === uid);
+        
+        if (account && account.tokens) {
+          const { google } = await import('googleapis');
+          const oauth2Client = new google.auth.OAuth2(
+            process.env.GOOGLE_CLIENT_ID,
+            process.env.GOOGLE_CLIENT_SECRET
+          );
+          oauth2Client.setCredentials(account.tokens);
+          
+          const drive = google.drive({ version: 'v3', auth: oauth2Client });
+          const profile = (context.profiles || []).find(p => p.visitorId === recipient || p.phone === recipient) || {};
+          const resolveVars = (text) => text ? text.replace(/\{\{(.*?)\}\}/g, (match, key) => profile[key.trim()] || context[key.trim()] || match) : text;
+          
+          const name = resolveVars(itemName) || 'New Item';
+          
+          if (action === 'create_folder') {
+            await drive.files.create({
+              resource: {
+                name: name,
+                mimeType: 'application/vnd.google-apps.folder',
+              },
+              fields: 'id',
+            });
+            console.log(`[FlowEngine] 📁 Google Drive: Created folder "${name}"`);
+          } else if (action === 'upload_file') {
+            const url = resolveVars(fileUrl);
+            await drive.files.create({
+              resource: { name: name },
+              media: { mimeType: 'text/plain', body: `File URL: ${url}` },
+              fields: 'id',
+            });
+            console.log(`[FlowEngine] ☁️ Google Drive: Uploaded file info "${name}"`);
+          }
+        }
+      } catch (error) {
+        console.error('[FlowEngine] ❌ Google Drive Error:', error.message);
+      }
+    }
+    else if (node.type === 'youtube') {
+      const { action, title, videoUrl } = node.data || {};
+      const uid = context.uid;
+      
+      try {
+        const accounts = await getCollection('google_workspace_accounts');
+        const account = accounts.find(a => a.uid === uid);
+        
+        if (account && account.tokens) {
+          const { google } = await import('googleapis');
+          const oauth2Client = new google.auth.OAuth2(
+            process.env.GOOGLE_CLIENT_ID,
+            process.env.GOOGLE_CLIENT_SECRET
+          );
+          oauth2Client.setCredentials(account.tokens);
+          
+          const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
+          const profile = (context.profiles || []).find(p => p.visitorId === recipient || p.phone === recipient) || {};
+          const resolveVars = (text) => text ? text.replace(/\{\{(.*?)\}\}/g, (match, key) => profile[key.trim()] || context[key.trim()] || match) : text;
+          
+          const resolvedTitle = resolveVars(title) || 'New YouTube Item';
+          
+          if (action === 'create_playlist') {
+            await youtube.playlists.insert({
+              part: 'snippet,status',
+              resource: {
+                snippet: { title: resolvedTitle },
+                status: { privacyStatus: 'private' }
+              }
+            });
+            console.log(`[FlowEngine] ▶️ YouTube: Created playlist "${resolvedTitle}"`);
+          } else if (action === 'upload_video') {
+             console.log(`[FlowEngine] ▶️ YouTube: Video upload placeholder for "${resolvedTitle}" with URL ${resolveVars(videoUrl)}`);
+          }
+        }
+      } catch (error) {
+        console.error('[FlowEngine] ❌ YouTube Error:', error.message);
+      }
+    }
 
     // 2. Continue to Next Nodes (Recursive)
     const outgoingEdges = edges.filter(e => e.source === nodeId);

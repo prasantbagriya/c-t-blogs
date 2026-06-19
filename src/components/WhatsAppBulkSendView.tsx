@@ -64,6 +64,44 @@ export function WhatsAppBulkSendView({ user, onSuccess, selectedAccount }: Whats
   const [parsedRecipients, setParsedRecipients] = useState<any[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [isAudienceModalOpen, setIsAudienceModalOpen] = useState(false);
+  const [userContacts, setUserContacts] = useState<any[]>([]);
+  const [uniqueTags, setUniqueTags] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!user?.uid) return;
+    const q = query(collection(db, 'contacts'), where('uid', '==', user.uid));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setUserContacts(docs);
+      
+      const tags = new Set<string>();
+      docs.forEach(c => {
+        if (c.tags && Array.isArray(c.tags)) {
+          c.tags.forEach(t => tags.add(t));
+        }
+      });
+      setUniqueTags(Array.from(tags));
+    });
+    return () => unsubscribe();
+  }, [user.uid]);
+
+  const handleSelectAudience = (tag: string | null) => {
+    const contactsToUse = tag ? userContacts.filter(c => c.tags?.includes(tag)) : userContacts;
+    if (contactsToUse.length === 0) return;
+
+    const newContent = contactsToUse.map(c => {
+      return `${c.phoneNumber},${c.name || ''}`;
+    }).join('\n');
+
+    setRecipients(prev => {
+      const current = prev.trim();
+      return current ? `${current}\n${newContent}` : newContent;
+    });
+    
+    setIsAudienceModalOpen(false);
+  };
+
   useEffect(() => {
     setSelectedTemplate(null); // Reset selection when account changes
     
@@ -458,6 +496,12 @@ export function WhatsAppBulkSendView({ user, onSuccess, selectedAccount }: Whats
 
                   <div className="flex flex-col sm:flex-row gap-3">
                     <div className="flex-1 flex items-center gap-3 p-4 bg-slate-50 dark:bg-[#1a1a24] border border-slate-200 dark:border-white/5 rounded border-dashed cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/10 hover:border-blue-400 transition-all group" 
+                         onClick={() => setIsAudienceModalOpen(true)}>
+                      <Users size={18} className="text-slate-700 dark:text-slate-200 group-hover:text-blue-500" />
+                      <span className="text-xs font-medium text-slate-600 dark:text-slate-200 group-hover:text-blue-600">Select Audience</span>
+                    </div>
+
+                    <div className="flex-1 flex items-center gap-3 p-4 bg-slate-50 dark:bg-[#1a1a24] border border-slate-200 dark:border-white/5 rounded border-dashed cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/10 hover:border-blue-400 transition-all group" 
                          onClick={() => fileInputRef.current?.click()}>
                       <Upload size={18} className="text-slate-700 dark:text-slate-200 group-hover:text-blue-500" />
                       <span className="text-xs font-medium text-slate-600 dark:text-slate-200 group-hover:text-blue-600">Upload CSV / TXT</span>
@@ -632,6 +676,69 @@ export function WhatsAppBulkSendView({ user, onSuccess, selectedAccount }: Whats
           </div>
         </div>
       </main>
+
+      {/* Audience Selection Modal */}
+      {isAudienceModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-white dark:bg-[#16161d] w-full max-w-md rounded-xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col">
+            <div className="p-4 border-b border-slate-100 dark:border-white/10 flex justify-between items-center">
+              <h3 className="font-bold text-lg text-slate-900 dark:text-white">
+                Select Audience Segment
+              </h3>
+              <button onClick={() => setIsAudienceModalOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="p-4 max-h-[60vh] overflow-y-auto space-y-2">
+              <button
+                onClick={() => handleSelectAudience(null)}
+                className="w-full text-left p-4 rounded-lg border border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-[#1a1a24] hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all flex items-center justify-between"
+              >
+                <div>
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">All Contacts</h4>
+                  <p className="text-xs text-slate-500 mt-1">Send to everyone in your audience</p>
+                </div>
+                <div className="bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-slate-300 text-[10px] font-bold px-2 py-1 rounded">
+                  {userContacts.length}
+                </div>
+              </button>
+
+              {uniqueTags.length > 0 && (
+                <div className="pt-4 pb-2">
+                  <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">By Tag / Segment</h4>
+                </div>
+              )}
+
+              {uniqueTags.map(tag => {
+                const count = userContacts.filter(c => c.tags?.includes(tag)).length;
+                return (
+                  <button
+                    key={tag}
+                    onClick={() => handleSelectAudience(tag)}
+                    className="w-full text-left p-4 rounded-lg border border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-[#1a1a24] hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all flex items-center justify-between"
+                  >
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-white">{tag}</h4>
+                      <p className="text-xs text-slate-500 mt-1">Send to contacts tagged as {tag}</p>
+                    </div>
+                    <div className="bg-blue-100 dark:bg-blue-900/30 text-blue-600 text-[10px] font-bold px-2 py-1 rounded">
+                      {count}
+                    </div>
+                  </button>
+                );
+              })}
+              
+              {uniqueTags.length === 0 && userContacts.length > 0 && (
+                 <p className="text-xs text-center text-slate-500 pt-4">No tags created yet. Add tags to contacts to see segments here.</p>
+              )}
+              {userContacts.length === 0 && (
+                 <p className="text-xs text-center text-slate-500 pt-4">No contacts found in your Audience. Please add them first.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

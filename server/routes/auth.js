@@ -152,7 +152,7 @@ router.post('/signup', decodePayload, async (req, res) => {
   }
 });
 
-router.post('/signin', decodePayload, async (req, res) => {
+router.post('/login', decodePayload, async (req, res) => {
   try {
     let { email, password } = req.body;
     

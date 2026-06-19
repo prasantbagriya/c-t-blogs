@@ -27,6 +27,7 @@ const PLATFORMS = [
   { id: 'meta', name: 'Meta / Facebook', icon: <Share2 />, color: '#0668E1', desc: 'Link your business pages and ad accounts.' },
   { id: 'threads', name: 'Threads', icon: <Threads size={16} />, color: '#000000', desc: 'Publish threads and analyze engagement.' },
   { id: 'razorpay', name: 'Razorpay', icon: <CreditCard />, color: '#3395FF', desc: 'Accept payments directly in WhatsApp and Widget.' },
+  { id: 'google_workspace', name: 'Google Workspace', icon: <Globe />, color: '#4285F4', desc: 'Login with Google to connect Drive, Calendar, YouTube, and Sheets.' },
   { id: 'google_sheets', name: 'Google Sheets', icon: <FileText />, color: '#0F9D58', desc: 'Sync leads and payments to your spreadsheets.' },
   { id: 'google_sheet_automation', name: 'Google Sheet Automation', icon: <FileText />, color: '#0F9D58', desc: 'Trigger flows when a new row is added to your sheet.' },
   { id: 'custom_blank', name: 'Custom (Blank Canvas)', icon: <Layout />, color: '#64748b', desc: 'Full freedom with all nodes and MCP connectivity.' },
@@ -68,6 +69,11 @@ export function IntegrationsView({ user, showToast, onNavigate }: { user: any, s
       setConnections(prev => [...prev.filter(c => c.platform !== 'google_sheets'), ...googleCons]);
     });
 
+    const unsubGoogleWorkspace = onSnapshot(query(collection(db, 'google_workspace_accounts'), ...uidFilter), (snap) => {
+      const workspaceCons = snap.docs.map(d => ({ id: d.id, platform: 'google_workspace', ...d.data() }));
+      setConnections(prev => [...prev.filter(c => c.platform !== 'google_workspace'), ...workspaceCons]);
+    });
+
     const unsubA = onSnapshot(query(collection(db, 'automations'), ...uidFilter), (snap) => {
       setAutomations(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     });
@@ -96,7 +102,7 @@ export function IntegrationsView({ user, showToast, onNavigate }: { user: any, s
     });
 
     return () => { 
-      unsubShopify(); unsubRazorpay(); unsubGoogle(); unsubA(); unsubT(); unsubP(); unsubIG(); unsubThreads(); unsubWidgets();
+      unsubShopify(); unsubRazorpay(); unsubGoogle(); unsubGoogleWorkspace(); unsubA(); unsubT(); unsubP(); unsubIG(); unsubThreads(); unsubWidgets();
     };
   }, [user.uid, user.parentId, user.role]);
 
@@ -143,6 +149,8 @@ export function IntegrationsView({ user, showToast, onNavigate }: { user: any, s
         else await addDoc(collection(db, 'google_settings'), { ...data, createdAt: new Date().toISOString() });
         showToast('Google Sheets linked!', 'success');
         setSelectedPlatform(null);
+      } else if (selectedPlatform.id === 'google_workspace') {
+        window.location.href = `${API_URL}/google/auth?uid=${user.parentId || user.uid}`;
       } else if (selectedPlatform.id === 'meta') {
         setIsSyncing(true);
         try {

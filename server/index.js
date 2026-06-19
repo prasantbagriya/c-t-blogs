@@ -472,6 +472,10 @@ app.get('/sdk/widget.js', (req, res) => {
   }
 });
 app.use('/api/auth', authRoutes);
+app.use('/api/google', (req, res, next) => {
+  console.log('[DEBUG] Hit /api/google:', req.method, req.url, req.path);
+  next();
+}, lazyRouter(() => import('./routes/googleAuth.js')));
 app.use('/api', lazyRouter(() => import('./routes/api.js')));
 app.use('/api/webhooks', lazyRouter(() => import('./routes/webhooks.js')));
 app.use('/shopify-login', shopifyRouter);
@@ -487,6 +491,7 @@ try {
 app.use('/api/inquiries', inquiryRoutes);
 app.use('/api/payments', lazyRouter(() => import('./routes/payments.js')));
 app.use('/api/google-sheets', lazyRouter(() => import('./routes/googleSheets.js')));
+
 app.use('/api/downloader', lazyRouter(() => import('./routes/downloader.js')));
 app.use('/api/playbook', lazyRouter(() => import('./routes/playbook.js')));
 // 404 handler for API routes

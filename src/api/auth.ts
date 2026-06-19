@@ -100,7 +100,7 @@ export async function signOut(authObj: any = null) {
 
 let facebookSdkPromise: Promise<void> | null = null;
 
-function loadFacebookSdk() {
+export function loadFacebookSdk() {
   if ((window as any).FB) return Promise.resolve();
   if (facebookSdkPromise) return facebookSdkPromise;
 
