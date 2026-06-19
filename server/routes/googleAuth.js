@@ -55,7 +55,7 @@ router.get('/callback', async (req, res) => {
     
     if (error) {
       console.error('[Google Auth] OAuth Error:', error);
-      return res.redirect(`${process.env.VITE_APP_URL || 'http://localhost:5173'}/integrations?google_error=${error}`);
+      return res.redirect(`${process.env.VITE_APP_URL || 'http://localhost:5173'}/dashboard?tab=integrations&google_error=${encodeURIComponent(error)}`);
     }
 
     if (!code || !state) {
@@ -101,10 +101,10 @@ router.get('/callback', async (req, res) => {
     await setDoc('google_workspace_accounts', accountId, accountData);
 
     // Redirect back to frontend
-    res.redirect(`${process.env.VITE_APP_URL || 'http://localhost:5173'}/settings?tab=integrations&google_success=true`);
+    res.redirect(`${process.env.VITE_APP_URL || 'http://localhost:5173'}/dashboard?tab=integrations&google_success=true`);
   } catch (error) {
     console.error('[Google Auth Callback] Error:', error);
-    res.redirect(`${process.env.VITE_APP_URL || 'http://localhost:5173'}/settings?tab=integrations&google_error=true`);
+    res.redirect(`${process.env.VITE_APP_URL || 'http://localhost:5173'}/dashboard?tab=integrations&google_error=${encodeURIComponent(error.message || 'unknown_error')}`);
   }
 });
 

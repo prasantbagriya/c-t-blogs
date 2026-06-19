@@ -1499,10 +1499,12 @@ router.get('/:collection', async (req, res) => {
     console.log(`[GenericAPI] Found ${data.length} items`);
     
     const collection = resolveCollection(req.params.collection);
-    const isMessages = collection === 'messages' || collection === 'ms-c';
     
-    // Optimized Cache headers
-    res.set('Cache-Control', isMessages ? 'no-store' : 'private, max-age=30');
+    // Optimized Cache headers - NEVER cache API responses to prevent stale data
+    // especially after OAuth redirects where the UI needs the freshest data instantly.
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
 
     // --- PERMISSION-BASED FILTERING ---
     const role = req.user.role;

@@ -1,4 +1,5 @@
 import { google } from 'googleapis';
+import { getCollection } from '../db.js';
 
 /**
  * Appends a row of data to a Google Sheet.
@@ -9,19 +10,40 @@ import { google } from 'googleapis';
 
 let cachedAuth = null;
 
-export async function appendToGoogleSheet(spreadsheetId, range, rowData) {
+export async function appendToGoogleSheet(spreadsheetId, range, rowData, uid = null) {
   try {
-    if (!cachedAuth) {
-      cachedAuth = new google.auth.GoogleAuth({
-        credentials: {
-          client_email: process.env.GOOGLE_CLIENT_EMAIL,
-          private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-        },
-        scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-      });
+    let authClient = null;
+
+    if (uid) {
+      const accounts = await getCollection('google_workspace_accounts');
+      const account = accounts.find(a => a.uid === uid);
+      if (account && account.accessToken) {
+        authClient = new google.auth.OAuth2(
+          process.env.GOOGLE_CLIENT_ID,
+          process.env.GOOGLE_CLIENT_SECRET
+        );
+        authClient.setCredentials({
+          access_token: account.accessToken,
+          refresh_token: account.refreshToken,
+          expiry_date: account.expiryDate
+        });
+      }
     }
 
-    const sheets = google.sheets({ version: 'v4', auth: cachedAuth });
+    if (!authClient) {
+      if (!cachedAuth) {
+        cachedAuth = new google.auth.GoogleAuth({
+          credentials: {
+            client_email: process.env.GOOGLE_CLIENT_EMAIL,
+            private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+          },
+          scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+        });
+      }
+      authClient = cachedAuth;
+    }
+
+    const sheets = google.sheets({ version: 'v4', auth: authClient });
 
     // 1. Get existing headers to map the row correctly
     const response = await sheets.spreadsheets.values.get({

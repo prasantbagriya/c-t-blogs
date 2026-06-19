@@ -17,6 +17,16 @@ export const ListNode = ({ data, isConnectable }: any) => {
     ));
   };
 
+  const updateSection = (sectionId: number, title: string) => {
+    data.onChange('sections', sections.map((s: any) =>
+      s.id === sectionId ? { ...s, title } : s
+    ));
+  };
+
+  const addSection = () => {
+    data.onChange('sections', [...sections, { id: Date.now(), title: 'New Section', rows: [{ id: Date.now() + 1, title: 'Item 1' }] }]);
+  };
+
   return (
     <div className="px-4 py-3 bg-white dark:bg-[#1a1a24] rounded-lg border border-slate-200 dark:border-white/5 min-w-[220px]">
       <Handle type="target" position={Position.Top} isConnectable={isConnectable} className="w-2 h-2 bg-blue-400" />
@@ -50,12 +60,38 @@ export const ListNode = ({ data, isConnectable }: any) => {
             onChange={(e) => data.onChange('message', e.target.value)}
           />
         </div>
+        <div className="space-y-1">
+          <p className="text-[8px] text-slate-400 uppercase tracking-widest font-medium">Footer Text</p>
+          <input
+            placeholder="Footer text (optional)..."
+            className="w-full text-[10px] p-2 bg-slate-50 dark:bg-[#0f0f13] border border-slate-100 dark:border-white/5 rounded outline-none dark:text-white font-medium"
+            value={data.footer || ''}
+            onChange={(e) => data.onChange('footer', e.target.value)}
+          />
+        </div>
+        <div className="space-y-1">
+          <p className="text-[8px] text-slate-400 uppercase tracking-widest font-medium">List Button Text</p>
+          <input
+            placeholder="e.g. View Options (Required)..."
+            className="w-full text-[10px] p-2 bg-slate-50 dark:bg-[#0f0f13] border border-slate-100 dark:border-white/5 rounded outline-none dark:text-white font-medium"
+            value={data.buttonText || ''}
+            onChange={(e) => data.onChange('buttonText', e.target.value)}
+          />
+        </div>
         <div className="space-y-2">
           {sections.map((section: any) => (
             <div key={section.id} className="space-y-1">
-              <div className="flex items-center justify-between">
-                <p className="text-[8px] text-slate-400 uppercase font-medium">Rows</p>
-                <button onClick={() => addRow(section.id)} className="text-[8px] text-blue-500 hover:underline">+ Add Row</button>
+              <div className="flex flex-col gap-1 mb-1">
+                <div className="flex items-center justify-between">
+                  <p className="text-[8px] text-slate-400 uppercase font-medium">Section Title</p>
+                  <button onClick={() => addRow(section.id)} className="text-[8px] text-blue-500 hover:underline">+ Add Row</button>
+                </div>
+                <input
+                  value={section.title || ''}
+                  onChange={(e) => updateSection(section.id, e.target.value)}
+                  className="w-full text-[9px] p-1.5 bg-slate-50 dark:bg-[#0f0f13] border border-slate-200 dark:border-white/10 rounded outline-none dark:text-white font-medium"
+                  placeholder="Section title (e.g. Options)..."
+                />
               </div>
               {section.rows.map((row: any, idx: number) => (
                 <div key={row.id} className="relative group space-y-1 p-2 bg-slate-50 dark:bg-[#0f0f13] border border-slate-100 dark:border-white/5 rounded-lg transition-all hover:border-blue-500/30">
@@ -199,6 +235,12 @@ export const ListNode = ({ data, isConnectable }: any) => {
               ))}
             </div>
           ))}
+          <button 
+            onClick={addSection}
+            className="w-full py-1.5 mt-2 text-[9px] font-medium text-slate-500 bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 rounded-md transition-colors"
+          >
+            + Add Section
+          </button>
         </div>
       </div>
     </div>

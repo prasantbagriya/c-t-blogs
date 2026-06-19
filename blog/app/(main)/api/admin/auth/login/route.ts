@@ -77,8 +77,10 @@ export async function POST(request: Request) {
       } else {
         // Native form submission: redirect with a relative URL so we don't leak the internal Next.js port
         // when proxied through Vite or Hostinger.
-        // Native form submission: redirect with a relative URL
-        const redirectUrl = new URL('/blog/admin', request.url);
+        // Native form submission: redirect using NEXT_PUBLIC_SITE_URL to prevent proxy host overriding
+        const isLocal = request.url.includes('localhost') || request.url.includes('127.0.0.1');
+        const baseUrl = isLocal && process.env.NODE_ENV === 'development' ? request.url : (process.env.NEXT_PUBLIC_SITE_URL || 'https://chatwizs.com');
+        const redirectUrl = new URL('/blog/admin', baseUrl);
         return NextResponse.redirect(redirectUrl, {
           status: 302,
         });
@@ -98,8 +100,10 @@ export async function POST(request: Request) {
           : 'Account locked. Too many failed attempts.',
       }, { status: 401 });
     } else {
-      // Native form redirect back with error using relative URL
-      const errorUrl = new URL('/blog/auth/login?error=Invalid+password', request.url);
+      // Native form redirect back with error using NEXT_PUBLIC_SITE_URL
+      const isLocal = request.url.includes('localhost') || request.url.includes('127.0.0.1');
+      const baseUrl = isLocal && process.env.NODE_ENV === 'development' ? request.url : (process.env.NEXT_PUBLIC_SITE_URL || 'https://chatwizs.com');
+      const errorUrl = new URL('/blog/auth/login?error=Invalid+password', baseUrl);
       return NextResponse.redirect(errorUrl, {
         status: 302,
       });

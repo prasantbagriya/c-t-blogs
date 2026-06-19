@@ -1,6 +1,6 @@
 import React from 'react';
 import { Handle, Position } from '@xyflow/react';
-import { Youtube, Trash2 } from 'lucide-react';
+import { MonitorPlay, Trash2 } from 'lucide-react';
 
 export const YouTubeNode = ({ data, isConnectable }: any) => {
   return (
@@ -10,7 +10,7 @@ export const YouTubeNode = ({ data, isConnectable }: any) => {
       <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-red-500/10">
         <div className="flex items-center gap-2">
           <div className="p-1 bg-red-50 text-red-600 rounded">
-            <Youtube className="w-3.5 h-3.5" />
+            <MonitorPlay className="w-3.5 h-3.5" />
           </div>
           <span className="text-[10px] font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wider">YouTube API</span>
         </div>

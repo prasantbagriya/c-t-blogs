@@ -2,6 +2,10 @@
   RewriteEngine On
   RewriteBase /
 
+  # Fix infinite redirect loop caused by physical /blog folder vs Next.js
+  DirectorySlash Off
+  Options -Indexes
+
   # Hostinger fix for missing Authorization header
   SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
   SetEnvIf X-Authorization "(.*)" HTTP_X_AUTHORIZATION=$1

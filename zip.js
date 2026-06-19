@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { ZipArchive } from 'archiver';
 
-const output = fs.createWriteStream(path.join(process.cwd(), 'chatwiz_hostinger_lite.zip'));
+const output = fs.createWriteStream(path.join(process.cwd(), 'chatwiz_upload_lite.zip'));
 const archive = new ZipArchive({
   zlib: { level: 9 } // Sets the compression level.
 });
@@ -37,7 +37,8 @@ for (const file of includeFiles) {
 // Add directories
 const includeDirs = [
   'server',
-  'dist'
+  'dist',
+  'shims'
 ];
 
 for (const dir of includeDirs) {

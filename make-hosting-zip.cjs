@@ -68,6 +68,7 @@ const rootFiles = [
   'app.js',
   '.htaccess',
   'blog-state.js',
+  '.env',
 ];
 
 rootFiles.forEach(file => {

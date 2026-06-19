@@ -258,6 +258,33 @@ router.post('/shopify', async (req, res) => {
   }
 });
 
+// Google Sheets Webhook (Trigger flows on new row)
+router.post('/google-sheets', async (req, res) => {
+  try {
+    const { uid, phone, ...rowData } = req.body;
+    if (!uid || !phone) return res.status(400).send('Missing uid or phone column');
+
+    const accounts = await getCollection('whatsapp_accounts');
+    const account = accounts.find(acc => acc.uid === uid);
+    if (!account) return res.status(404).send('WhatsApp account not found for UID');
+
+    // Clean phone number
+    const cleanPhone = String(phone).replace(/\D/g, '');
+
+    // Pass data to flow engine
+    await processFlowMessage({
+      from: cleanPhone,
+      text: 'Google Sheet Row Added',
+      googleSheetsData: rowData
+    }, account);
+
+    res.status(200).send('Flow Triggered');
+  } catch (err) {
+    console.error('[Google Sheets Webhook Error]', err);
+    res.status(500).send('Internal Error');
+  }
+});
+
 // ── THREADS WEBHOOK: User Deauthorized (Uninstall) ───────────────────────────
 // Meta calls this when a user disconnects your Threads app
 router.post('/threads/webhooks/deauthorize', async (req, res) => {

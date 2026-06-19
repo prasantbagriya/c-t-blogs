@@ -12,6 +12,7 @@ import { fileURLToPath } from 'url';
 import http from 'http';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import compression from 'compression';
+import { startSheetsPolling } from './utils/sheetsPolling.js';
 
 // Import shared blog state (avoids circular dependency with app.js)
 import { blogState } from '../blog-state.js';
@@ -631,6 +632,9 @@ if (!process.env.IS_WRAPPER) {
     console.log(`🚀 ChatWizs Server is LIVE on port ${PORT}`);
     console.log(`👉 Mode: ${process.env.NODE_ENV || 'production'}`);
     console.log(`-----------------------------------------`);
+    
+    // Start background services
+    startSheetsPolling(120000); // 2 minutes
   });
 
   server.on('error', (err) => {

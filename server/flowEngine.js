@@ -777,7 +777,7 @@ async function executeFlowFromNode(nodeId, nodes, edges, recipient, source, cont
             });
           } catch (e) { console.error('Mapping Parse Error', e); }
 
-          await appendToGoogleSheet(settings.spreadsheetId, settings.sheetName || 'Sheet1', dataToLog);
+          await appendToGoogleSheet(settings.spreadsheetId, settings.sheetName || 'Sheet1', dataToLog, uid);
           console.log(`[FlowEngine] ✅ Data synced to Google Sheet: ${settings.spreadsheetId}`);
         } catch (error) {
           console.error('[FlowEngine] ❌ Google Sheets Error:', error.message);
@@ -863,8 +863,88 @@ async function executeFlowFromNode(nodeId, nodes, edges, recipient, source, cont
               
               // Persist to profile so it's available in next messages
               if (profile && profile.id) {
-                await updateDoc('customer_profiles', profile.id, { meetLink: response.data.hangoutLink });
+                await updateDoc('customer_profiles', profile.id, { meetLink: response.data.hangoutLink, lastEventId: response.data.id });
               }
+            } else if (profile && profile.id && response.data.id) {
+                await updateDoc('customer_profiles', profile.id, { lastEventId: response.data.id });
+            }
+          } else if (action === 'find_slot') {
+            const { timeframeStart, timeframeEnd } = node.data || {};
+            const profile = (context.profiles || []).find(p => p.visitorId === recipient || p.phone === recipient) || {};
+            const resolveVars = (text) => text ? text.replace(/\{\{(.*?)\}\}/g, (match, key) => profile[key.trim()] || context[key.trim()] || match) : text;
+            
+            let timeMin = new Date();
+            if (timeframeStart) {
+               const parsed = Date.parse(resolveVars(timeframeStart));
+               if (!isNaN(parsed)) timeMin = new Date(parsed);
+            }
+            let timeMax = new Date(timeMin.getTime() + 7 * 24 * 60 * 60 * 1000); // default 7 days
+            if (timeframeEnd) {
+               const parsed = Date.parse(resolveVars(timeframeEnd));
+               if (!isNaN(parsed)) timeMax = new Date(parsed);
+            }
+
+            const freebusy = await calendar.freebusy.query({
+              resource: {
+                timeMin: timeMin.toISOString(),
+                timeMax: timeMax.toISOString(),
+                timeZone: 'UTC',
+                items: [{ id: 'primary' }]
+              }
+            });
+
+            const busySlots = freebusy.data.calendars.primary.busy || [];
+            let availableSlots = [];
+            let curr = new Date(timeMin);
+            curr.setMinutes(0,0,0);
+            // simple hourly slot generation
+            while (curr < timeMax && availableSlots.length < 5) {
+              let end = new Date(curr.getTime() + 30*60000);
+              let isBusy = busySlots.some(b => {
+                let bStart = new Date(b.start);
+                let bEnd = new Date(b.end);
+                return (curr < bEnd && end > bStart);
+              });
+              if (!isBusy && curr.getHours() >= 9 && curr.getHours() <= 17) {
+                availableSlots.push(`${curr.toISOString()}`);
+              }
+              curr = new Date(curr.getTime() + 60*60000); // step 1 hour
+            }
+            
+            const slotText = availableSlots.length > 0 ? availableSlots.map(s => new Date(s).toLocaleString()).join(', ') : 'No slots available';
+            context.available_slots = slotText;
+            if (profile && profile.id) {
+               await updateDoc('customer_profiles', profile.id, { available_slots: slotText });
+            }
+            console.log(`[FlowEngine] 📅 Google Calendar: Found slots: ${slotText}`);
+            
+          } else if (action === 'reschedule_event') {
+            const { eventId, startTime, duration } = node.data || {};
+            const profile = (context.profiles || []).find(p => p.visitorId === recipient || p.phone === recipient) || {};
+            const resolveVars = (text) => text ? text.replace(/\{\{(.*?)\}\}/g, (match, key) => profile[key.trim()] || context[key.trim()] || match) : text;
+            
+            // Allow using the last generated event if eventId is missing
+            const resolvedId = resolveVars(eventId) || profile.lastEventId;
+            if (resolvedId) {
+              let startDateTime = new Date();
+              if (startTime) {
+                 const parsed = Date.parse(resolveVars(startTime));
+                 if (!isNaN(parsed)) startDateTime = new Date(parsed);
+              }
+              const endDateTime = new Date(startDateTime.getTime() + parseInt(duration || '30') * 60000);
+              
+              await calendar.events.patch({
+                calendarId: 'primary',
+                eventId: resolvedId,
+                resource: {
+                  start: { dateTime: startDateTime.toISOString(), timeZone: 'UTC' },
+                  end: { dateTime: endDateTime.toISOString(), timeZone: 'UTC' }
+                },
+                sendUpdates: 'all'
+              });
+              console.log(`[FlowEngine] 📅 Google Calendar: Rescheduled event ${resolvedId}`);
+            } else {
+              console.log(`[FlowEngine] 📅 Google Calendar: Missing eventId for reschedule`);
             }
           }
         }
@@ -880,13 +960,17 @@ async function executeFlowFromNode(nodeId, nodes, edges, recipient, source, cont
         const accounts = await getCollection('google_workspace_accounts');
         const account = accounts.find(a => a.uid === uid);
         
-        if (account && account.tokens) {
+        if (account && account.accessToken) {
           const { google } = await import('googleapis');
           const oauth2Client = new google.auth.OAuth2(
             process.env.GOOGLE_CLIENT_ID,
             process.env.GOOGLE_CLIENT_SECRET
           );
-          oauth2Client.setCredentials(account.tokens);
+          oauth2Client.setCredentials({
+            access_token: account.accessToken,
+            refresh_token: account.refreshToken,
+            expiry_date: account.expiryDate
+          });
           
           const drive = google.drive({ version: 'v3', auth: oauth2Client });
           const profile = (context.profiles || []).find(p => p.visitorId === recipient || p.phone === recipient) || {};
@@ -925,13 +1009,17 @@ async function executeFlowFromNode(nodeId, nodes, edges, recipient, source, cont
         const accounts = await getCollection('google_workspace_accounts');
         const account = accounts.find(a => a.uid === uid);
         
-        if (account && account.tokens) {
+        if (account && account.accessToken) {
           const { google } = await import('googleapis');
           const oauth2Client = new google.auth.OAuth2(
             process.env.GOOGLE_CLIENT_ID,
             process.env.GOOGLE_CLIENT_SECRET
           );
-          oauth2Client.setCredentials(account.tokens);
+          oauth2Client.setCredentials({
+            access_token: account.accessToken,
+            refresh_token: account.refreshToken,
+            expiry_date: account.expiryDate
+          });
           
           const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
           const profile = (context.profiles || []).find(p => p.visitorId === recipient || p.phone === recipient) || {};
