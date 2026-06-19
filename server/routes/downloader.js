@@ -66,8 +66,8 @@ const ensureYtDlp = async () => {
     }
 
     const url = isWin 
-        ? 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe'
-        : 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux';
+        ? 'https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/latest/download/yt-dlp.exe'
+        : 'https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/latest/download/yt-dlp_linux';
 
     try {
         await downloadFile(url, binPath);
@@ -101,7 +101,7 @@ const infoHandler = async (req, res) => {
             '--no-warnings',
             '--no-check-certificates',
             '--extractor-args',
-            'youtube:player_client=android',
+            'youtube:player_client=web,default',
             url
         ], { env: customEnv });
 
