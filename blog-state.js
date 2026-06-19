@@ -4,7 +4,9 @@
  * Avoids circular imports between the two files.
  */
 
+const isDev = process.env.NODE_ENV === 'development';
+
 export const blogState = {
-  ready: false,
-  port: parseInt(process.env.BLOG_PORT || '4000', 10),
+  ready: isDev ? true : false,
+  port: parseInt(process.env.BLOG_PORT || (isDev ? '4289' : '4000'), 10),
 };

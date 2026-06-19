@@ -4,20 +4,7 @@
  */
 
 import React, { useState, useRef, useEffect, Suspense, lazy } from 'react';
-import {
-  MessageSquare,
-  Send,
-  BarChart3,
-  LayoutDashboard,
-  TrendingUp,
-  Users,
-  Settings,
-  Brain,
-  Zap,
-  UserCircle,
-  Sparkles
-} from 'lucide-react';
-import { Instagram, Threads, Facebook } from './components/common/BrandIcons';
+import { Zap } from 'lucide-react';
 import {
   auth,
   db,
@@ -116,7 +103,7 @@ const AnimatedFooter = lazy(() => import('./theme_migration/components/animated-
 import BackgroundPaths from './theme_migration/components/background-paths';
 const AnimatedBackground = lazy(() => import('./theme_migration/components/animated-background'));
 const BackgroundStripes = lazy(() => import('./theme_migration/components/background-stripes'));
-
+import { AppSEO } from './components/AppSEO';
 
 import type { DashboardTab } from './components/dashboard/DashboardLayout';
 import type { ToastType } from './theme_migration/components/ui/toast';
@@ -144,6 +131,48 @@ type UserRole = 'admin' | 'manager' | 'user';
 
 // InboxView extracted to ./components/InboxView.tsx
 
+
+// --- Shared Shell Components (must be outside App to avoid re-creating on each render) ---
+
+function LoadingFallback() {
+  return (
+    <div className="fixed inset-0 bg-black flex items-center justify-center z-[100]">
+      <div className="relative">
+        <div className="w-16 h-16 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-8 h-8 bg-blue-500/10 rounded-full blur-xl animate-pulse" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MarketingShell({ children, onNavigate }: { children: React.ReactNode; onNavigate?: (page: any) => void }) {
+  return (
+    <div className="relative min-h-screen bg-black text-white">
+      <Suspense fallback={null}><BackgroundPaths /></Suspense>
+      <Suspense fallback={null}><AnimatedBackground /></Suspense>
+      <Suspense fallback={null}><BackgroundStripes /></Suspense>
+      <div className="relative z-10">
+        <Navbar onNavigate={onNavigate as any} />
+        {children}
+        <AnimatedFooter onNavigate={onNavigate as any} />
+      </div>
+    </div>
+  );
+}
+
+function ToolShell({ children, onNavigate }: { children: React.ReactNode; onNavigate?: (page: any) => void }) {
+  return (
+    <div className="relative min-h-screen">
+      <div className="relative z-10">
+        <Navbar onNavigate={onNavigate as any} />
+        {children}
+        <AnimatedFooter onNavigate={onNavigate as any} />
+      </div>
+    </div>
+  );
+}
 
 // --- Main App ---
 
@@ -173,8 +202,6 @@ export default function App() {
     const validTabs = ['overview', 'inbox', 'whatsapp', 'instagram', 'threads', 'flows', 'ads', 'tools', 'settings', 'help', 'users', 'manage-pages', 'widget'];
     return (validTabs.includes(hash) ? hash : 'overview') as DashboardTab;
   });
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [activeChatId, setActiveChatId] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
@@ -259,9 +286,7 @@ export default function App() {
   const [selectedAccount, setSelectedAccount] = useState<any>(null);
   const [activeSubTab, setActiveSubTab] = useState('overview');
   const [globalAccounts, setGlobalAccounts] = useState<any[]>([]);
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [notifications, setNotifications] = useState<any[]>([
+  const [notifications] = useState<any[]>([
     { id: '1', title: 'Welcome to ChatWizs!', message: 'Explore our new WhatsApp API features.', time: 'Just now', type: 'info' },
     { id: '2', title: 'Meta SDK Updated', message: 'Popup-based login is now active.', time: '5m ago', type: 'success' }
   ]);
@@ -364,18 +389,13 @@ export default function App() {
   // Handle window resize for mobile detection
   React.useEffect(() => {
     const handleResize = () => {
-      const isNowMobile = window.innerWidth < 768;
-      setIsMobile(prev => {
-        if (prev !== isNowMobile) {
-          setIsSidebarOpen(!isNowMobile);
-        }
-        return isNowMobile;
-      });
+      setIsMobile(window.innerWidth < 768);
     };
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
 
 
   // Handle Auth State
@@ -598,109 +618,7 @@ export default function App() {
     };
   }, []);
 
-  // --- Dynamic SEO Management ---
-  useEffect(() => {
-    let title = "ChatWizs | AI-Powered WhatsApp Automation Platform";
-    let description = "Empower your business with ChatWizs. The ultimate AI-powered WhatsApp automation platform for marketing, lead generation, and customer support.";
-    let canonicalUrl = "https://chatwizs.com/";
-
-    const pageTitles: Record<string, string> = {
-      landing: "ChatWizs | Advanced WhatsApp Marketing & AI Automation",
-      services: "Our Services | WhatsApp Business API & AI Solutions - ChatWizs",
-      'service-detail': `Service Detail | WhatsApp Automation - ChatWizs`,
-      'whatsapp-link-generator': "WhatsApp Link & QR Generator | Free Marketing Tools - ChatWizs",
-      about: "About Us | Our Story & Vision - ChatWizs",
-      contact: "Contact Us | Get Started with WhatsApp API - ChatWizs",
-      privacy: "Privacy Policy | ChatWizs Data Protection",
-      terms: "Terms of Service | ChatWizs Platform Usage",
-      auth: "Login & Sign Up | Access ChatWizs Dashboard",
-      dashboard: "Dashboard | Manage Your WhatsApp Campaigns - ChatWizs",
-      'sip-calculator': "SIP Calculator | Plan Your Mutual Fund Investment - ChatWizs",
-      'compound-interest': "Compound Interest Calculator | Free Financial Tool - ChatWizs",
-      'prop-firm': "Prop Firm Calculator | Trading Tool - ChatWizs",
-      'youtubevideodownload': "YouTube Video Downloader Free Online – Download MP4 & MP3 | ChatWizs",
-    };
-
-    const pageDescriptions: Record<string, string> = {
-      landing: "Scale your business with AI-powered WhatsApp automation. Send bulk messages, automate responses, and convert leads with ChatWizs platform.",
-      services: "Explore ChatWizs WhatsApp Business API services — bulk messaging, chatbot automation, lead generation, and Meta Business Partner solutions.",
-      about: "Learn about ChatWizs — India's leading AI-powered WhatsApp marketing platform trusted by thousands of businesses.",
-      contact: "Get in touch with ChatWizs team. Start your WhatsApp Business API integration today and grow your business.",
-      privacy: "Read ChatWizs privacy policy. We are committed to protecting your data and ensuring full GDPR & IT Act compliance.",
-      terms: "ChatWizs terms of service — understand your rights and responsibilities while using our platform.",
-      auth: "Login or sign up to ChatWizs dashboard. Access your WhatsApp campaigns, contacts, and AI automation tools.",
-      'youtubevideodownload': "Download YouTube videos free in MP4 & MP3. Fast online YouTube downloader – no software needed. Supports 4K, 1080p, 720p & Shorts.",
-      'sip-calculator': "Calculate your SIP returns with our free mutual fund SIP calculator. Plan investments for wealth creation with ChatWizs.",
-      'compound-interest': "Calculate compound interest easily with our free online tool. See how your money grows over time.",
-    };
-
-    const pageUrls: Record<string, string> = {
-      landing: "https://chatwizs.com/",
-      services: "https://chatwizs.com/services",
-      about: "https://chatwizs.com/about-us",
-      contact: "https://chatwizs.com/contact-us",
-      privacy: "https://chatwizs.com/privacy-policy",
-      terms: "https://chatwizs.com/terms-of-service",
-      'auth': "https://chatwizs.com/get-started",
-      'youtubevideodownload': "https://chatwizs.com/youtubevideodownload",
-      'sip-calculator': "https://chatwizs.com/tool/sip-calculator",
-      'compound-interest': "https://chatwizs.com/tool/compound-interest",
-      'prop-firm': "https://chatwizs.com/tool/prop-firm",
-    };
-
-    const tabTitles: Record<string, string> = {
-      overview: "Overview | Marketing Performance Dashboard",
-      accounts: "Accounts | Manage WhatsApp & Instagram API",
-      whatsapp: "WhatsApp | Official Meta Messaging & Broadcasts",
-      instagram: "Instagram | DM Automation & AI Responses",
-      inbox: "Unified Inbox | Omnichannel Customer Support",
-      flows: "Flow Builder | No-Code AI Automation Sequences",
-      ads: "Ads Manager | Click-to-WhatsApp Advertising",
-      contacts: "Contacts | Audience Management & Segments",
-      agent: "AI Training | Train Your Business Assistant",
-      leads: "Leads Hub | Convert Conversations into Sales",
-      settings: "Settings | Platform Configuration & Security"
-    };
-
-    if (currentPage === 'dashboard') {
-      title = tabTitles[activeTab] || pageTitles[currentPage];
-      canonicalUrl = "https://chatwizs.com/dashboard";
-    } else {
-      title = pageTitles[currentPage] || title;
-      description = pageDescriptions[currentPage] || description;
-      canonicalUrl = pageUrls[currentPage] || canonicalUrl;
-    }
-
-    document.title = title;
-
-    // Update meta description
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.setAttribute('content', description);
-
-    // Update OG tags
-    const ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle) ogTitle.setAttribute('content', title);
-
-    const ogDesc = document.querySelector('meta[property="og:description"]');
-    if (ogDesc) ogDesc.setAttribute('content', description);
-
-    const ogUrl = document.querySelector('meta[property="og:url"]');
-    if (ogUrl) ogUrl.setAttribute('content', canonicalUrl);
-
-    // Update Twitter tags
-    const twTitle = document.querySelector('meta[name="twitter:title"]');
-    if (twTitle) twTitle.setAttribute('content', title);
-
-    const twDesc = document.querySelector('meta[name="twitter:description"]');
-    if (twDesc) twDesc.setAttribute('content', description);
-
-    // Update canonical link
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) {
-      canonical.setAttribute('href', canonicalUrl);
-    }
-
-  }, [currentPage, activeTab]);
+  // --- Dynamic SEO Management is now handled by AppSEO component ---
 
   // Handle OAuth Redirects (Instagram & WhatsApp)
   useEffect(() => {
@@ -805,31 +723,7 @@ export default function App() {
     setIsBulkModalOpen(true);
   };
 
-  // Define sidebar items based on role
-  const sidebarItems = [
-    { id: 'overview', icon: <LayoutDashboard className="w-5 h-5" />, label: 'Overview', roles: ['admin', 'manager', 'user'] },
-    { id: 'inbox', icon: <MessageSquare className="w-5 h-5" />, label: 'Unified Inbox', roles: ['admin', 'manager', 'user'] },
-    { id: 'whatsapp', icon: <Send className="w-5 h-5" />, label: 'WhatsApp', roles: ['admin', 'manager', 'user'] },
-    { id: 'instagram', icon: <Instagram className="w-5 h-5" />, label: 'Instagram', roles: ['admin', 'manager', 'user'] },
-    { id: 'threads', icon: <Threads className="w-5 h-5" />, label: 'Threads', roles: ['admin', 'manager', 'user'] },
-    { id: 'contacts', icon: <Users className="w-5 h-5" />, label: 'Contacts', roles: ['admin', 'manager', 'user'] },
-    { id: 'ads', icon: <BarChart3 className="w-5 h-5" />, label: 'Ads Manager', roles: ['admin', 'manager', 'user'] },
-    { id: 'agent', icon: <Brain className="w-5 h-5" />, label: 'AI Training', roles: ['admin', 'manager', 'user'] },
-    { id: 'flows', icon: <Zap className="w-5 h-5" />, label: 'Flows Builder', roles: ['admin', 'manager', 'user'] },
-    { id: 'knowledge', icon: <Sparkles className="w-5 h-5" />, label: 'Knowledge Hub', roles: ['admin', 'manager', 'user'] },
-    { id: 'leads', icon: <TrendingUp className="w-5 h-5" />, label: 'Leads Hub', roles: ['admin', 'manager', 'user'] },
-    { id: 'tools', icon: <Zap className="w-5 h-5" />, label: 'Tools', roles: ['admin', 'manager', 'user'] },
-    { id: 'settings', icon: <Settings className="w-5 h-5" />, label: 'Settings', roles: ['admin'] },
-    { id: 'profile', icon: <UserCircle className="w-5 h-5" />, label: 'Profile', roles: ['admin', 'manager', 'user'] },
-    { id: 'users', icon: <Users className="w-5 h-5" />, label: 'Users', roles: ['admin'] }
-  ].filter(item => item.roles.includes(userRole));
-
-  // Ensure active tab is valid for current role
-  React.useEffect(() => {
-    if (!sidebarItems.find(item => item.id === activeTab)) {
-      setActiveTab(sidebarItems[0]?.id as DashboardTab || 'inbox');
-    }
-  }, [userRole]);
+  // NOTE: Nav items and role checks are handled by DashboardLayout's NAV_GROUPS
 
   const handleFacebookLogin = async () => {
     try {
@@ -853,8 +747,9 @@ export default function App() {
     }
   };
 
-  if (authLoading) {
-    return (
+  const renderAppContent = () => {
+    if (authLoading) {
+      return (
       <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
         {/* Background Glow */}
         <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-transparent to-purple-500/10" />
@@ -881,30 +776,6 @@ export default function App() {
             </div>
           </div>
         </div>
-      </div>
-    );
-  }
-
-  if (currentPage === 'deletion') {
-    return (
-      <div className="public-container-scaled">
-        <DataDeletion onBack={() => setCurrentPage('landing')} />
-      </div>
-    );
-  }
-
-  if (currentPage === 'privacy') {
-    return (
-      <div className="public-container-scaled">
-        <PrivacyPolicy onNavigate={setCurrentPage} />
-      </div>
-    );
-  }
-
-  if (currentPage === 'terms') {
-    return (
-      <div className="public-container-scaled">
-        <TermsOfService onNavigate={setCurrentPage} />
       </div>
     );
   }
@@ -949,44 +820,6 @@ export default function App() {
   }
 
 
-  // Premium Loading Fallback
-  function LoadingFallback() {
-    return (
-      <div className="fixed inset-0 bg-black flex items-center justify-center z-[100]">
-        <div className="relative">
-          <div className="w-16 h-16 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-8 h-8 bg-blue-500/10 rounded-full blur-xl animate-pulse" />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const MarketingShell = ({ children }: { children: React.ReactNode }) => (
-    <div className="relative min-h-screen bg-black text-white">
-      <Suspense fallback={null}><BackgroundPaths /></Suspense>
-      <Suspense fallback={null}><AnimatedBackground /></Suspense>
-      <Suspense fallback={null}><BackgroundStripes /></Suspense>
-      <div className="relative z-10">
-        <Navbar onNavigate={setCurrentPage} />
-        {children}
-        <AnimatedFooter onNavigate={setCurrentPage} />
-      </div>
-    </div>
-  );
-
-  // Minimal shell — only Navbar + Footer, no background (for pages with their own bg like YouTubeDownloader)
-  const ToolShell = ({ children }: { children: React.ReactNode }) => (
-    <div className="relative min-h-screen">
-      <div className="relative z-10">
-        <Navbar onNavigate={setCurrentPage} />
-        {children}
-        <AnimatedFooter onNavigate={setCurrentPage} />
-      </div>
-    </div>
-  );
-
   const renderContent = () => {
     if (currentPage === 'artists') {
       return <ThemeArtistsPage onNavigate={setCurrentPage} />;
@@ -1000,26 +833,26 @@ export default function App() {
       return <ThemeCareersPage onNavigate={setCurrentPage} />;
     }
     if (currentPage === 'about') {
-      return <MarketingShell><AboutPage onNavigate={setCurrentPage} /></MarketingShell>;
+      return <MarketingShell onNavigate={setCurrentPage}><AboutPage onNavigate={setCurrentPage} /></MarketingShell>;
     }
 
     if (currentPage === 'contact') {
-      return <MarketingShell><ContactPage /></MarketingShell>;
+      return <MarketingShell onNavigate={setCurrentPage}><ContactPage /></MarketingShell>;
     }
 
     if (currentPage === 'services') {
-      return <MarketingShell><ServicesPage /></MarketingShell>;
+      return <MarketingShell onNavigate={setCurrentPage}><ServicesPage /></MarketingShell>;
     }
 
     if (currentPage === 'pricing') {
-      return <MarketingShell><PricingPage onNavigate={setCurrentPage} /></MarketingShell>;
+      return <MarketingShell onNavigate={setCurrentPage}><PricingPage onNavigate={setCurrentPage} /></MarketingShell>;
     }
 
-    if (currentPage === 'sip-calculator') return <MarketingShell><Suspense fallback={null}><SIPCalculator /></Suspense></MarketingShell>;
-    if (currentPage === 'compound-interest') return <MarketingShell><Suspense fallback={null}><CompoundInterest /></Suspense></MarketingShell>;
-    if (currentPage === 'prop-firm') return <MarketingShell><Suspense fallback={null}><PropFirm /></Suspense></MarketingShell>;
+    if (currentPage === 'sip-calculator') return <MarketingShell onNavigate={setCurrentPage}><Suspense fallback={null}><SIPCalculator /></Suspense></MarketingShell>;
+    if (currentPage === 'compound-interest') return <MarketingShell onNavigate={setCurrentPage}><Suspense fallback={null}><CompoundInterest /></Suspense></MarketingShell>;
+    if (currentPage === 'prop-firm') return <MarketingShell onNavigate={setCurrentPage}><Suspense fallback={null}><PropFirm /></Suspense></MarketingShell>;
     
-    if (currentPage === 'youtubevideodownload') return <ToolShell><Suspense fallback={null}><YouTubeDownloader /></Suspense></ToolShell>;
+    if (currentPage === 'youtubevideodownload') return <ToolShell onNavigate={setCurrentPage}><Suspense fallback={null}><YouTubeDownloader /></Suspense></ToolShell>;
 
     if (currentPage === 'whatsapp-link-generator') return <Suspense fallback={null}><ThemeToolsPage onNavigate={setCurrentPage} /></Suspense>;
 
@@ -1265,6 +1098,14 @@ export default function App() {
       </div>
       </DashboardLayout>
     </Suspense>
+  );
+  };
+
+  return (
+    <>
+      <AppSEO currentPage={currentPage} activeTab={activeTab} />
+      {renderAppContent()}
+    </>
   );
 
 }

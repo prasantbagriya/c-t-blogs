@@ -175,11 +175,7 @@ export default function DashboardLayout({
     }
   }, [lastScrollY]);
 
-  useEffect(() => {
-    if (isDarkMode) document.documentElement.classList.add('dark');
-    else document.documentElement.classList.remove('dark');
-  }, [isDarkMode]);
-
+  // Note: dark mode class is managed by App.tsx to avoid duplicate effects
   useEffect(() => {
     const check = () => {
       const mobile = window.innerWidth < 1024;
