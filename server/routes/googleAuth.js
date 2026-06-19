@@ -13,16 +13,18 @@ const SCOPES = [
   'https://www.googleapis.com/auth/userinfo.profile'
 ];
 
-function getOAuth2Client() {
+function getOAuth2Client(redirectUri) {
   const clientId = process.env.GOOGLE_CLIENT_ID;
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-  const redirectUri = process.env.VITE_APP_URL ? `${process.env.VITE_APP_URL}/api/google/callback` : 'http://localhost:5173/api/google/callback';
 
   if (!clientId || !clientSecret) {
     console.warn('[Google Auth] Missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET in environment variables.');
   }
 
-  return new google.auth.OAuth2(clientId, clientSecret, redirectUri);
+  // Use the provided redirectUri, fallback to a default if absolutely necessary (though it should always be provided)
+  const finalRedirectUri = redirectUri || (process.env.VITE_APP_URL ? `${process.env.VITE_APP_URL}/api/google/callback` : 'http://localhost:5173/api/google/callback');
+
+  return new google.auth.OAuth2(clientId, clientSecret, finalRedirectUri);
 }
 
 // 1. Generate Auth URL
@@ -31,14 +33,20 @@ router.get('/auth', (req, res) => {
     const { uid } = req.query;
     if (!uid) return res.status(400).json({ error: 'UID is required' });
 
-    const oauth2Client = getOAuth2Client();
+    // Dynamically build the redirect URI
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+    const host = req.headers.host;
+    const dynamicRedirectUri = `${protocol}://${host}/api/google/callback`;
+
+    const oauth2Client = getOAuth2Client(dynamicRedirectUri);
     
     // Pass uid in state so we can recover it in the callback
     const url = oauth2Client.generateAuthUrl({
       access_type: 'offline', // Request a refresh token
       prompt: 'consent', // Force consent prompt to guarantee refresh_token
       scope: SCOPES,
-      state: encodeURIComponent(JSON.stringify({ uid }))
+      state: encodeURIComponent(JSON.stringify({ uid })),
+      redirect_uri: dynamicRedirectUri // Pass explicitly to prevent 'Missing required parameter'
     });
 
     res.redirect(url);
@@ -70,7 +78,13 @@ router.get('/callback', async (req, res) => {
     }
 
     const { uid } = parsedState;
-    const oauth2Client = getOAuth2Client();
+
+    // Dynamically build the redirect URI to match the one used during /auth
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+    const host = req.headers.host;
+    const dynamicRedirectUri = `${protocol}://${host}/api/google/callback`;
+
+    const oauth2Client = getOAuth2Client(dynamicRedirectUri);
 
     // Exchange code for tokens
     const { tokens } = await oauth2Client.getToken(code);
