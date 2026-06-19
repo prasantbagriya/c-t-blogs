@@ -475,7 +475,7 @@ app.use('/api/google', (req, res, next) => {
   console.log('[DEBUG] Hit /api/google:', req.method, req.url, req.path);
   next();
 }, lazyRouter(() => import('./routes/googleAuth.js')));
-app.use('/api', lazyRouter(() => import('./routes/api.js')));
+
 app.use('/api/webhooks', lazyRouter(() => import('./routes/webhooks.js')));
 app.use('/shopify-login', shopifyRouter);
 
@@ -493,6 +493,9 @@ app.use('/api/google-sheets', lazyRouter(() => import('./routes/googleSheets.js'
 
 app.use('/api/downloader', lazyRouter(() => import('./routes/downloader.js')));
 app.use('/api/playbook', lazyRouter(() => import('./routes/playbook.js')));
+
+app.use('/api', lazyRouter(() => import('./routes/api.js')));
+
 // 404 handler for API routes
 app.use('/api', (req, res) => {
   res.status(404).json({
