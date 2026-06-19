@@ -14,7 +14,7 @@
     "dev:server": "cross-env PORT=3001 NODE_ENV=development nodemon --config server/nodemon.json server/index.js",
     "dev:blog": "cd blog && npm run dev -- -p 4289",
     "dev:studio": "cd PB-Creative-Studio && npm run dev",
-    "build": "echo \"Skip server build\"",
+    "build": "npm run build:local",
     "build:local": "node generate-sitemap.js && vite build",
     "sitemap": "node generate-sitemap.js",
     "lint": "tsc --noEmit",
