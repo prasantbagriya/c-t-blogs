@@ -84,8 +84,9 @@ app.use(cors({
 
 // ✅ PB-Creative-Studio Proxy Setup
 const STUDIO_PATHS = [
-  '/portal', '/hub',
-  '/api/student', '/api/hub', '/api/leads'
+  '/hub', '/tool', '/youtubevideodownload',
+  '/info', '/download',
+  '/api/student', '/api/hub', '/api/leads', '/api/info', '/api/download'
 ];
 
 let _studioProxy = null;
@@ -545,6 +546,12 @@ app.use('/uploads', express.static(path.join(__dirname, '../blog/public/uploads'
 app.use('/uploads', express.static(path.join(__dirname, '../blog/.next/standalone/public/uploads'), { maxAge: '30d' }));
 
 // Portal App Static Serving
+app.use((req, res, next) => {
+  if (req.path === '/portal') {
+    return res.redirect(301, '/portal/');
+  }
+  next();
+});
 app.use('/portal', express.static(path.join(__dirname, 'public/portal'), {
   maxAge: '0',
   setHeaders: (res, filepath) => {

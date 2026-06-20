@@ -28,7 +28,7 @@ export default function Navbar() {
     
     const toolPages = [
       'prop-firm', 'sip-calculator', 'compound-interest',
-      'whatsapp-link-generator', 'whatsapp-direct-message', 'whatsapp-form-generator'
+      
     ];
     if (toolPages.includes(page)) return getDevPath("/tool/");
     
@@ -60,9 +60,6 @@ export default function Navbar() {
   ]
 
   const toolsList = [
-    { label: 'Link Generator', page: 'whatsapp-link-generator', icon: LinkIcon, color: 'text-blue-400' },
-    { label: 'Direct Message', page: 'whatsapp-direct-message', icon: MessageSquareText, color: 'text-blue-400' },
-    { label: 'Form Generator', page: 'whatsapp-form-generator', icon: FileText, color: 'text-emerald-400' },
     { label: 'SIP Calculator', page: 'sip-calculator', icon: Activity, color: 'text-purple-400' },
     { label: 'Compound Growth', page: 'compound-interest', icon: TrendingUp, color: 'text-emerald-400' },
     { label: 'Prop Firm Calc', page: 'prop-firm', icon: Terminal, color: 'text-indigo-400' },

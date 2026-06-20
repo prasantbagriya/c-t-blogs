@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { TrendingUp, PieChart, Calculator, BarChart3, Receipt } from 'lucide-react';
+import { TrendingUp, PieChart } from 'lucide-react';
 
 const tools = [
     {
@@ -10,23 +10,10 @@ const tools = [
         tag: 'Flagship'
     },
     {
-        path: '/trading-consistency-calculator',
-        title: 'Monte Carlo Simulator',
-        desc: 'Simulate 10,000+ trade outcomes to visualize your edge and equity curve.',
-        icon: BarChart3,
-        tag: 'Simulation'
-    },
-    {
         path: '/sip-calculator',
         title: 'SIP Forecaster',
         desc: 'Project long-term wealth creation through Systematic Investment Plans.',
         icon: PieChart
-    },
-    {
-        path: '/emi-calculator',
-        title: 'Loan Architect',
-        desc: 'Analyze principal vs interest ratios for mortgages and car loans.',
-        icon: Calculator
     },
     {
         path: '/compound-interest-calculator',
@@ -34,12 +21,6 @@ const tools = [
         desc: 'The math of becoming a millionaire. Visualize exponential growth.',
         icon: TrendingUp
     },
-    {
-        path: '/gst-calculator',
-        title: 'GST Computer',
-        desc: 'Instant tax computations for invoices. Add or remove tax components.',
-        icon: Receipt
-    }
 ];
 
 const Home = () => {

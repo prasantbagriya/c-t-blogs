@@ -23,7 +23,7 @@ const ignoreRules = [
     '**/.git/**', 
     '**/.next/cache/**',
     '**/src/**',
-    '**/public/**',
+    'public/**',
     'PB-Creative-Studio/node_modules/**',
     'blog/node_modules/**',
     'blog/.next/cache/**',

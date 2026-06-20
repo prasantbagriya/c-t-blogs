@@ -21,6 +21,7 @@ export default function Navbar() {
       window.location.href = '/blog';
       return;
     }
+    if (page.startsWith('portal/')) { window.location.href = getDevPath('/' + page); return; }
     if (page === 'portal') {
       window.location.href = getDevPath('/portal/');
       return;
@@ -32,7 +33,7 @@ export default function Navbar() {
     // All tool/ sub-pages route to the Tools app
     const toolPages = [
       'prop-firm', 'sip-calculator', 'compound-interest',
-      'whatsapp-link-generator', 'whatsapp-direct-message', 'whatsapp-form-generator'
+      
     ];
     if (toolPages.includes(page)) {
       window.location.href = getDevPath(`/tool/${page}`);
@@ -48,9 +49,6 @@ export default function Navbar() {
   ]
 
     const toolsList = [
-    { label: 'Link Generator', page: 'whatsapp-link-generator', icon: LinkIcon, color: 'text-blue-400' },
-    { label: 'Direct Message', page: 'whatsapp-direct-message', icon: MessageSquare, color: 'text-blue-400' },
-    { label: 'Form Generator', page: 'whatsapp-form-generator', icon: FileText, color: 'text-emerald-400' },
     { label: 'SIP Calculator', page: 'sip-calculator', icon: Activity, color: 'text-purple-400' },
     { label: 'Compound Growth', page: 'compound-interest', icon: TrendingUp, color: 'text-emerald-400' },
     { label: 'Prop Firm Calc', page: 'prop-firm', icon: Terminal, color: 'text-indigo-400' },
@@ -61,8 +59,8 @@ export default function Navbar() {
     const portalList = [
     { label: 'About Us', page: 'about' },
     { label: 'Contact Us', page: 'contact' },
-    { label: 'Terms of Service', page: 'terms' },
-    { label: 'Privacy Policy', page: 'privacy' }
+    { label: 'Terms of Service', page: 'portal/terms-and-conditions' },
+    { label: 'Privacy Policy', page: 'portal/privacy-policy' }
   ]
 
   return (

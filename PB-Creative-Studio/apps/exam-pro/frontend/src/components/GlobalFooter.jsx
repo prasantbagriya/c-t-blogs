@@ -65,9 +65,6 @@ export default function Footer() {
     {
       title: "Free Tools",
       links: [
-        { label: "Link Generator", page: "whatsapp-link-generator" },
-        { label: "Direct Message", page: "whatsapp-direct-message" },
-        { label: "Form Generator", page: "whatsapp-form-generator" },
         { label: "SIP Calculator", page: "sip-calculator" },
         { label: "Compound Growth", page: "compound-interest" },
         { label: "Prop Firm Calc", page: "prop-firm" },
@@ -95,8 +92,8 @@ export default function Footer() {
         { label: "Contact Us", page: "contact" },
         { label: "Editorial Policy", page: "editorial-policy" },
         { label: "Fact Checking", page: "fact-checking-policy" },
-        { label: "Privacy Policy", page: "privacy" },
-        { label: "Terms of Service", page: "terms" }
+        { label: "Privacy Policy", page: "privacy-policy" },
+        { label: "Terms of Service", page: "terms-of-service" }
       ]
     }
   ]
