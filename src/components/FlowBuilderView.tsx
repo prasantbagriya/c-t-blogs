@@ -106,7 +106,7 @@ const cn = (...classes: any[]) => classes.filter(Boolean).join(' ');
 const InfoIcon = ({ text }: { text: string }) => (
   <div className="group relative inline-block ml-1 align-middle">
     <HelpCircle size={10} className="text-slate-400 cursor-help hover:text-blue-500 transition-colors" />
-    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-slate-900 text-white text-[8px] rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-[100] pointer-events-none">
+    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-slate-900 text-white text-[8px] rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-100 pointer-events-none">
       <div className="relative">
         {text}
         <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
@@ -623,7 +623,7 @@ const FlowBuilderContent = ({ user, platform: propPlatform = 'whatsapp', selecte
                       <div className="min-w-0 pr-6">
                         <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate">@{acc.username}</h3>
                         <div className="flex items-center gap-1 mt-0.5">
-                          <span className="px-1.5 py-0.5 bg-gradient-to-r from-pink-500 to-purple-600 text-white text-[7px] sm:text-[8px] font-black rounded uppercase">IG</span>
+                          <span className="px-1.5 py-0.5 bg-linear-to-r from-pink-500 to-purple-600 text-white text-[7px] sm:text-[8px] font-black rounded uppercase">IG</span>
                           <span className="text-[9px] sm:text-[10px] text-slate-400 font-medium truncate">{acc.displayName}</span>
                         </div>
                       </div>
@@ -853,7 +853,7 @@ const FlowBuilderContent = ({ user, platform: propPlatform = 'whatsapp', selecte
                           {flow.status}
                         </span>
                         {flow.platform === 'instagram' && (flow.instagramAccountId || flow.instagramUsername) && (
-                          <span className="px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-widest bg-gradient-to-r from-pink-500/10 to-purple-500/10 text-pink-500 border border-pink-500/20 flex items-center gap-1">
+                          <span className="px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-widest bg-linear-to-r from-pink-500/10 to-purple-500/10 text-pink-500 border border-pink-500/20 flex items-center gap-1">
                             <Instagram size={8} />
                             {flow.instagramUsername || flow.name.match(/@([\w.]+)/)?.[1] || (flow.instagramAccountId ? flow.instagramAccountId.replace('ig_','').substring(0,8) : 'Account')}
                           </span>
@@ -903,7 +903,7 @@ const FlowBuilderContent = ({ user, platform: propPlatform = 'whatsapp', selecte
 
         {/* ── CUSTOM DELETE CONFIRMATION MODAL ─────────────────────── */}
         {confirmDeleteFlow && (
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150">
             <div className="bg-white dark:bg-[#1a1a24] border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl w-full max-w-sm p-6 animate-in zoom-in-95 duration-200">
               <div className="flex items-start gap-4 mb-5">
                 <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center shrink-0">
@@ -1044,7 +1044,7 @@ const FlowBuilderContent = ({ user, platform: propPlatform = 'whatsapp', selecte
       className={cn(
         "flex flex-col bg-[#f8fafc] dark:bg-[#0a0a0f] font-sans transition-all duration-300",
         isFullscreen
-          ? "fixed inset-0 z-[100] m-0 rounded-none w-screen h-screen"
+          ? "fixed inset-0 z-100 m-0 rounded-none w-screen h-screen"
           : "relative"
       )}
       style={{
@@ -1479,7 +1479,7 @@ const FlowBuilderContent = ({ user, platform: propPlatform = 'whatsapp', selecte
               className="opacity-50"
             />
             <Controls
-              className="!bg-white dark:!bg-[#1a1a24] !border-slate-200 dark:!border-white/10 !rounded-xl overflow-hidden"
+              className="bg-white! dark:bg-[#1a1a24]! border-slate-200! dark:border-white/10! rounded-xl! overflow-hidden"
               style={{ bottom: '80px' }}
             />
             {/* MiniMap — hidden on mobile to save space */}

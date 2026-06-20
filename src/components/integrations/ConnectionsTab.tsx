@@ -51,7 +51,7 @@ export const ConnectionsTab = ({
             </div>
 
             <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1.5">{platform.name}</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mb-6 flex-grow leading-relaxed">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-6 grow leading-relaxed">
               {platform.desc}
             </p>
 
@@ -96,7 +96,7 @@ export const ConnectionsTab = ({
         );
       })}
       {/* Advanced Discovery Section */}
-      <div className="col-span-full mt-8 p-6 bg-slate-50 dark:bg-white/2 rounded-[2rem] border-2 border-dashed border-slate-200 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="col-span-full mt-8 p-6 bg-slate-50 dark:bg-white/2 rounded-4xl border-2 border-dashed border-slate-200 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-4">
            <div className="w-12 h-12 bg-blue-600/10 text-blue-600 rounded-xl flex items-center justify-center">
              <Settings2 size={24} />

@@ -113,8 +113,8 @@ const YouTubeDownloader = () => {
   return (
     <div className="relative min-h-screen text-white font-outfit selection:bg-amber-500/30">
       {/* Thermal Progress Bar */}
-      <div className="fixed top-0 left-0 right-0 h-1 z-[100] pointer-events-none">
-        <motion.div className="h-full bg-gradient-to-r from-orange-600 via-amber-500 to-yellow-400" style={{ width: scrollProgress }} />
+      <div className="fixed top-0 left-0 right-0 h-1 z-100 pointer-events-none">
+        <motion.div className="h-full bg-linear-to-r from-orange-600 via-amber-500 to-yellow-400" style={{ width: scrollProgress }} />
       </div>
 
       <div className="fixed inset-0 pointer-events-none -z-10">
@@ -145,7 +145,7 @@ const YouTubeDownloader = () => {
                   <Activity size={12} className="animate-pulse" />
                   Fast & Secure Downloader
                 </div>
-                <h1 className="text-5xl md:text-[6rem] font-black tracking-[-0.05em] mb-6 md:mb-10 leading-[1] uppercase italic text-glow-sharp">
+                <h1 className="text-5xl md:text-[6rem] font-black tracking-tighter mb-6 md:mb-10 leading-none uppercase italic text-glow-sharp">
                   Free YouTube <br />
                   <span className="text-gradient-stellar not-italic">& Video Downloader</span>
                 </h1>
@@ -167,7 +167,7 @@ const YouTubeDownloader = () => {
                 <div
                   ref={searchContainerRef}
                   onMouseMove={handleSearchMouseMove}
-                  className="search-glow-wrapper console-card relative rounded-[2rem] md:rounded-[3rem] p-4 md:p-8"
+                  className="search-glow-wrapper console-card relative rounded-4xl md:rounded-[3rem] p-4 md:p-8"
                 >
                   {/* Console Header */}
                   <div className="flex items-center justify-between mb-10 px-6">
@@ -183,7 +183,7 @@ const YouTubeDownloader = () => {
                   </div>
 
                   {/* Input Matrix */}
-                  <div className="relative flex flex-col md:flex-row items-center gap-4 bg-black/40 p-2 md:p-3 rounded-2xl md:rounded-[2rem] border border-white/[0.03]">
+                  <div className="relative flex flex-col md:flex-row items-center gap-4 bg-black/40 p-2 md:p-3 rounded-2xl md:rounded-4xl border border-white/3">
                     <div className="flex-1 w-full flex items-center gap-3 md:gap-5 px-4 md:px-6 py-2 md:py-3">
                       <Link2 className="text-sky-400/50" size={24} />
                       <input
@@ -201,7 +201,7 @@ const YouTubeDownloader = () => {
                       onClick={fetchInfo}
                       disabled={loading || !url}
                       className={cn(
-                        "w-full md:w-auto px-6 md:px-12 py-4 md:py-6 rounded-xl md:rounded-[1.5rem] btn-stellar flex items-center justify-center gap-4 transition-all hover:scale-105",
+                        "w-full md:w-auto px-6 md:px-12 py-4 md:py-6 rounded-xl md:rounded-3xl btn-stellar flex items-center justify-center gap-4 transition-all hover:scale-105",
                         (loading || !url) && "opacity-50 cursor-not-allowed grayscale"
                       )}
                     >
@@ -242,9 +242,9 @@ const YouTubeDownloader = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                       
                       {/* Thumbnail Core */}
-                      <div className="lg:col-span-12 relative rounded-[1.5rem] md:rounded-[3rem] overflow-hidden group border border-white/5 shadow-3xl aspect-video md:aspect-[21/9]">
+                      <div className="lg:col-span-12 relative rounded-3xl md:rounded-[3rem] overflow-hidden group border border-white/5 shadow-3xl aspect-video md:aspect-21/9">
                         <img src={info.thumbnail} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" alt="Extracted media" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+                        <div className="absolute inset-0 bg-linear-to-t from-black via-black/20 to-transparent" />
                         <div className="extraction-scanline" />
                         
                         <div className="absolute top-4 md:top-8 left-4 md:left-8 flex items-center gap-2 md:gap-3 px-3 py-1.5 md:px-5 md:py-2 bg-black/80 backdrop-blur-2xl border border-white/10 rounded-full">
@@ -290,7 +290,7 @@ const YouTubeDownloader = () => {
                                 <button
                                   key={i}
                                   onClick={() => handleDownload(fmt.id)}
-                                  className="group flex items-center justify-between p-5 bg-white/[0.03] hover:bg-amber-500/10 border border-white/[0.05] hover:border-amber-500/30 rounded-2xl transition-all"
+                                  className="group flex items-center justify-between p-5 bg-white/3 hover:bg-amber-500/10 border border-white/5 hover:border-amber-500/30 rounded-2xl transition-all"
                                 >
                                   <div className="flex flex-col text-left">
                                     <span className="text-sm font-black tracking-tight">{fmt.quality} {fmt.acodec !== "none" ? "(Audio)" : "(No Audio)"}</span>
@@ -318,7 +318,7 @@ const YouTubeDownloader = () => {
                               <button
                                 key={i}
                                 onClick={() => handleDownload(fmt.id)}
-                                className="group flex items-center justify-between p-5 bg-white/[0.03] hover:bg-orange-500/10 border border-white/[0.05] hover:border-orange-500/30 rounded-2xl transition-all"
+                                className="group flex items-center justify-between p-5 bg-white/3 hover:bg-orange-500/10 border border-white/5 hover:border-orange-500/30 rounded-2xl transition-all"
                               >
                                 <div className="flex flex-col text-left">
                                   <span className="text-sm font-black tracking-tight">{fmt.abr ? `${fmt.abr}kbps Audio` : 'HQ Audio'}</span>
@@ -349,7 +349,7 @@ const YouTubeDownloader = () => {
                 {error && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                    className="max-w-2xl mx-auto mt-12 p-6 bg-red-500/10 border border-red-500/30 rounded-[2rem] flex items-center gap-4 text-red-500"
+                    className="max-w-2xl mx-auto mt-12 p-6 bg-red-500/10 border border-red-500/30 rounded-4xl flex items-center gap-4 text-red-500"
                   >
                     <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center shrink-0">
                       <X size={20} />

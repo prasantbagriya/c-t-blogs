@@ -242,7 +242,7 @@ export default function DashboardLayout({
             {/* Slim Header */}
             <motion.header
               animate={{ y: activeTab === 'flows' ? -100 : 0 }}
-              className="h-16 py-2 border-b border-slate-100 dark:border-white/5 bg-white/80 dark:bg-[#0a0a0f]/80 backdrop-blur-xl flex items-center justify-between px-3 sm:px-6 sticky top-0 z-[60] w-full"
+              className="h-16 py-2 border-b border-slate-100 dark:border-white/5 bg-white/80 dark:bg-[#0a0a0f]/80 backdrop-blur-xl flex items-center justify-between px-3 sm:px-6 sticky top-0 z-60 w-full"
             >
               <div className="flex items-center gap-3">
                 <button onClick={() => isMobile ? setIsMobileDrawerOpen(true) : setIsSidebarOpen(!isSidebarOpen)} className="p-2 border border-slate-100 dark:border-white/10 rounded-lg text-slate-500 hover:text-black dark:hover:text-white transition-all"><Menu size={14} /></button>
@@ -309,7 +309,7 @@ export default function DashboardLayout({
 
           {/* Bottom Nav */}
           {isMobile && !hideMobileNav && activeTab !== 'flows' && (
-            <nav className="h-16 bg-white dark:bg-[#0a0a0f] border-t border-slate-100 dark:border-white/5 flex items-center justify-around px-2 fixed bottom-0 left-0 right-0 z-[100] shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+            <nav className="h-16 bg-white dark:bg-[#0a0a0f] border-t border-slate-100 dark:border-white/5 flex items-center justify-around px-2 fixed bottom-0 left-0 right-0 z-100 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
               {(activeTab === 'threads' ? [
                 { id: 'threads', icon: <Send size={18} />, label: 'Post', subTab: 'publisher' },
                 { id: 'threads', icon: <MessageSquare size={18} />, label: 'Inbox', subTab: 'inbox' },
@@ -345,8 +345,8 @@ export default function DashboardLayout({
       <AnimatePresence>
         {isMobileDrawerOpen && (
           <>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsMobileDrawerOpen(false)} className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm" />
-            <motion.div initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }} className="fixed inset-y-0 left-0 w-72 z-[110] bg-white dark:bg-[#16161d] flex flex-col shadow-2xl">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsMobileDrawerOpen(false)} className="fixed inset-0 z-100 bg-black/60 backdrop-blur-sm" />
+            <motion.div initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }} className="fixed inset-y-0 left-0 w-72 z-110 bg-white dark:bg-[#16161d] flex flex-col shadow-2xl">
               <div className="p-4 border-b border-slate-100 dark:border-white/5 flex justify-between items-center"><span className="font-black tracking-widest text-xs">Menu</span><button onClick={() => setIsMobileDrawerOpen(false)}><X size={20} /></button></div>
               <div className="flex-1 overflow-y-auto p-3 space-y-4">
                 {NAV_GROUPS.map(group => (
