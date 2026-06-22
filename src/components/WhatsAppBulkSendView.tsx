@@ -410,7 +410,7 @@ export function WhatsAppBulkSendView({ user, onSuccess, selectedAccount }: Whats
         {isSidebarOpen && (
           <motion.aside 
             initial={{ width: 0 }} animate={{ width: window.innerWidth < 1024 ? '100%' : 300 }} exit={{ width: 0 }}
-            className="h-full z-50 lg:relative lg:inset-auto bg-[#13131a] border-r border-white/5 flex flex-col lg:h-screen lg:sticky lg:top-0 overflow-hidden"
+            className="h-full z-50 bg-[#13131a] border-r border-white/5 flex flex-col lg:h-screen lg:sticky lg:top-0 overflow-hidden"
           >
             <div className="p-4 border-b border-white/5 flex items-center justify-between">
               <h2 className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Templates</h2>
@@ -445,7 +445,7 @@ export function WhatsAppBulkSendView({ user, onSuccess, selectedAccount }: Whats
                     )}
                   >
                     <div className={cn(
-                        "w-7 h-7 rounded flex items-center justify-center flex-shrink-0",
+                        "w-7 h-7 rounded flex items-center justify-center shrink-0",
                         selectedTemplate?.id === t.id ? 'bg-white/20' : (t.category === 'MARKETING' ? 'bg-blue-50 text-blue-600' : 'bg-slate-100 text-slate-600')
                     )}>
                         {t.category === 'MARKETING' ? <Sparkles size={12} /> : (t.category === 'AUTHENTICATION' ? <KeyRound size={12} /> : <FileStack size={12} />)}
@@ -616,7 +616,7 @@ export function WhatsAppBulkSendView({ user, onSuccess, selectedAccount }: Whats
                  </div>
                </div>
 
-               <div className="bg-[#e5ddd5] dark:bg-[#0b141a] rounded-[2rem] p-4 border-[8px] border-slate-900 dark:border-[#202c33] shadow-none h-[500px] flex flex-col relative">
+               <div className="bg-[#e5ddd5] dark:bg-[#0b141a] rounded-4xl p-4 border-8 border-slate-900 dark:border-[#202c33] shadow-none h-[500px] flex flex-col relative">
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-6 bg-slate-900 dark:bg-[#202c33] rounded-b-xl z-20 flex items-center justify-center">
                     <div className="w-8 h-1 bg-slate-800 rounded-full" />
                   </div>
@@ -679,7 +679,7 @@ export function WhatsAppBulkSendView({ user, onSuccess, selectedAccount }: Whats
 
       {/* Audience Selection Modal */}
       {isAudienceModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-white dark:bg-[#16161d] w-full max-w-md rounded-xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col">
             <div className="p-4 border-b border-slate-100 dark:border-white/10 flex justify-between items-center">
               <h3 className="font-bold text-lg text-slate-900 dark:text-white">

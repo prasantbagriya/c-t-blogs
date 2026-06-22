@@ -13,7 +13,7 @@ const getDevPath = (path) => {
   if (import.meta.env && import.meta.env.DEV) {
     if (path.startsWith('/youtubevideodownload')) return `http://localhost:5173${path}`
     if (path.startsWith('/tool')) return `http://localhost:5175${path}`
-    if (path.startsWith('/portal')) return `http://localhost:5174${path}`
+    if (path.startsWith('/portal')) return `http://localhost:5176${path}`
   }
   return path
 }
@@ -88,8 +88,8 @@ export default function Footer() {
     {
       title: "Support",
       links: [
-        { label: "About Us", page: "about" },
-        { label: "Contact Us", page: "contact" },
+        { label: "About Us", page: "about-us" },
+        { label: "Contact Us", page: "contact-us" },
         { label: "Editorial Policy", page: "editorial-policy" },
         { label: "Fact Checking", page: "fact-checking-policy" },
         { label: "Privacy Policy", page: "privacy-policy" },

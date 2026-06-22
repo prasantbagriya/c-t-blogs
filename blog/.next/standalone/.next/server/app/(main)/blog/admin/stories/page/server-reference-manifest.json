@@ -1,6 +1,6 @@
 {
   "node": {
-    "4059076cdc5349d8b7aaaefbe1770600a61c7c41a8": {
+    "407ff37244231a5b1194907a4e1327480d0fb122f2": {
       "workers": {
         "app/(main)/blog/admin/stories/page": {
           "moduleId": 74147,
@@ -12,7 +12,7 @@
       "exportedName": "handleDeletePost",
       "filename": "lib/actions.ts"
     },
-    "40f86cbfd46c614b0f010d2c84ea48654ad691b75d": {
+    "40374fc68cfb72ed67a3f0e10161fa88bd8469b38d": {
       "workers": {
         "app/(main)/blog/admin/stories/page": {
           "moduleId": 74147,

@@ -20,9 +20,9 @@ export default function GlobalFooter() {
     {
       title: 'Free Tools',
       links: [
-        { label: 'Link Generator', href: '/tool/whatsapp-link-generator' },
-        { label: 'Direct Message', href: '/tool/whatsapp-direct-message' },
-        { label: 'Form Generator', href: '/tool/whatsapp-form-generator' },
+        { label: 'Link Generator', href: '/whatsapp-link-generator' },
+        { label: 'Direct Message', href: '/whatsapp-direct-message' },
+        { label: 'Form Generator', href: '/whatsapp-form-generator' },
         { label: 'SIP Calculator', href: '/tool/sip-calculator' },
         { label: 'Compound Growth', href: '/tool/compound-interest' },
         { label: 'Prop Firm Calc', href: '/tool/prop-firm' },
@@ -33,22 +33,22 @@ export default function GlobalFooter() {
     {
       title: 'Portal Links',
       links: [
-        { label: 'Student Login', href: '/portal/' },
-        { label: 'Admin Login', href: '/portal/' },
-        { label: 'Refund Policy', href: '/portal/' },
-        { label: 'Cookies Policy', href: '/privacy' },
-        { label: 'Terms & Conditions', href: '/terms' },
+        { label: 'Student Login', href: '/portal/student/login' },
+        { label: 'Admin Login', href: '/portal/admin/login' },
+        { label: 'Refund Policy', href: '/portal/refund-policy' },
+        { label: 'Cookies Policy', href: '/portal/cookies-policy' },
+        { label: 'Terms & Conditions', href: '/portal/terms-and-conditions' },
       ],
     },
     {
       title: 'Support',
       links: [
-        { label: 'About Us', href: '/about' },
-        { label: 'Contact Us', href: '/contact' },
+        { label: 'About Us', href: '/about-us' },
+        { label: 'Contact Us', href: '/contact-us' },
         { label: 'Editorial Policy', href: '/editorial-policy' },
         { label: 'Fact Checking', href: '/fact-checking-policy' },
-        { label: 'Privacy Policy', href: '/privacy' },
-        { label: 'Terms of Service', href: '/terms' },
+        { label: 'Privacy Policy', href: '/privacy-policy' },
+        { label: 'Terms of Service', href: '/terms-of-service' },
       ],
     },
   ];

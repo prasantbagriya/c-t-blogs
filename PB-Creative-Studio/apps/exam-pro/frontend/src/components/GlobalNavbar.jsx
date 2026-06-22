@@ -5,9 +5,9 @@ import { Menu, X, Zap, ChevronDown, Link as LinkIcon, MessageSquareText, FileTex
 
 const getDevPath = (path) => {
   if (import.meta.env && import.meta.env.DEV) {
-    if (path.startsWith('/youtubevideodownload')) return "http://localhost:5173${path}"
-    if (path.startsWith('/tool')) return "http://localhost:5175${path}"
-    if (path.startsWith('/portal')) return "http://localhost:5174${path}"
+    if (path.startsWith('/youtubevideodownload')) return `http://localhost:5173${path}`
+    if (path.startsWith('/tool')) return `http://localhost:5175${path}`
+    if (path.startsWith('/portal')) return `http://localhost:5176${path}`
   }
   return path
 }
@@ -21,16 +21,15 @@ export default function Navbar() {
   const getHref = (page) => {
     if (page === 'blog') return '/blog';
     if (page === 'portal' || page.startsWith('portal/')) {
-      const path = page === 'portal' ? '/portal/' : "/";
+      const path = page === 'portal' ? '/portal/' : `/${page}`;
       return getDevPath(path);
     }
     if (page === 'youtubevideodownload') return getDevPath('/youtubevideodownload/');
     
     const toolPages = [
       'prop-firm', 'sip-calculator', 'compound-interest',
-      
     ];
-    if (toolPages.includes(page)) return getDevPath("/tool/");
+    if (toolPages.includes(page)) return getDevPath(`/tool/${page}`);
     
     return "/";
   }
@@ -41,7 +40,7 @@ export default function Navbar() {
     
     if (targetPage === 'portal' || targetPage.startsWith('portal/')) {
       if (event) event.preventDefault();
-      const path = targetPage === 'portal' ? '/' : "/";
+      const path = targetPage === 'portal' ? '/' : `/${targetPage.replace('portal/', '')}`;
       navigate(path);
       setIsMenuOpen(false)
       setIsToolsOpen(false)

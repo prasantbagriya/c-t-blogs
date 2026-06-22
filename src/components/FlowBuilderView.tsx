@@ -1178,7 +1178,7 @@ const FlowBuilderContent = ({ user, platform: propPlatform = 'whatsapp', selecte
                   <Zap size={10} /> Triggers
                 </h3>
               ) : (
-                <div className="w-8 h-[1px] bg-slate-200 dark:bg-white/10" />
+                <div className="w-8 h-px bg-slate-200 dark:bg-white/10" />
               )}
               <div className="grid grid-cols-1 gap-2">
                 {[
@@ -1214,7 +1214,7 @@ const FlowBuilderContent = ({ user, platform: propPlatform = 'whatsapp', selecte
                   <Play size={10} className="text-blue-500" /> Actions
                 </h3>
               ) : (
-                <div className="w-8 h-[1px] bg-slate-200 dark:bg-white/10" />
+                <div className="w-8 h-px bg-slate-200 dark:bg-white/10" />
               )}
               <div className="grid grid-cols-1 gap-2 w-full">
                 {[
@@ -1255,7 +1255,7 @@ const FlowBuilderContent = ({ user, platform: propPlatform = 'whatsapp', selecte
                   <CreditCard size={10} className="text-blue-500" /> Payments
                 </h3>
               ) : (
-                <div className="w-8 h-[1px] bg-slate-200 dark:bg-white/10" />
+                <div className="w-8 h-px bg-slate-200 dark:bg-white/10" />
               )}
               <div className="grid grid-cols-1 gap-2 w-full">
                 {[
@@ -1290,7 +1290,7 @@ const FlowBuilderContent = ({ user, platform: propPlatform = 'whatsapp', selecte
                   <Split size={10} className="text-purple-500" /> Logic & AI
                 </h3>
               ) : (
-                <div className="w-8 h-[1px] bg-slate-200 dark:bg-white/10" />
+                <div className="w-8 h-px bg-slate-200 dark:bg-white/10" />
               )}
               <div className="grid grid-cols-1 gap-2 w-full">
                 {[
@@ -1331,7 +1331,7 @@ const FlowBuilderContent = ({ user, platform: propPlatform = 'whatsapp', selecte
                   <Database size={10} className="text-cyan-500" /> Integrations
                 </h3>
               ) : (
-                <div className="w-8 h-[1px] bg-slate-200 dark:bg-white/10" />
+                <div className="w-8 h-px bg-slate-200 dark:bg-white/10" />
               )}
               <div className="grid grid-cols-1 gap-2 w-full">
                 {[
@@ -1367,7 +1367,7 @@ const FlowBuilderContent = ({ user, platform: propPlatform = 'whatsapp', selecte
                   <User size={10} className="text-rose-500" /> Support
                 </h3>
               ) : (
-                <div className="w-8 h-[1px] bg-slate-200 dark:bg-white/10" />
+                <div className="w-8 h-px bg-slate-200 dark:bg-white/10" />
               )}
               <div className="grid grid-cols-1 gap-2 w-full">
                 {[
@@ -1402,7 +1402,7 @@ const FlowBuilderContent = ({ user, platform: propPlatform = 'whatsapp', selecte
                   <Cpu size={10} className="text-emerald-500" /> Utilities
                 </h3>
               ) : (
-                <div className="w-8 h-[1px] bg-slate-200 dark:bg-white/10" />
+                <div className="w-8 h-px bg-slate-200 dark:bg-white/10" />
               )}
               <div className="grid grid-cols-1 gap-2 w-full">
                 {[
@@ -1484,7 +1484,7 @@ const FlowBuilderContent = ({ user, platform: propPlatform = 'whatsapp', selecte
             />
             {/* MiniMap — hidden on mobile to save space */}
             <MiniMap
-              className="!rounded-2xl !border-slate-200 dark:!border-white/10 !bg-white/80 dark:!bg-[#13131a]/80 !backdrop-blur-xl hidden sm:!block"
+              className="rounded-2xl! border-slate-200! dark:border-white/10! bg-white/80! dark:bg-[#13131a]/80! backdrop-blur-xl! hidden sm:block!"
               nodeColor={(n) => {
                 if (n.type === 'trigger') return '#f59e0b';
                 if (n.type === 'message') return '#3b82f6';

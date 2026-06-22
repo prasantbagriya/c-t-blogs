@@ -86,8 +86,8 @@ const nextConfig = {
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           // ✅ Permissions policy — restrict unnecessary browser APIs
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()' },
-          // ✅ HSTS (only effective when served over HTTPS)
-          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+          // ✅ HSTS (only effective when served over HTTPS) - apply only in production
+          ...(process.env.NODE_ENV === 'production' ? [{ key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' }] : []),
           // ✅ Content-Security-Policy — critical Google security trust signal
           {
             key: 'Content-Security-Policy',
@@ -103,8 +103,8 @@ const nextConfig = {
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self' http://localhost:* http://127.0.0.1:* https://chatwizs.com",
-              "upgrade-insecure-requests",
-            ].join('; '),
+              process.env.NODE_ENV === 'production' ? "upgrade-insecure-requests" : ""
+            ].filter(Boolean).join('; '),
           },
         ],
       },

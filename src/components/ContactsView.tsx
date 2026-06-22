@@ -261,7 +261,7 @@ export const ContactsView = ({ user, showToast }: ContactsViewProps) => {
 
       {/* Add/Edit Contact Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-white dark:bg-[#16161d] w-full max-w-md rounded-xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col">
             <div className="p-4 border-b border-slate-100 dark:border-white/10 flex justify-between items-center">
               <h3 className="font-bold text-lg text-slate-900 dark:text-white">
