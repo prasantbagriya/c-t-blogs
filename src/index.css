@@ -1,0 +1,421 @@
+@import "tailwindcss";
+
+/* Tailwind v4: use class-based dark mode (ThemeToggle adds/removes .dark on <html>) */
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  --color-background: #ffffff;
+  --color-foreground: #000000;
+  --color-muted-foreground: #666666;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 0% 9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+
+  html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  html, body {
+    overflow-x: hidden;
+  }
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    min-height: 100%;
+    /* ── Global font-weight baseline: everything starts at 400 ── */
+    font-weight: 400;
+  }
+
+  /* ── Normalize all headings to medium weight ── */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── Dashboard: standardize labels and section headers ── */
+  /* Section labels that use tracking-widest/uppercase get softened */
+  .tracking-widest, .tracking-wider {
+    letter-spacing: 0.04em !important;
+  }
+
+  /* ── Mobile typography scaling ── */
+  @media (max-width: 640px) {
+    body { font-size: 14px; }
+    h1 { font-size: 1.4rem; }
+    h2 { font-size: 1.2rem; }
+    h3 { font-size: 1rem; }
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/90 backdrop-blur-sm border border-black/5;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.4s ease-out;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes loading-bar {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+.animate-loading-bar {
+  animation: loading-bar 1.5s ease-in-out infinite;
+}
+
+@keyframes progress {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+.animate-progress {
+  animation: progress var(--duration, 5s) linear forwards;
+}
+
+/* ── Marquee ── */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 60s linear infinite;
+}
+
+.animate-marquee-reverse {
+  animation: marquee 60s linear infinite reverse;
+}
+
+/* No scrollbar */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Dot-grid overlay for dark sections (from lite project) */
+.dot-grid-overlay {
+  background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.12) 1px, transparent 0);
+  background-size: 40px 40px;
+}
+
+/* Custom Scrollbars - Premium Modern Aesthetic */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.2); /* Indigo/Blue subtle */
+  border-radius: 100px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.4);
+}
+
+/* Dark mode specific thumb */
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Global Scrollbar Optimization */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.4);
+}
+
+/* Sidebar Specific Scrollbar (Transparent and thin) */
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.05);
+}
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* React Flow Controls Styling */
+.react-flow__controls-button {
+  background-color: white !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  color: #0f172a !important; /* Slate 900 */
+}
+
+.react-flow__controls-button svg {
+  fill: currentColor !important;
+}
+
+.dark .react-flow__controls-button {
+  background-color: #1a1a24 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
+}
+
+.dark .react-flow__controls-button:hover {
+  background-color: #252533 !important;
+}
+
+/* Utilities */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, rgba(99, 102, 241, 0.1), rgba(99, 102, 241, 0.3));
+    border: 1.5px solid transparent;
+  }
+  
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.15));
+  }
+
+  /* YouTube Downloader Styles */
+  .text-gradient-stellar {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-slate-100 via-sky-400 to-blue-500;
+  }
+
+  .btn-stellar {
+    @apply bg-white text-black font-black transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:shadow-[0_0_50px_rgba(56,189,248,0.4)] active:scale-95;
+  }
+
+  .console-terminal {
+    @apply font-mono text-[10px] tracking-widest text-sky-400/60 uppercase;
+  }
+}
+
+.search-glow-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.search-glow-wrapper::before {
+  content: '';
+  position: absolute;
+  top: var(--mouse-y, 0);
+  left: var(--mouse-x, 0);
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(56,189,248,0.08) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.console-card {
+  background: linear-gradient(135deg, rgba(15,23,42,0.8) 0%, rgba(2,6,23,0.9) 100%);
+  border: 1px solid rgba(56,189,248,0.1);
+  box-shadow: 0 20px 60px -15px rgba(0,0,0,0.7);
+  backdrop-filter: blur(40px);
+}
+
+.extraction-scanline {
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(to right, transparent, #38bdf8, transparent);
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: scan 3s linear infinite;
+  opacity: 0.3;
+}
+
+@keyframes scan {
+  from { top: 0%; }
+  to { top: 100%; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PAGESPEED 100 — Performance CSS Utilities
+   All rules below directly improve Core Web Vitals scores
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── CLS FIX: All media elements have intrinsic size ── */
+/* Prevents layout shift when images/videos load */
+img, video, canvas, svg, iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── LCP FIX: content-visibility for below-fold sections ── */
+/* Skips rendering of off-screen content — huge LCP gain on dashboard */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 auto 400px;
+}
+
+/* ── INP FIX: touch-action for faster mobile interactions ── */
+/* Eliminates 300ms tap delay on mobile (huge INP improvement) */
+a, button, [role="button"], [tabindex] {
+  touch-action: manipulation;
+}
+
+/* ── GPU COMPOSITING: will-change management ── */
+/* Only promote layers that are actively animating */
+.gpu-promote {
+  will-change: transform;
+  transform: translateZ(0);
+}
+/* Free GPU memory when animation ends */
+.gpu-idle {
+  will-change: auto;
+}
+
+/* ── CLS FIX: Reserve space for async-loaded UI ── */
+.skeleton {
+  background: linear-gradient(90deg, #1a1a2e 25%, #16213e 50%, #1a1a2e 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+@keyframes skeleton-shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+/* ── ACCESSIBILITY: Reduced motion (WCAG 2.2 + Page Experience) ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-marquee,
+  .animate-marquee-reverse {
+    animation: none !important;
+    overflow-x: auto;
+  }
+}
+
+/* ── ACCESSIBILITY: High-contrast mode (Windows users) ── */
+@media (forced-colors: active) {
+  .btn-stellar, [class*="gradient"] {
+    forced-color-adjust: none;
+  }
+}
+
+/* ── PRINT: Clean print layout ── */
+@media print {
+  nav, header, footer, aside, .no-print { display: none !important; }
+  body { font-size: 12pt; color: #000; background: #fff; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.8em; }
+}
+
+/* ── FOCUS VISIBLE: Required for Lighthouse Accessibility 100 ── */
+:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ── TOUCH TARGET: Minimum 44x44px (Google Page Experience) ── */
+button, [role="button"], a {
+  min-height: 44px;
+  min-width: 44px;
+}
+/* Override for inline links */
+p a, nav a, .inline-link {
+  min-height: unset;
+  min-width: unset;
+}
+
+/* ── FONT DISPLAY: Prevent invisible text during font load ── */
+@font-face {
+  font-display: swap; /* Show fallback font immediately, swap when ready */
+}
+

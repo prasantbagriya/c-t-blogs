@@ -1,0 +1,3 @@
+{
+  "/(main)/news-sitemap.xml/route": "app/(main)/news-sitemap.xml/route.js"
+}

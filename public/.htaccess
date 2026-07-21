@@ -1,0 +1,134 @@
+# ═══════════════════════════════════════════════════════════════
+#  ChatWizs — Apache .htaccess
+#  Google PageSpeed 100 Server Configuration
+#  Covers: Gzip, Brotli, Browser Cache, Security, SPA routing
+# ═══════════════════════════════════════════════════════════════
+
+# ── 1. HTTPS REDIRECT ─────────────────────────────────────────
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Force HTTPS (required for HSTS + trust signals)
+  RewriteCond %{HTTPS} off
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Remove www (canonical domain = no-www)
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+
+  # SPA fallback — serve index.html for all non-file routes
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# ── 2. GZIP COMPRESSION ───────────────────────────────────────
+# Reduces transfer size by 60-80% for HTML/CSS/JS (huge PageSpeed gain)
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/x-javascript
+  AddOutputFilterByType DEFLATE application/json
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE application/rss+xml
+  AddOutputFilterByType DEFLATE application/atom+xml
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE text/plain
+  AddOutputFilterByType DEFLATE text/xml
+  AddOutputFilterByType DEFLATE font/ttf
+  AddOutputFilterByType DEFLATE font/otf
+  AddOutputFilterByType DEFLATE font/woff
+  AddOutputFilterByType DEFLATE font/woff2
+  AddOutputFilterByType DEFLATE application/font-woff
+  AddOutputFilterByType DEFLATE application/font-woff2
+
+  # Don't compress already-compressed formats
+  SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|webp|avif|ico|zip|gz|br)$ no-gzip dont-vary
+
+  # Ensure proper Vary header for CDNs
+  Header append Vary Accept-Encoding env=!no-gzip
+</IfModule>
+
+# ── 3. BROWSER CACHING ────────────────────────────────────────
+# Aggressive caching = faster repeat visits = better PageSpeed
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # Vite JS/CSS chunks (hashed filenames = safe to cache forever)
+  <FilesMatch "\.(js|css|mjs)$">
+    ExpiresDefault "access plus 1 year"
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Images (hashed = 1 year)
+  <FilesMatch "\.(webp|avif|png|jpg|jpeg|gif|ico|svg)$">
+    ExpiresDefault "access plus 1 year"
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Fonts (hashed = 1 year)
+  <FilesMatch "\.(woff|woff2|ttf|eot|otf)$">
+    ExpiresDefault "access plus 1 year"
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # HTML (no cache — always fresh)
+  <FilesMatch "\.html$">
+    ExpiresDefault "access plus 0 seconds"
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+  </FilesMatch>
+
+  # JSON/XML (short cache)
+  <FilesMatch "\.(json|xml)$">
+    ExpiresDefault "access plus 1 hour"
+    Header set Cache-Control "public, max-age=3600"
+  </FilesMatch>
+
+  # Manifest + service worker (no cache)
+  <FilesMatch "(manifest\.json|sw\.js|service-worker\.js)$">
+    ExpiresDefault "access plus 0 seconds"
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# ── 4. SECURITY HEADERS ───────────────────────────────────────
+# Required for Google PageSpeed "Best Practices" score = 100
+<IfModule mod_headers.c>
+  # Prevent clickjacking
+  Header always set X-Frame-Options "SAMEORIGIN"
+  # Prevent MIME sniffing
+  Header always set X-Content-Type-Options "nosniff"
+  # Referrer policy
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  # XSS protection (legacy browsers)
+  Header always set X-XSS-Protection "1; mode=block"
+  # HSTS (force HTTPS for 2 years)
+  Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+  # Permissions policy — disable unused APIs
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=(), payment=(), usb=(), bluetooth=()"
+  # Remove server info leaks
+  Header always unset X-Powered-By
+  Header always unset Server
+
+  # CORS for fonts (required for cross-origin font loading)
+  <FilesMatch "\.(woff|woff2|ttf|eot|otf)$">
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, OPTIONS"
+  </FilesMatch>
+</IfModule>
+
+# ── 5. ETags (fingerprinting for CDNs) ────────────────────────
+FileETag MTime Size
+
+# ── 6. KEEP-ALIVE (reduce TCP overhead) ───────────────────────
+<IfModule mod_headers.c>
+  Header set Connection keep-alive
+</IfModule>
+
+# ── 7. DEFAULT CHARACTER SET ──────────────────────────────────
+AddDefaultCharset UTF-8
+

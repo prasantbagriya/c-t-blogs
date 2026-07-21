@@ -1,0 +1,15 @@
+node_modules/
+build/
+# dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+*.zip
+temp_build/
+.codex-runtime/
+PB-Creative-Studio/server/bin/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal

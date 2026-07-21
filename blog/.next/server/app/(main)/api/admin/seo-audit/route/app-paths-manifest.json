@@ -1,0 +1,3 @@
+{
+  "/(main)/api/admin/seo-audit/route": "app/(main)/api/admin/seo-audit/route.js"
+}

@@ -1,0 +1,122 @@
+import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+import { createHash } from 'crypto';
+import { SESSION_TTL, isValidSession, signToken } from '@/lib/auth';
+
+// ✅ In-memory rate limiting (resets on server restart — acceptable for small blog)
+const loginAttempts = new Map<string, { count: number; lastAttempt: number }>();
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_TIME = 15 * 60 * 1000; // 15 minutes
+
+export { isValidSession }; // Preserve export for compatibility
+
+export async function POST(request: Request) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'anonymous';
+  const now = Date.now();
+
+  // Rate limiting check
+  const attempt = loginAttempts.get(ip);
+  if (attempt && attempt.count >= MAX_ATTEMPTS && (now - attempt.lastAttempt < LOCKOUT_TIME)) {
+    const minutesLeft = Math.ceil((LOCKOUT_TIME - (now - attempt.lastAttempt)) / 60000);
+    return NextResponse.json({
+      success: false,
+      error: `Too many failed attempts. Try again in ${minutesLeft} minute${minutesLeft !== 1 ? 's' : ''}.`,
+    }, { status: 429 });
+  }
+
+  try {
+    const contentType = request.headers.get('content-type') || '';
+    let password = '';
+
+    if (contentType.includes('application/json')) {
+      const body = await request.json();
+      password = body.password;
+    } else if (contentType.includes('application/x-www-form-urlencoded') || contentType.includes('multipart/form-data')) {
+      const formData = await request.formData();
+      password = formData.get('password')?.toString() || '';
+    }
+
+    if (!password || typeof password !== 'string') {
+      return NextResponse.json({ success: false, error: 'Password required' }, { status: 400 });
+    }
+
+    const masterPassword = process.env.ADMIN_PASSWORD;
+    if (!masterPassword) {
+      console.error('CRITICAL: ADMIN_PASSWORD environment variable not set!');
+      return NextResponse.json({ success: false, error: 'Server misconfiguration' }, { status: 500 });
+    }
+
+    // ✅ Constant-time comparison to prevent timing attacks
+    const inputHash = createHash('sha256').update(password).digest('hex');
+    const masterHash = createHash('sha256').update(masterPassword).digest('hex');
+    const isValid = inputHash === masterHash;
+
+    if (isValid) {
+      // Reset rate limiting on success
+      loginAttempts.delete(ip);
+
+      // ✅ Generate stateless signed session token
+      const expiry = now + SESSION_TTL;
+      const sessionToken = signToken(expiry);
+
+      const cookieStore = await cookies();
+      cookieStore.set('chatwiz_admin_session', sessionToken, {
+        httpOnly: true,
+        secure: false, // ✅ Set false to prevent proxy HTTPS termination mismatch
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 7,
+        path: '/',
+      });
+
+      if (contentType.includes('application/json')) {
+        return NextResponse.json({ success: true }, {
+          headers: {
+            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
+          }
+        });
+      } else {
+        // Native form submission: redirect with a relative URL so we don't leak the internal Next.js port
+        // when proxied through Vite or Hostinger.
+        // Native form submission: redirect using NEXT_PUBLIC_SITE_URL to prevent proxy host overriding
+        const isLocal = request.url.includes('localhost') || request.url.includes('127.0.0.1');
+        const baseUrl = isLocal && process.env.NODE_ENV === 'development' ? request.url : (process.env.NEXT_PUBLIC_SITE_URL || 'https://chatwizs.com');
+        const redirectUrl = new URL('/blog/admin', baseUrl);
+        return NextResponse.redirect(redirectUrl, {
+          status: 302,
+        });
+      }
+    }
+
+    // Increment failed attempts
+    const count = (attempt?.count || 0) + 1;
+    loginAttempts.set(ip, { count, lastAttempt: now });
+    const remaining = MAX_ATTEMPTS - count;
+
+    if (contentType.includes('application/json')) {
+      return NextResponse.json({
+        success: false,
+        error: remaining > 0
+          ? `Invalid password. ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining.`
+          : 'Account locked. Too many failed attempts.',
+      }, { status: 401 });
+    } else {
+      // Native form redirect back with error using NEXT_PUBLIC_SITE_URL
+      const isLocal = request.url.includes('localhost') || request.url.includes('127.0.0.1');
+      const baseUrl = isLocal && process.env.NODE_ENV === 'development' ? request.url : (process.env.NEXT_PUBLIC_SITE_URL || 'https://chatwizs.com');
+      const errorUrl = new URL('/blog/auth/login?error=Invalid+password', baseUrl);
+      return NextResponse.redirect(errorUrl, {
+        status: 302,
+      });
+    }
+
+  } catch {
+    return NextResponse.json({ success: false, error: 'Internal Server Error' }, { status: 500 });
+  }
+}
+
+// ✅ Logout endpoint
+export async function DELETE() {
+  const cookieStore = await cookies();
+  cookieStore.delete('chatwiz_admin_session');
+  return NextResponse.json({ success: true });
+}

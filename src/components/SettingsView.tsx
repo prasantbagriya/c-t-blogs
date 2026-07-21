@@ -1,0 +1,216 @@
+import React, { useState } from 'react';
+import { 
+ Zap, 
+ Moon, 
+ Sun, 
+ Bell, 
+ MessageSquare, 
+ CheckSquare, 
+ BarChart3, 
+ Shield, 
+ Globe, 
+ Users, 
+ UserCircle, 
+ ChevronRight 
+} from 'lucide-react';
+import { Facebook } from './common/BrandIcons';
+
+interface SettingsViewProps {
+ isDarkMode: boolean;
+ setIsDarkMode: (dark: boolean) => void;
+ currentUser: any;
+ onConnectFacebook: () => void;
+ onOpenUsers: () => void;
+}
+
+export const SettingsView = ({ 
+ isDarkMode, 
+ setIsDarkMode, 
+ currentUser, 
+ onConnectFacebook, 
+ onOpenUsers 
+}: SettingsViewProps) => {
+ const [preferences, setPreferences] = useState({
+ newMessage: true,
+ templateStatus: true,
+ campaignPerformance: false,
+ securityAlerts: true,
+ marketingEmails: false
+ });
+
+ const togglePreference = (key: keyof typeof preferences) => {
+ setPreferences(prev => ({ ...prev, [key]: !prev[key] }));
+ };
+
+ return (
+ <div className="w-full space-y-4 sm:space-y-8 pb-8">
+ <div className="py-2 sm:py-4 text-center sm:text-left">
+ <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-1">Settings</h2>
+ <p className="text-[11px] sm:text-sm text-slate-500 dark:text-slate-200">Manage your account preferences and notification settings.</p>
+ </div>
+
+ {/* Appearance Section */}
+ <div className="bg-white dark:bg-[#16161d] rounded-none border border-slate-200 dark:border-white/5 overflow-hidden">
+ <div className="p-4 sm:p-6 border-b border-slate-100 dark:border-slate-200">
+ <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+ <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+ Appearance
+ </h3>
+ <p className="text-[10px] sm:text-sm text-slate-500 dark:text-slate-200 mt-1">Customize how ChatWizs looks for you.</p>
+ </div>
+ <div className="p-4 sm:p-6 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-900/50 ">
+ <div className="flex gap-3 sm:gap-4">
+ <div className="w-8 h-8 sm:w-10 sm:h-10 bg-slate-100 dark:bg-[#16161d] rounded-none flex items-center justify-center text-slate-600 dark:text-slate-200">
+ {isDarkMode ? <Moon className="w-4 h-4 sm:w-5 sm:h-5" /> : <Sun className="w-4 h-4 sm:w-5 sm:h-5" />}
+ </div>
+ <div>
+ <p className="text-sm font-bold text-slate-900 dark:text-white">Dark Mode</p>
+ <p className="text-[10px] sm:text-sm text-slate-500 dark:text-slate-200 max-w-[180px] sm:max-w-md">Switch between light and dark themes.</p>
+ </div>
+ </div>
+ <button
+ onClick={() => setIsDarkMode(!isDarkMode)}
+ className={`w-10 h-5 sm:w-12 sm:h-6 rounded-none relative ${isDarkMode ? 'bg-blue-600' : 'bg-slate-200'}`}
+ >
+ <div className={`absolute top-0.5 sm:top-1 w-4 h-4 bg-white rounded-none ${isDarkMode ? 'left-5 sm:left-7' : 'left-1'}`} />
+ </button>
+ </div>
+ </div>
+
+ <div className="bg-white dark:bg-[#16161d] rounded-none border border-slate-200 dark:border-white/5 overflow-hidden">
+ <div className="p-4 sm:p-6 border-b border-slate-100 dark:border-white/5">
+ <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+ <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+ Notification Preferences
+ </h3>
+ <p className="text-[10px] sm:text-sm text-slate-500 dark:text-slate-200 mt-1">Choose what updates you want to receive.</p>
+ </div>
+
+ <div className="divide-y divide-slate-100 dark:divide-slate-800">
+ {[
+ { id: 'newMessage', label: 'New Message Alerts', desc: 'Get notified when a customer sends you a new message.', icon: <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" /> },
+ { id: 'templateStatus', label: 'Template Approval', desc: 'Receive alerts when your message templates are approved or rejected.', icon: <CheckSquare className="w-4 h-4 sm:w-5 sm:h-5" /> },
+ { id: 'campaignPerformance', label: 'Campaign Reports', desc: 'Weekly summaries of your bulk messaging and ad campaign results.', icon: <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5" /> },
+ { id: 'securityAlerts', label: 'Security Alerts', desc: 'Important notifications about your account security and login activity.', icon: <Shield className="w-4 h-4 sm:w-5 sm:h-5" /> }
+ ].map((item) => (
+ <div key={item.id} className="p-4 sm:p-6 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-900/50 ">
+ <div className="flex gap-3 sm:gap-4">
+ <div className="w-8 h-8 sm:w-10 sm:h-10 bg-slate-100 dark:bg-[#16161d] rounded-none flex items-center justify-center text-slate-600 dark:text-slate-200">
+ {item.icon}
+ </div>
+ <div>
+ <p className="text-sm font-bold text-slate-900 dark:text-white">{item.label}</p>
+ <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-200 max-w-[170px] sm:max-w-md">{item.desc}</p>
+ </div>
+ </div>
+ <button
+ onClick={() => togglePreference(item.id as keyof typeof preferences)}
+ className={`w-10 h-5 sm:w-12 sm:h-6 rounded-none relative ${preferences[item.id as keyof typeof preferences] ? 'bg-blue-600' : 'bg-slate-200'}`}
+ >
+ <div className={`absolute top-0.5 sm:top-1 w-4 h-4 bg-white rounded-none ${preferences[item.id as keyof typeof preferences] ? 'left-5 sm:left-7' : 'left-1'}`} />
+ </button>
+ </div>
+ ))}
+ </div>
+
+ <div className="p-4 sm:p-6 bg-slate-50 dark:bg-[#16161d]/50 flex justify-end gap-3">
+ <button className="px-4 py-2 text-[10px] sm:text-sm font-bold text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white uppercase tracking-widest">Cancel</button>
+ <button className="px-4 sm:px-6 py-2 bg-blue-600 text-white rounded-none font-bold text-[10px] sm:text-sm hover:bg-blue-700 uppercase tracking-widest">
+ Save Changes
+ </button>
+ </div>
+ </div>
+
+ <div className="bg-white dark:bg-[#16161d] rounded-none border border-slate-200 dark:border-white/5 overflow-hidden">
+ <div className="p-4 sm:p-6 border-b border-slate-100 dark:border-white/5">
+ <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+ <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+ Connected Accounts
+ </h3>
+ <p className="text-[10px] sm:text-sm text-slate-500 dark:text-slate-200 mt-1">Manage your linked social accounts.</p>
+ </div>
+ <div className="p-4 sm:p-6 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-900/50 ">
+ <div className="flex gap-3 sm:gap-4">
+ <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#1877F2]/10 rounded-none flex items-center justify-center text-[#1877F2]">
+ <Facebook className="w-4 h-4 sm:w-5 sm:h-5" />
+ </div>
+ <div>
+ <p className="text-sm font-bold text-slate-900 dark:text-white">Facebook</p>
+ <p className="text-[10px] sm:text-sm text-slate-500 dark:text-slate-200 max-w-[170px] sm:max-w-md">
+ {currentUser?.facebookId ? `Linked as ${currentUser.displayName}` : 'Connect your Facebook account.'}
+ </p>
+ </div>
+ </div>
+ {currentUser?.facebookId ? (
+ <span className="px-2 py-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-[8px] sm:text-[10px] font-black uppercase tracking-widest rounded-none h-fit">
+ Active
+ </span>
+ ) : (
+ <button
+ onClick={onConnectFacebook}
+ className="px-3 sm:px-4 py-1.5 sm:py-2 bg-[#1877F2] text-white rounded-none font-bold text-[10px] sm:text-sm hover:bg-[#166fe5] uppercase tracking-widest"
+ >
+ Connect
+ </button>
+ )}
+ </div>
+ </div>
+
+ {/* User Management Section */}
+ <div className="bg-white dark:bg-[#16161d] rounded-none border border-slate-200 dark:border-white/5 overflow-hidden">
+ <div className="p-4 sm:p-6 border-b border-slate-100 dark:border-white/5">
+ <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+ <Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+ User Management
+ </h3>
+ <p className="text-[10px] sm:text-sm text-slate-500 dark:text-slate-200 mt-1">Manage sub-users, roles, and platform permissions.</p>
+ </div>
+ <div className="p-4 sm:p-6">
+ <button
+ onClick={onOpenUsers}
+ className="w-full flex items-center justify-between p-3 sm:p-4 bg-slate-50 dark:bg-[#16161d] border border-slate-200 dark:border-white/5 rounded-none hover:border-blue-500 group"
+ >
+ <div className="flex items-center gap-3">
+ <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-50 dark:bg-blue-900/20 rounded-none flex items-center justify-center text-blue-600 ">
+ <Shield className="w-4 h-4 sm:w-5 sm:h-5" />
+ </div>
+ <div className="text-left">
+ <p className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">Admin Control Panel</p>
+ <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-200">Configure team access and security policies.</p>
+ </div>
+ </div>
+ <ChevronRight className="w-4 h-4 text-slate-400 group- " />
+ </button>
+ </div>
+ </div>
+
+ {/* Account Details Section */}
+ <div className="bg-white dark:bg-[#16161d] rounded-none border border-slate-200 dark:border-white/5 p-4 sm:p-6">
+ <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+ <UserCircle className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+ Account Details
+ </h3>
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+ <div className="space-y-1 sm:space-y-2">
+ <label className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">Full Name</label>
+ <input
+ readOnly
+ type="text"
+ defaultValue={currentUser?.displayName || "User"}
+ className="w-full px-4 py-2 sm:py-3 bg-slate-50 dark:bg-[#16161d] border border-slate-200 dark:border-white/5 rounded-none text-xs sm:text-sm focus:border-blue-500 outline-none dark:text-white"
+ />
+ </div>
+ <div className="space-y-1 sm:space-y-2">
+ <label className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">Email Address</label>
+ <input
+ readOnly
+ type="email"
+ defaultValue={currentUser?.email || "No email"}
+ className="w-full px-4 py-2 sm:py-3 bg-slate-50 dark:bg-[#16161d] border border-slate-200 dark:border-white/5 rounded-none text-xs sm:text-sm focus:border-blue-500 outline-none dark:text-white"
+ />
+ </div>
+ </div>
+ </div>
+ </div>
+ );
+};

@@ -1,0 +1,24 @@
+{
+  "name": "pb-creative-studio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install && npm install --workspaces",
+    "dev:server": "npm run dev --workspace=server",
+    "dev:homepage": "npm run dev --workspace=homepage -- --port 5174 --host",
+    "dev:downloader": "npm run dev --workspace=downloader -- --port 5178 --host",
+    "dev:tools": "npm run dev --workspace=tools -- --port 5175 --host",
+    "dev:exam": "npm run dev --workspace=exam-pro -- --port 5176 --host",
+    "dev:hub": "npm run dev --workspace=studio-hub -- --port 5177 --host",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:homepage\" \"npm run dev:downloader\" \"npm run dev:tools\" \"npm run dev:exam\" \"npm run dev:hub\"",
+    "build": "npm run build --workspaces --if-present"
+  },
+  "workspaces": [
+    "apps/*",
+    "server"
+  ],
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3"
+  }
+}

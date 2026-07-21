@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ChatWizs</string>
+    <string name="title_activity_main">ChatWizs</string>
+    <string name="package_name">com.chatwizs.app</string>
+    <string name="custom_url_scheme">com.chatwizs.app</string>
+</resources>

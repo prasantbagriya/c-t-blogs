@@ -1,0 +1,62 @@
+# ═══════════════════════════════════════════════════════════════
+#  Leads Manager — Apache .htaccess
+#  Google PageSpeed 100 + Admin Security Configuration
+# ═══════════════════════════════════════════════════════════════
+
+# ── 1. HTTPS REDIRECT ─────────────────────────────────────────
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ── 2. GZIP COMPRESSION ───────────────────────────────────────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+  SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|webp|ico|zip|gz)$ no-gzip
+  Header append Vary Accept-Encoding env=!no-gzip
+</IfModule>
+
+# ── 3. BROWSER CACHING ────────────────────────────────────────
+<IfModule mod_expires.c>
+  ExpiresActive On
+  # CSS/JS (fingerprinted by content)
+  <FilesMatch "\.(js|css)$">
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
+  # Images
+  <FilesMatch "\.(png|jpg|jpeg|gif|ico|svg|webp)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+  # HTML pages (admin = always fresh)
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+  </FilesMatch>
+</IfModule>
+
+# ── 4. SECURITY HEADERS (Admin Portal — Strict) ───────────────
+<IfModule mod_headers.c>
+  # Prevent embedding in iframes (clickjacking protection)
+  Header always set X-Frame-Options "DENY"
+  # Prevent MIME sniffing
+  Header always set X-Content-Type-Options "nosniff"
+  # XSS filter
+  Header always set X-XSS-Protection "1; mode=block"
+  # Force HTTPS
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  # Referrer (don't leak admin URL to external sites)
+  Header always set Referrer-Policy "no-referrer"
+  # Permissions policy
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+  # Hide server info
+  Header always unset X-Powered-By
+  Header always unset Server
+
+  # CSP for admin (very strict — only allow own domain)
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src 'self'"
+</IfModule>
+
+AddDefaultCharset UTF-8

@@ -1,0 +1,519 @@
+{
+  "version": 3,
+  "pages404": true,
+  "appType": "app",
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:file((?!\\.well-known(?:/.*)?)(?:[^/]+/)*[^/]+\\.\\w+)/",
+      "destination": "/:file",
+      "internal": true,
+      "priority": true,
+      "missing": [
+        {
+          "type": "header",
+          "key": "x-nextjs-data"
+        }
+      ],
+      "statusCode": 308,
+      "regex": "^(?:/((?!\\.well-known(?:/.*)?)(?:[^/]+/)*[^/]+\\.\\w+))/$"
+    },
+    {
+      "source": "/:notfile((?!\\.well-known(?:/.*)?)(?:[^/]+/)*[^/\\.]+)",
+      "destination": "/:notfile/",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?!\\.well-known(?:/.*)?)(?:[^/]+/)*[^/\\.]+))$"
+    },
+    {
+      "source": "/blog/admin/login",
+      "destination": "/blog/auth/login",
+      "statusCode": 308,
+      "regex": "^(?!/_next)/blog/admin/login(?:/)?$"
+    },
+    {
+      "source": "/admin/login",
+      "destination": "/blog/auth/login",
+      "statusCode": 308,
+      "regex": "^(?!/_next)/admin/login(?:/)?$"
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.chatwizs.com"
+        }
+      ],
+      "destination": "https://chatwizs.com/:path*",
+      "statusCode": 308,
+      "regex": "^(?!/_next)(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://cdn.ampproject.org https://pagead2.googlesyndication.com https://*.googlesyndication.com https://adservice.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https: http:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://pagead2.googlesyndication.com; frame-src 'self' https://*.youtube.com https://*.youtube-nocookie.com https://googleads.g.doubleclick.net https://*.doubleclick.net https://*.google.com https://*.googlesyndication.com; object-src 'none'; base-uri 'self'; form-action 'self' http://localhost:* http://127.0.0.1:* https://chatwizs.com; upgrade-insecure-requests"
+        }
+      ],
+      "regex": "^(?:/(.*))(?:/)?$"
+    },
+    {
+      "source": "/blog/admin/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, proxy-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
+      ],
+      "regex": "^/blog/admin(?:/(.*))(?:/)?$"
+    },
+    {
+      "source": "/blog/admin",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, proxy-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
+      ],
+      "regex": "^/blog/admin(?:/)?$"
+    },
+    {
+      "source": "/blog/auth/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, proxy-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
+      ],
+      "regex": "^/blog/auth(?:/(.*))(?:/)?$"
+    },
+    {
+      "source": "/blog/auth",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, proxy-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
+      ],
+      "regex": "^/blog/auth(?:/)?$"
+    },
+    {
+      "source": "/icons/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ],
+      "regex": "^/icons(?:/(.*))(?:/)?$"
+    },
+    {
+      "source": "/uploads/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ],
+      "regex": "^/uploads(?:/(.*))(?:/)?$"
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, stale-while-revalidate=86400"
+        }
+      ],
+      "regex": "^/sitemap\\.xml(?:/)?$"
+    },
+    {
+      "source": "/feed.xml",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, stale-while-revalidate=86400"
+        }
+      ],
+      "regex": "^/feed\\.xml(?:/)?$"
+    }
+  ],
+  "onMatchHeaders": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/author/[slug]",
+      "regex": "^/author/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/author/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/blog/admin/authors/edit/[id]",
+      "regex": "^/blog/admin/authors/edit/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/blog/admin/authors/edit/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/blog/admin/edit/[id]",
+      "regex": "^/blog/admin/edit/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/blog/admin/edit/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/blog/admin/stories/edit/[id]",
+      "regex": "^/blog/admin/stories/edit/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/blog/admin/stories/edit/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/blog/[slug]",
+      "regex": "^/blog/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/blog/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/category/[slug]",
+      "regex": "^/category/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/category/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/stories/[slug]",
+      "regex": "^/stories/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/stories/(?<nxtPslug>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/about",
+      "regex": "^/about(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/about(?:/)?$"
+    },
+    {
+      "page": "/api/admin/auth/login",
+      "regex": "^/api/admin/auth/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/auth/login(?:/)?$"
+    },
+    {
+      "page": "/api/admin/authors",
+      "regex": "^/api/admin/authors(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/authors(?:/)?$"
+    },
+    {
+      "page": "/api/admin/categories",
+      "regex": "^/api/admin/categories(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/categories(?:/)?$"
+    },
+    {
+      "page": "/api/admin/media",
+      "regex": "^/api/admin/media(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/media(?:/)?$"
+    },
+    {
+      "page": "/api/admin/posts",
+      "regex": "^/api/admin/posts(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/posts(?:/)?$"
+    },
+    {
+      "page": "/api/admin/seo-audit",
+      "regex": "^/api/admin/seo\\-audit(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/seo\\-audit(?:/)?$"
+    },
+    {
+      "page": "/api/admin/stories",
+      "regex": "^/api/admin/stories(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/stories(?:/)?$"
+    },
+    {
+      "page": "/api/og",
+      "regex": "^/api/og(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/og(?:/)?$"
+    },
+    {
+      "page": "/api/public/posts",
+      "regex": "^/api/public/posts(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/public/posts(?:/)?$"
+    },
+    {
+      "page": "/author",
+      "regex": "^/author(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/author(?:/)?$"
+    },
+    {
+      "page": "/blog",
+      "regex": "^/blog(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog(?:/)?$"
+    },
+    {
+      "page": "/blog/admin",
+      "regex": "^/blog/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog/admin(?:/)?$"
+    },
+    {
+      "page": "/blog/admin/authors",
+      "regex": "^/blog/admin/authors(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog/admin/authors(?:/)?$"
+    },
+    {
+      "page": "/blog/admin/authors/new",
+      "regex": "^/blog/admin/authors/new(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog/admin/authors/new(?:/)?$"
+    },
+    {
+      "page": "/blog/admin/categories",
+      "regex": "^/blog/admin/categories(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog/admin/categories(?:/)?$"
+    },
+    {
+      "page": "/blog/admin/media",
+      "regex": "^/blog/admin/media(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog/admin/media(?:/)?$"
+    },
+    {
+      "page": "/blog/admin/new",
+      "regex": "^/blog/admin/new(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog/admin/new(?:/)?$"
+    },
+    {
+      "page": "/blog/admin/seo-audit",
+      "regex": "^/blog/admin/seo\\-audit(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog/admin/seo\\-audit(?:/)?$"
+    },
+    {
+      "page": "/blog/admin/stories",
+      "regex": "^/blog/admin/stories(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog/admin/stories(?:/)?$"
+    },
+    {
+      "page": "/blog/admin/stories/new",
+      "regex": "^/blog/admin/stories/new(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog/admin/stories/new(?:/)?$"
+    },
+    {
+      "page": "/blog/auth/login",
+      "regex": "^/blog/auth/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog/auth/login(?:/)?$"
+    },
+    {
+      "page": "/contact",
+      "regex": "^/contact(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/contact(?:/)?$"
+    },
+    {
+      "page": "/editorial-policy",
+      "regex": "^/editorial\\-policy(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/editorial\\-policy(?:/)?$"
+    },
+    {
+      "page": "/fact-checking-policy",
+      "regex": "^/fact\\-checking\\-policy(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/fact\\-checking\\-policy(?:/)?$"
+    },
+    {
+      "page": "/favicon.ico",
+      "regex": "^/favicon\\.ico(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/feed.xml",
+      "regex": "^/feed\\.xml(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/feed\\.xml(?:/)?$"
+    },
+    {
+      "page": "/news-sitemap.xml",
+      "regex": "^/news\\-sitemap\\.xml(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/news\\-sitemap\\.xml(?:/)?$"
+    },
+    {
+      "page": "/privacy",
+      "regex": "^/privacy(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/privacy(?:/)?$"
+    },
+    {
+      "page": "/search",
+      "regex": "^/search(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/search(?:/)?$"
+    },
+    {
+      "page": "/sitemap.xml",
+      "regex": "^/sitemap\\.xml(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/sitemap\\.xml(?:/)?$"
+    },
+    {
+      "page": "/stories",
+      "regex": "^/stories(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/stories(?:/)?$"
+    },
+    {
+      "page": "/terms",
+      "regex": "^/terms(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/terms(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

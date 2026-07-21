@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Completing Connection...</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f8fafc; color: #1e293b; }
+        .card { background: white; padding: 2rem; border-radius: 1rem; shadow: 0 10px 15px -3px rgba(0,0,0,0.1); text-align: center; }
+        .spinner { border: 4px solid rgba(0,0,0,0.1); border-left-color: #4f46e5; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="spinner"></div>
+        <p>Finishing Facebook connection...</p>
+        <p style="font-size: 0.8rem; color: #64748b;">If you are not redirected, <a href="/dashboard">click here</a>.</p>
+    </div>
+
+    <script>
+        // Use JavaScript to bypass PHP WAF limits
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+
+        if (code) {
+            // Set cookies client-side
+            const expires = new Date(Date.now() + 300 * 1000).toUTCString();
+            document.cookie = "_oc=" + encodeURIComponent(code) + "; expires=" + expires + "; path=/; SameSite=Lax; Secure";
+            document.cookie = "_os=" + encodeURIComponent(state || '') + "; expires=" + expires + "; path=/; SameSite=Lax; Secure";
+        }
+
+        // Redirect to dashboard immediately
+        window.location.href = "/dashboard";
+    </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+:HL["/_next/static/chunks/0rjc8t4ofj-h..css","style"]
+:HL["/_next/static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/uploads/media-1779794143548-72338622.png","image",{"fetchPriority":"high","imageSrcSet":"/uploads/media-1779794143548-72338622.png?w=640 640w, /uploads/media-1779794143548-72338622.png?w=1200 1200w","imageSizes":"(max-width: 1200px) 100vw, 1200px"}]
+0:{"tree":{"name":"","param":null,"prefetchHints":0,"slots":{"children":{"name":"(main)","param":null,"prefetchHints":16,"slots":{"children":{"name":"blog","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"iphone-18-launch-date-price-features","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"ZJ7srt7FqBd5WcgufR1xn"}

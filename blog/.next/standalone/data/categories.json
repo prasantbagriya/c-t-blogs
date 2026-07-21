@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Cricket",
+    "slug": "cricket",
+    "description": "",
+    "id": "cf144ae9-8c62-499d-9505-f4922217b8e9"
+  },
+  {
+    "name": "Stock Market",
+    "slug": "stock-market",
+    "description": "",
+    "id": "ad4e4e0f-490a-4441-983a-a60a8c896184"
+  },
+  {
+    "name": "Tech",
+    "slug": "tech",
+    "description": "",
+    "id": "6ffe650d-1cff-4993-a446-602c2aef0792"
+  }
+]

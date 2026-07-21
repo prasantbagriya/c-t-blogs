@@ -1,0 +1,88 @@
+{
+  "app": {
+    "[project]/app/(main)/about/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/author/[slug]/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/author/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/blog/[slug]/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/blog/admin/authors/edit/[id]/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/blog/admin/authors/new/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/blog/admin/authors/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/blog/admin/categories/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/blog/admin/edit/[id]/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/blog/admin/media/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/blog/admin/new/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/blog/admin/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/blog/admin/seo-audit/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/blog/admin/stories/edit/[id]/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/blog/admin/stories/new/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/blog/admin/stories/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/blog/auth/login/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/blog/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/category/[slug]/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/contact/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/editorial-policy/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/fact-checking-policy/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/privacy/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/search/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/stories/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/app/(main)/terms/page": [
+      "static/media/83afe278b6a6bb3c.p.0q-301v4kxxnr.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": false,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}

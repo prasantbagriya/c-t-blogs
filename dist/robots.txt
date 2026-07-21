@@ -1,0 +1,25 @@
+# ====================================================
+#  ChatWizs robots.txt -- Google PageSpeed & SEO
+# ====================================================
+
+# All bots
+User-agent: *
+Allow: /
+# Block API endpoints (no crawling needed)
+Disallow: /api/
+Disallow: /uploads/
+Disallow: /sdk/
+# Block auth/admin pages (security)
+Disallow: /reset-password
+Disallow: /deletion
+
+# Google Image Bot -- allow all images
+User-agent: Googlebot-Image
+Allow: /
+
+# Sitemap locations (helps Google discover all content faster)
+Sitemap: https://chatwizs.com/sitemap.xml
+Sitemap: https://chatwizs.com/news-sitemap.xml
+Sitemap: https://chatwizs.com/feed.xml
+
+

@@ -1,0 +1,56 @@
+# ═══════════════════════════════════════════════════════════════
+#  EduExam Pro — Apache .htaccess
+#  Google PageSpeed 100 Server Configuration
+#  Base path: /portal/ (matches vite base config)
+# ═══════════════════════════════════════════════════════════════
+
+# ── 1. HTTPS + SPA ROUTING (/portal/ base path) ───────────────
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /portal/
+  RewriteCond %{HTTPS} off
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /portal/index.html [L]
+</IfModule>
+
+# ── 2. GZIP COMPRESSION ───────────────────────────────────────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml font/woff2
+  SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|webp|avif|ico|zip|gz)$ no-gzip
+  Header append Vary Accept-Encoding env=!no-gzip
+</IfModule>
+
+# ── 3. BROWSER CACHING ────────────────────────────────────────
+<IfModule mod_expires.c>
+  ExpiresActive On
+  <FilesMatch "\.(js|css|mjs)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(webp|avif|png|jpg|jpeg|svg|woff|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# ── 4. SECURITY HEADERS ───────────────────────────────────────
+<IfModule mod_headers.c>
+  # Admin portal — extra security
+  Header always set X-Frame-Options "DENY"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-XSS-Protection "1; mode=block"
+  Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+  Header always unset X-Powered-By
+  # CSP for exam portal (restrict to own domain)
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' http://localhost:3500"
+</IfModule>
+
+AddDefaultCharset UTF-8
